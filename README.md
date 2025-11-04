@@ -6,41 +6,41 @@
 
 
 
-> \*\*Status:\*\* Proof of Concept (PoC) in active development.
+> \\\*\\\*Status:\\\*\\\* Proof of Concept (PoC) in active development.
 
 
 
 \## Overview
 
-AegisCore is designed to detect, analyze, and neutralize malware on Windows systems.  
+AegisCore is designed to detect, analyze, and neutralize malware on Windows systems.
 
 The system (will) consists of four main components:
 
 
 
-1\. \*\*Pre-Download Scanner\*\*  
+1\. \*\*Pre-Download Scanner\*\*
 
-&nbsp;  Checks new downloads on a remote server \*before\* they finish downloading to the local machine.  
+   Checks new downloads on a remote server \*before\* they finish downloading to the local machine.
 
-&nbsp;  This allows early detection and blocking of malicious files before execution.
-
-
-
-2\. \*\*Signature Checker\*\*  
-
-&nbsp;  Scans files and processes using a database of known malware signatures (hash-based or pattern-based). (Maybe add checks to file metadata too?)
+   This allows early detection and blocking of malicious files before execution.
 
 
 
-3\. \*\*Sandbox\*\*  
+2\. \*\*Signature Checker\*\*
 
-&nbsp;  Executes suspicious files in an isolated environment to monitor their behavior safely.
+   Scans files and processes using a database of known malware signatures (hash-based or pattern-based). (Maybe add checks to file metadata too?)
 
 
 
-4\. \*\*Tranquilization Engine\*\*  
+3\. \*\*Sandbox\*\*
 
-&nbsp;  Terminates malicious processes, removes infected files, and cleans up applications or artifacts created by the malware.
+   Executes suspicious files in an isolated environment to monitor their behavior safely.
+
+
+
+4\. \*\*Tranquilization Engine\*\*
+
+   Terminates malicious processes, removes infected files, and cleans up applications or artifacts created by the malware.
 
 
 
@@ -64,13 +64,13 @@ The system (will) consists of four main components:
 
 \- \*\*Windows APIs:\*\* WinAPI, Windows Driver Kit (WDK)
 
-\- \*\*Security Tools \& Libraries:\*\*  
+\- \*\*Security Tools \& Libraries:\*\*
 
-&nbsp; - Hashing (SHA256/MD5)
+  - Hashing (SHA256/MD5)
 
-&nbsp; - MinHook / Microsoft Detours (for API hooking in sandbox)
+  - MinHook / Microsoft Detours (for API hooking in sandbox)
 
-&nbsp; - Sysinternals Suite (testing \& analysis)
+  - Sysinternals Suite (testing \& analysis)
 
 \- \*\*Test Environment:\*\* VirtualBox VM snapshots
 
@@ -109,6 +109,4 @@ This repository currently focuses on building a \*\*Proof of Concept\*\* that de
 
 
 The final product will integrate these modules into a cohesive antivirus framework.
-
-
 
