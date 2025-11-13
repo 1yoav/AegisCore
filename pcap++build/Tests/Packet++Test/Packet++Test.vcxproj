@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{09AC6B01-B0C4-3B0D-9A18-CD037272437F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>Packet++Test</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Packet++Test.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Packet++Test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packet++Test.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packet++Test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Bin\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Packet++Test.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Packet++Test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Bin\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Packet++Test.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Packet++Test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\3rdParty\MemPlumber\MemPlumber\Debug\memplumber.lib;..\PcppTestUtilities\Debug\PcppTestUtilities.lib;..\..\Packet++\Debug\Packet++.lib;..\..\Common++\Debug\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/Debug/Packet++Test.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/Bin/Packet++Test.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\3rdParty\MemPlumber\MemPlumber\Release\memplumber.lib;..\PcppTestUtilities\Release\PcppTestUtilities.lib;..\..\Packet++\Release\Packet++.lib;..\..\Common++\Release\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/Release/Packet++Test.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/Bin/Packet++Test.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\3rdParty\MemPlumber\MemPlumber\MinSizeRel\memplumber.lib;..\PcppTestUtilities\MinSizeRel\PcppTestUtilities.lib;..\..\Packet++\MinSizeRel\Packet++.lib;..\..\Common++\MinSizeRel\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/MinSizeRel/Packet++Test.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/Bin/MinSizeRel/Packet++Test.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;WIN32_LEAN_AND_MEAN;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\MemPlumber\MemPlumber;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestUtilities;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\PcppTestFramework;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\3rdParty\MemPlumber\MemPlumber\RelWithDebInfo\memplumber.lib;..\PcppTestUtilities\RelWithDebInfo\PcppTestUtilities.lib;..\..\Packet++\RelWithDebInfo\Packet++.lib;..\..\Common++\RelWithDebInfo\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/RelWithDebInfo/Packet++Test.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/Bin/RelWithDebInfo/Packet++Test.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Tests\Packet++Test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Tests\Packet++Test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Tests\Packet++Test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Tests/Packet++Test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Tests/Packet++Test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Tests\Packet++Test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\main.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Asn1Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Base64Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\BgpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CiscoHdlcTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CotpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CryptoKeyTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DhcpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DhcpV6Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DnsTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DoIpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\EthAndArpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\FtpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\GreTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\GtpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\HttpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IcmpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IcmpV6Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IgmpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPSecTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPv4Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPv6Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\LdapTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\LLCTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\ModbusTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\NflogTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\NtpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PacketTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PacketUtilsTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PemTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PPPoETests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\RadiusTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\S7CommTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SipSdpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Sll2Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SllNullLoopbackTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SmtpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SomeIpSdTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SomeIpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SSHTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SSLTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\StpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TcpTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TelnetTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TpktTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\VlanMplsTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\VrrpTest.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\WakeOnLanTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\WireGuardTests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\X509Tests.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Utils\TestUtils.cpp" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include\EndianPortable.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio\getopt.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\ZERO_CHECK.vcxproj">
+      <Project>{FB93BE45-279C-3A62-A9C9-74E70EE80EE8}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Common++\Common++.vcxproj">
+      <Project>{59D6E9B8-185D-35BA-BB12-CD68A323E009}</Project>
+      <Name>Common++</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\Packet++.vcxproj">
+      <Project>{EECAE9F2-44A8-354C-97EF-518C46DA3629}</Project>
+      <Name>Packet++</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Tests\PcppTestUtilities\PcppTestUtilities.vcxproj">
+      <Project>{6AFA31C6-1AEB-30C7-8436-4362CC1C4025}</Project>
+      <Name>PcppTestUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\3rdParty\MemPlumber\MemPlumber\memplumber.vcxproj">
+      <Project>{FBA3BB94-2A30-3C90-BDEB-A8B5FEFF29D3}</Project>
+      <Name>memplumber</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,6 +1,7 @@
-#include "database.h"
+#include "SQLDatabase.h"
 #include <iostream>
 #include <io.h>
+#include "SQLDatabase.h"
 
 using std::cout;
 using std::endl;
@@ -59,4 +60,9 @@ bool SQLDatabase::close()
 	sqlite3_close(this->m_db);
 	this->m_db = nullptr;
 	return true;
+}
+
+int SQLDatabase::addNewProcess(string username, string password, string email)
+{
+    return 0;
 }

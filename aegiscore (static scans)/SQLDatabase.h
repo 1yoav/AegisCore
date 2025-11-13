@@ -22,14 +22,15 @@ struct Process // contaions information we need about certain process
 class SQLDatabase
 {
 public:
-	SQLDatabase() = default;
+
+	SQLDatabase(sqlite3* db, std::string dbFileName) : m_db(db), m_dbFileName(dbFileName), m_errMessage(nullptr) { open(); };
 	~SQLDatabase() = default;
 
 	// no need for interface or virtual functions; highly doubt we'll inpliment a non sql databse
 	virtual bool open(); // opens/creates db
 	virtual bool close();
 
-	virtual int addNewProcess(string username, string password, string email) = 0; // no clue why this an int
+	virtual int addNewProcess(string username, string password, string email);
 
 private:
 	

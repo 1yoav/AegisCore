@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\ArpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Asn1Codec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\BgpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CiscoHdlcLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CotpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CryptoKeyDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DhcpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DhcpV6Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsResourceData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DoIpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\EthDot3Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\EthLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\FtpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\GreLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\GtpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\HttpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IcmpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IcmpV6Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IgmpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPReassembly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPSecLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv4Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv6Extensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv6Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\LdapLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\LLCLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\ModbusLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\MplsLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NdpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NflogLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NtpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NullLoopbackLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PacketTrailerLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PacketUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PayloadLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PemCodec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PPPoELayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\RadiusLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\RawPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\S7CommLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SdpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SingleCommandTextProtocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SipLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Sll2Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SllLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SmtpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SomeIpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SomeIpSdLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSHLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLCommon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLHandshake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\StpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TcpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TcpReassembly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TelnetLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TextBasedProtocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TLVData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TpktLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\UdpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VlanLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VrrpLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VxlanLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\WakeOnLanLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\WireGuardLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\X509Decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\X509ExtensionDataDecoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\ArpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Asn1Codec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\BgpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CiscoHdlcLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CotpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CryptoDataReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CryptoKeyDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DhcpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DhcpV6Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsLayerEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsResourceData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DoIpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\EthDot3Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\EthLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\FtpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\GreLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\GtpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\HttpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IcmpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IcmpV6Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IgmpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPReassembly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPSecLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv4Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv6Extensions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv6Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\LdapLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\LLCLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\MplsLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NullLoopbackLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NdpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NflogLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NtpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Packet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PacketTrailerLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PacketUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PayloadLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PemCodec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PPPoELayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\ProtocolType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\RadiusLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\RawPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\S7CommLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SdpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SingleCommandTextProtocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SipLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SllLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Sll2Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SmtpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SomeIpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SomeIpSdLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSHLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLHandshake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\StpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TcpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TcpReassembly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TelnetLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TextBasedProtocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TLVData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TpktLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\UdpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VlanLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VrrpLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VxlanLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\WakeOnLanLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\WireGuardLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\X509Decoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\X509ExtensionDataDecoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\3rdParty\hash-library\hash-library.dir\$(Configuration)\md5.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{1BAFEFD4-7EF7-3EE6-AE41-034C726765DD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Libraries">
+      <UniqueIdentifier>{5F5E1457-05A6-32E2-9F3C-0A363E53E703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F690F94D-61D4-3D6B-9329-E3E2EADD649B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

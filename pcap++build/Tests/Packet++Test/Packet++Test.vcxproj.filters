@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Asn1Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Base64Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\BgpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CiscoHdlcTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CotpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\CryptoKeyTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DhcpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DhcpV6Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DnsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\DoIpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\EthAndArpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\FtpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\GreTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\GtpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\HttpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IcmpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IcmpV6Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IgmpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPSecTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPv4Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\IPv6Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\LdapTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\LLCTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\ModbusTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\NflogTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\NtpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PacketTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PacketUtilsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PemTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\PPPoETests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\RadiusTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\S7CommTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SipSdpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\Sll2Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SllNullLoopbackTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SmtpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SomeIpSdTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SomeIpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SSHTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\SSLTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\StpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TcpTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TelnetTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\TpktTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\VlanMplsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\VrrpTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\WakeOnLanTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\WireGuardTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Tests\X509Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\Utils\TestUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include\EndianPortable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\Getopt-for-Visual-Studio\getopt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Tests\Packet++Test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{1BAFEFD4-7EF7-3EE6-AE41-034C726765DD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F690F94D-61D4-3D6B-9329-E3E2EADD649B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
