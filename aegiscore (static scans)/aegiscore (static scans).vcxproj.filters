@@ -30,12 +30,33 @@
     <ClCompile Include="NetworkMonitor.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="WFPEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SQLDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterRule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WFPEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketLogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

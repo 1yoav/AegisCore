@@ -132,13 +132,20 @@
   <ItemGroup>
     <ClCompile Include="NetworkMonitor.cpp" />
     <ClCompile Include="NetworkMonitor.h" />
+    <ClCompile Include="NetworkUtils.cpp" />
+    <ClCompile Include="PacketLogger.cpp" />
     <ClCompile Include="SQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="WFPEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FilterRule.h" />
+    <ClInclude Include="NetworkUtils.h" />
+    <ClInclude Include="PacketLogger.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="WFPEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

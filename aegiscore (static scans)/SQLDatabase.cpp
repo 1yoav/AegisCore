@@ -1,7 +1,6 @@
 #include "SQLDatabase.h"
 #include <iostream>
 #include <io.h>
-#include "SQLDatabase.h"
 
 using std::cout;
 using std::endl;
