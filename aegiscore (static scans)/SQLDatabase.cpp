@@ -34,8 +34,28 @@ bool SQLDatabase::open()
                 Verdict TEXT DEFAULT 'under_review' CHECK(Verdict IN ('benign','suspicious','malicious','under_review')),
                 LastSeen TEXT NOT NULL
             );
+            CREATE TABLE PROCESSES (
+                PID INTEGER PRIMARY KEY NOT NULL,
+                StartTime TEXT NOT NULL,
+                EndTime TEXT,
+                ProcessName TEXT NOT NULL,
+                ExePath TEXT NOT NULL,
+                UserName TEXT,
+                HashSHA256 TEXT,
+                SignedBy TEXT,
+                InitialTrigger TEXT,
+                CurrentScore REAL DEFAULT 0,
+                Verdict TEXT DEFAULT 'under_review' CHECK(Verdict IN ('benign','suspicious','malicious','under_review')),
+                LastSeen TEXT NOT NULL
+            );
+            CREATE TABLE CIDR_IPS (
+                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                StartIP INTEGER NOT NULL,
+                EndIP INTEGER NOT NULL,
+            );
         )";
 
+        // create table
         res = sqlite3_exec(m_db, sqlStatement, nullptr, nullptr, &m_errMessage);
         if (res != SQLITE_OK)
         {
@@ -50,6 +70,7 @@ bool SQLDatabase::open()
     return true;
 }
 
+// void SQLDatabase::importIps
 bool SQLDatabase::close()
 {
 	if (!m_db)
@@ -63,5 +84,6 @@ bool SQLDatabase::close()
 
 int SQLDatabase::addNewProcess(string username, string password, string email)
 {
+
     return 0;
 }

@@ -59,5 +59,8 @@
     <ClInclude Include="NetworkUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

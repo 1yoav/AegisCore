@@ -1,5 +1,7 @@
 #include "sqlite3.h"
+#include "Ip.h"
 #include <string>
+
 
 using std::string;
 
@@ -31,6 +33,7 @@ public:
 	virtual bool close();
 
 	virtual int addNewProcess(string username, string password, string email);
+
 
 private:
 	

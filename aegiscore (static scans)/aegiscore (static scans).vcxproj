@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FilterRule.h" />
+    <ClInclude Include="Ip.h" />
     <ClInclude Include="NetworkUtils.h" />
     <ClInclude Include="PacketLogger.h" />
     <ClInclude Include="SQLDatabase.h" />
