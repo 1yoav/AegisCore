@@ -144,6 +144,7 @@
     <ClInclude Include="Ip.h" />
     <ClInclude Include="NetworkUtils.h" />
     <ClInclude Include="PacketLogger.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="WFPEngine.h" />

@@ -54,40 +54,59 @@ bool WFPEngine::CreateSubLayer() {
     logger->LogInfo("WFP sublayer created successfully");
     return true;
 }
-
 bool WFPEngine::AddFilter(const FilterRule& rule) {
+    // Pass the updated rule structure to the specific version handler
     return AddIPv4Filter(rule);
 }
 
 bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
     FWPM_FILTER0 filter = { 0 };
-    FWPM_FILTER_CONDITION0 conditions[2] = { 0 };
+    FWPM_FILTER_CONDITION0 conditions[2] = { 0 }; // Max 2 conditions (IP + Port)
     UINT32 conditionCount = 0;
 
-    // Set filter metadata
+    // We need these structs to persist until FwpmFilterAdd0 is called
+    FWP_RANGE0 rangeValue = { };
+
+    // 1. Set Filter Metadata
     filter.subLayerKey = subLayerGUID;
     filter.displayData.name = (wchar_t*)L"AV Network Filter";
+    // Convert std::string description to wchar_t* for the description field if desired
+    // (For simplicity, we are leaving description generic or you can convert rule.description)
     filter.weight.type = FWP_UINT8;
-    filter.weight.uint8 = 0xF;
+    filter.weight.uint8 = 0xF; // Weight
     filter.action.type = FWP_ACTION_BLOCK;
+    filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4; // Standard outbound connection layer
 
-    // Choose layer based on filter type
+    // 2. Configure IP Condition
     if (rule.type == FilterType::BLOCK_IP || rule.type == FilterType::BLOCK_IP_PORT) {
-        // Outbound IPv4 layer
-        filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
-
-        // Add IP condition
         conditions[conditionCount].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
-        conditions[conditionCount].matchType = FWP_MATCH_EQUAL;
-        conditions[conditionCount].conditionValue.type = FWP_UINT32;
-        conditions[conditionCount].conditionValue.uint32 = NetworkUtils::IPStringToUInt32(rule.ip);
+
+        // CHECK: Is this a single IP or a Range?
+        if (rule.min_ip == rule.max_ip) {
+            // SINGLE IP: Use standard equality match
+            conditions[conditionCount].matchType = FWP_MATCH_EQUAL;
+            conditions[conditionCount].conditionValue.type = FWP_UINT32;
+            conditions[conditionCount].conditionValue.uint32 = rule.min_ip;
+        }
+        else {
+            // IP RANGE: Use WFP Range match
+            // We must construct an FWP_RANGE0 struct
+            rangeValue.valueLow.type = FWP_UINT32;
+            rangeValue.valueLow.uint32 = rule.min_ip;
+
+            rangeValue.valueHigh.type = FWP_UINT32;
+            rangeValue.valueHigh.uint32 = rule.max_ip;
+
+            conditions[conditionCount].matchType = FWP_MATCH_RANGE;
+            conditions[conditionCount].conditionValue.type = FWP_RANGE_TYPE;
+            conditions[conditionCount].conditionValue.rangeValue = &rangeValue;
+        }
         conditionCount++;
     }
 
-    if (rule.type == FilterType::BLOCK_PORT || rule.type == FilterType::BLOCK_IP_PORT) {
-        // Add port condition
-        filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
-
+    // 3. Configure Port Condition
+    // Note: We check if port > 0 to avoid blocking port 0 accidentally
+    if ((rule.type == FilterType::BLOCK_PORT || rule.type == FilterType::BLOCK_IP_PORT) && rule.port > 0) {
         conditions[conditionCount].fieldKey = FWPM_CONDITION_IP_REMOTE_PORT;
         conditions[conditionCount].matchType = FWP_MATCH_EQUAL;
         conditions[conditionCount].conditionValue.type = FWP_UINT16;
@@ -95,9 +114,13 @@ bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
         conditionCount++;
     }
 
+    // 4. Apply Conditions
     filter.numFilterConditions = conditionCount;
-    filter.filterCondition = conditions;
+    if (conditionCount > 0) {
+        filter.filterCondition = conditions;
+    }
 
+    // 5. Add to WFP Engine
     UINT64 filterId;
     DWORD result = FwpmFilterAdd0(engineHandle, &filter, NULL, &filterId);
 
