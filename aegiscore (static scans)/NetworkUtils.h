@@ -1,5 +1,5 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN  // exclude rarely used stuff from windows headers
 #include <string>
 
 #include <ws2tcpip.h>

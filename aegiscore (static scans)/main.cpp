@@ -3,6 +3,7 @@
 #include "WFPEngine.h"
 #include "PacketLogger.h"
 #include "FilterRule.h"
+#include "SQLDatabase.h"
 #include <iostream>
 #include <memory>
 #include <thread>
@@ -15,6 +16,13 @@ int main() {
     std::cout << "  Antivirus Network Monitor" << std::endl;
     std::cout << "==================================" << std::endl;
     std::cout << std::endl;
+
+    std::cout << "Initializing databse...\n";
+
+    sqlite3* database = nullptr;
+    SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
+    db.open();
+
 
     // Initialize logger
     auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true);
@@ -36,10 +44,18 @@ int main() {
         FilterRule("8.8.8.8", FilterType::BLOCK_IP, "Block Google DNS"),
         FilterRule("8.8.4.4", FilterType::BLOCK_IP, "Block Google DNS Secondary"),
         FilterRule(69, FilterType::BLOCK_PORT, "Block TFTP (port 69)"),
-        FilterRule(3333, FilterType::BLOCK_PORT, "Block Cryptomining (port 3333)"),
-        FilterRule(4444, FilterType::BLOCK_PORT, "Block Cryptomining (port 4444)"),
-        FilterRule(9999, FilterType::BLOCK_PORT, "Block Cryptomining (port 9999)")
+        // ... other static rules ...
     };
+
+    // 2. Fetch Dynamic Rules from DB
+    std::cout << "Loading malicious CIDR ranges from database...\n";
+    std::vector<FilterRule> dbRules = db.getC2Rules();
+
+    // 3. Merge vectors
+    // This adds everything from dbRules to the end of rules
+    rules.insert(rules.end(), dbRules.begin(), dbRules.end());
+
+    std::cout << "Total Active Rules: " << rules.size() << "\n";
 
     for (const auto& rule : rules) {
         wfpEngine.AddFilter(rule);
@@ -65,18 +81,3 @@ int main() {
     return 0;
 }
 
-//#include <iostream>
-//#include "SQLDatabase.h"
-//
-//int main(void)
-//{
-//	std::cout << "Welcome to AegisCore! Passive Scanner activated.\n\n";
-//
-//	std::cout << "INitializing databse...\n";
-//
-//	sqlite3* database = nullptr;
-//	SQLDatabase db(database, "DATABASE");
-//
-//
-//	return 0;
-//}
