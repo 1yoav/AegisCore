@@ -1,15 +1,9 @@
-//runs as administartor
-
-//read constantly the proccess
-
-//inject into every procees the dll file
-
-//run the dll
-
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <stdio.h>
 #include <iostream>
+#include "pipe.h"
+#include <thread>
 
 
 void log(const wchar_t* msg)
@@ -21,10 +15,15 @@ void log(const wchar_t* msg)
 
 int main()
 {
+	//load the hooking DLL
     HMODULE minHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
     HMODULE hDLL = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll");
-
     
+    // Fix the thread creation line in main:
+    std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
+	pipe.detach();
+
+	Sleep(2000); // Wait for 2 seconds to ensure the pipe thread is running
 
     printf("DLL loaded. Testing APIs...\n");
 
@@ -98,6 +97,8 @@ int main()
     ResumeThread(selfThread);
 
     printf("All tests finished!\n");
-    return 0;
+   return 0;
+
+
 }
 
