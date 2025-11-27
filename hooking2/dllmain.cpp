@@ -4,12 +4,14 @@
 #include <iostream>
 #include <Windows.h>
 #include <sstream>
+#include <locale>
+#include <codecvt> // Deprecated in C++17
+#include <string>
 #include <vector>
 #include <tlhelp32.h>
 #include <stdio.h>
 #include <mutex>
 #include <cstring> // For strlen
-#include <string>
 #include "MinHook.h"
 
 //***********************************
@@ -315,7 +317,8 @@ BOOL WINAPI HookProcess32First(HANDLE a, LPPROCESSENTRY32 b) {
 // CreateToolhelp32Snapshot
 // ================================
 HANDLE WINAPI HookCreateToolhelp32Snapshot(DWORD a, DWORD b) {
-    LogHookedFunction("[API] CreateToolhelp32Snapshot\n");
+    OutputDebugStringW(L"tool32 snapshot called\n");
+    LogHookedFunction("[API] CreateToolhelp32Snapshot");
     return fpCreateToolhelp32Snapshot(a, b);
 }
 
@@ -535,11 +538,16 @@ void sendLogs()
     {
         //create the msg
 		logMutex.lock();
-        std::string msg = std::to_string(loggedApi.size()) + "@";
+        std::string msg;
         for (auto item : loggedApi)
         {
             msg += item;
         }
+
+		//create whide string for debug output
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::wstring wide_string = converter.from_bytes(msg);
+        OutputDebugStringW(wide_string.c_str());
 		loggedApi.clear();
         logMutex.unlock();
 
@@ -567,7 +575,7 @@ void sendLogs()
 
 //create log entry
 void LogHookedFunction(std::string functionName)
-{
+{    
     //create time
     SYSTEMTIME st;
     GetLocalTime(&st);
@@ -609,7 +617,7 @@ DWORD WINAPI nitHook(LPVOID)
 {
     if (MH_Initialize() != MH_OK)
     {
-        LogHookedFunction("MH_Initialize failed");
+        OutputDebugStringW(L"MH_Initialize failed\n");
         return 0;
     }
 
@@ -617,15 +625,17 @@ DWORD WINAPI nitHook(LPVOID)
         if (MH_CreateHookApi(hook.dllName, hook.funcName, hook.hookFunc, hook.originalFunc) != MH_OK)
         {
             std::string name = hook.funcName;
-            std::wstring msg = std::wstring(L"[HOOK FAIL] ") + std::wstring(name.begin(), name.end());
+            std::wstring msg = std::wstring(L"[HOOK FAIL] ") + std::wstring(name.begin(), name.end()) + std::wstring(L"\n");
             OutputDebugStringW(msg.c_str());
         }
     }
 
     if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
     {
-        LogHookedFunction("MH_EnableHook failed");
+        OutputDebugStringW(L"MH_EnableHook failed");
     }
+
+    OutputDebugStringW(L"MH_EnableHook succedd");
 
 	//create thread to send logs
 	std::thread logThread(sendLogs);
@@ -641,7 +651,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
         // Add this function to your dllmain.cpp
-        LogHookedFunction("DLL_PROCESS_ATTACH called");
+        OutputDebugStringW(L"DLL_PROCESS_ATTACH called\n");
         DisableThreadLibraryCalls(hModule);
         (QueueUserWorkItem(nitHook, nullptr, WT_EXECUTEDEFAULT));
         break;

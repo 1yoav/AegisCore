@@ -2,6 +2,7 @@
 
 void createPipe(wchar_t* pipe)
 {
+	std::cout << "Creating pipe at: " << pipe << std::endl;
 	HANDLE hPipe = CreateNamedPipeW(
 		pipe,
 		PIPE_ACCESS_INBOUND,

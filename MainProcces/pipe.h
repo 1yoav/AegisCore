@@ -3,4 +3,4 @@
 #include <windows.h>
 #include <iostream>
 
-
+void createPipe(wchar_t* pipe);
