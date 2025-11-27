@@ -2,7 +2,7 @@
 
 void createPipe(wchar_t* pipe)
 {
-	std::cout << "Creating pipe at: " << pipe << std::endl;
+	std::wcout << L"Creating pipe at: " << pipe << std::endl;
 	HANDLE hPipe = CreateNamedPipeW(
 		pipe,
 		PIPE_ACCESS_INBOUND,
@@ -30,7 +30,7 @@ void createPipe(wchar_t* pipe)
 			continue;
 		}
 
-		std::wcout << L"Client connected!" << std::endl;
+		std::cout << "Client connected!" << std::endl;
 		char buffer[1000];
 		DWORD bytesRead = 0;
 		BOOL success = ReadFile(

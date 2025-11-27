@@ -64,7 +64,7 @@ std::vector<std::string> loggedApi;
 std::mutex logMutex;
 typedef CLIENT_ID* PCLIENT_ID;
 
-const wchar_t* pipeName = L"\\\\.\\pipe\\MySinglePipe";
+const wchar_t* pipeName = L"\\\\.\\pipe\\my_pipe";
 
 //declare logging function
 void LogHookedFunction(std::string functionName);

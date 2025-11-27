@@ -20,19 +20,18 @@ int main()
     Sleep(2000);
 
 	//load the hooking DLL
-    HMODULE minHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
+    //HMODULE minHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
     HMODULE hDLL = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll");
 	Sleep(2000);
-    printf("DLL loaded. Testing APIs...\n");
 
-    // ---------------------------
-    // 2. Toolhelp32Snapshot / Process32
-    // ---------------------------
-    HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    PROCESSENTRY32 pe = { sizeof(pe) };
-    Process32First(snap, &pe);
-    while (Process32Next(snap, &pe));
-    CloseHandle(snap);
+    //// ---------------------------
+    //// 2. Toolhelp32Snapshot / Process32
+    //// ---------------------------
+    //HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    //PROCESSENTRY32 pe = { sizeof(pe) };
+    //Process32First(snap, &pe);
+    //while (Process32Next(snap, &pe));
+    //CloseHandle(snap);
 
    
 
