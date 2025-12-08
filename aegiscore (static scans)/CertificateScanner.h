@@ -1,11 +1,10 @@
 #pragma once
-#include "Process.h"
+#include "AVProcess.h"
 #include <string>
-#include <wintrust.h>
+#include "Windows.h"
 
-#pragma comment(lib, "wintrust.lib")
 
-class CertificateChecker
+class CertificateScanner
 {
 public:
     // This function attempts to verify the signature of the executable 
@@ -15,5 +14,5 @@ public:
 
 private:
     // Helper function to extract the signer name after a successful check
-    std::wstring getSignerName(HANDLE fileHandle);
+    std::string getSignerName(HANDLE fileHandle);
 };
