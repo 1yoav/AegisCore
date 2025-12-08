@@ -134,6 +134,7 @@
     <ClCompile Include="NetworkMonitor.h" />
     <ClCompile Include="NetworkUtils.cpp" />
     <ClCompile Include="PacketLogger.cpp" />
+    <ClCompile Include="CertificateScanner.h" />
     <ClCompile Include="SQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
@@ -144,7 +145,7 @@
     <ClInclude Include="Ip.h" />
     <ClInclude Include="NetworkUtils.h" />
     <ClInclude Include="PacketLogger.h" />
-    <ClInclude Include="Process.h" />
+    <ClInclude Include="AVProcess.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="WFPEngine.h" />

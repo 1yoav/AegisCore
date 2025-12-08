@@ -39,6 +39,9 @@
     <ClCompile Include="NetworkUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CertificateScanner.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SQLDatabase.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AVProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

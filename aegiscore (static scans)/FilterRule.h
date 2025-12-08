@@ -16,6 +16,7 @@ struct FilterRule {
     uint16_t port;
     FilterType type;
     std::string description;
+    std::string process_path; // used to know who to send to the deep scan
 
     // Constructor 1: Single IP String (e.g. "8.8.8.8")
     FilterRule(const std::string& ipAddr, FilterType t, const std::string& desc)
@@ -24,11 +25,12 @@ struct FilterRule {
         uint32_t val = ipStringToInt(ipAddr);
         min_ip = val;
         max_ip = val;
+        process_path = "";
     }
 
     // Constructor 2: Port only
     FilterRule(uint16_t p, FilterType t, const std::string& desc)
-        : ipStr(""), min_ip(0), max_ip(0), port(p), type(t), description(desc) {
+        : ipStr(""), min_ip(0), max_ip(0), port(p), type(t), description(desc), process_path(0) {
     }
 
     // Constructor 3: IP String + Port
@@ -37,10 +39,11 @@ struct FilterRule {
         uint32_t val = ipStringToInt(ipAddr);
         min_ip = val;
         max_ip = val;
+        process_path = "";
     }
 
     // Constructor 4: INTEGER RANGE (For your Database)
     FilterRule(uint32_t start, uint32_t end, FilterType t, const std::string& desc)
-        : ipStr("CIDR_RANGE"), min_ip(start), max_ip(end), port(0), type(t), description(desc) {
+        : ipStr("CIDR_RANGE"), min_ip(start), max_ip(end), port(0), type(t), description(desc), process_path(0) {
     }
 };
