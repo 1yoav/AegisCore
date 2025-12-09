@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CertificateScanner.cpp" />
+    <ClCompile Include="HelperFunctions.h" />
     <ClCompile Include="NetworkMonitor.cpp" />
     <ClCompile Include="NetworkMonitor.h" />
     <ClCompile Include="NetworkUtils.cpp" />

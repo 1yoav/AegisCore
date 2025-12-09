@@ -14,5 +14,5 @@ public:
 
 private:
     // Helper function to extract the signer name after a successful check
-    std::string getSignerName(HANDLE fileHandle);
+    std::string getSignerName(const std::wstring& filePath);
 };
