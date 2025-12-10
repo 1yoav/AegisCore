@@ -119,7 +119,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>"C:\Users\Cyber_User\Downloads\MinHook_133_bin\bin\MinHook.x64.lib";"C:\Users\Cyber_User\Downloads\MinHook_133_bin\bin\MinHook.x86.lib";%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>"C:\Users\Cyber_User\Downloads\MinHook_133_bin\bin\MinHook.x64.lib";%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

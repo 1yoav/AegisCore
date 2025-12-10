@@ -3,6 +3,7 @@
 #include <winternl.h>
 #include <iostream>
 #include <Windows.h>
+#include <thread>
 #include <sstream>
 #include <locale>
 #include <codecvt> // Deprecated in C++17
@@ -45,12 +46,22 @@
 //• SetThreadContext
 
 
-// Link MinHook library
-#if _WIN64
-#pragma comment(lib, "MinHook.x64.lib")
-#else
-#pragma comment(lib, "MinHook.x86.lib")
-#endif
+typedef MH_STATUS(WINAPI* pMH_Initialize)();
+typedef MH_STATUS(WINAPI* pMH_Uninitialize)();
+typedef MH_STATUS(WINAPI* pMH_CreateHookApi)(LPCWSTR pszModule, LPCSTR pszProcName, LPVOID pDetour, LPVOID* ppOriginal);
+typedef MH_STATUS(WINAPI* pMH_EnableHook)(LPVOID pTarget);
+typedef MH_STATUS(WINAPI* pMH_DisableHook)(LPVOID pTarget);
+
+// ------------------- Globals -------------------
+HMODULE g_hMinHook;
+
+pMH_Initialize      g_MH_Initialize;
+pMH_Uninitialize    g_MH_Uninitialize;
+pMH_CreateHookApi   g_MH_CreateHookApi;
+pMH_EnableHook      g_MH_EnableHook;
+pMH_DisableHook     g_MH_DisableHook;
+
+HMODULE hModulee;
 
 //defins global variables and types
 typedef struct HookInfo {
@@ -532,12 +543,19 @@ std::vector<HookInfo> hooks = {
 
 ///format: <num of logs><log1><log2>....<log N>
 //send logs to named pipe
-void sendLogs()
+    void sendLogs()
 {
     while (true)
     {
-        //create the msg
 		logMutex.lock();
+        if(loggedApi.empty())
+        {
+            logMutex.unlock();
+            Sleep(10000); // Sleep for 10 seconds if there are no logs
+            continue;
+		}
+
+        //create the msg
         std::string msg;
         for (auto item : loggedApi)
         {
@@ -553,7 +571,14 @@ void sendLogs()
 
 
 
-        WaitNamedPipeW(pipeName, NMPWAIT_WAIT_FOREVER);
+        if (!WaitNamedPipeW(pipeName, NMPWAIT_WAIT_FOREVER))
+        {
+            g_MH_DisableHook(MH_ALL_HOOKS);
+            g_MH_Uninitialize();
+            FreeLibrary(g_hMinHook);
+            FreeLibrary((hModulee));
+            return;
+        }
 
         HANDLE hPipe = CreateFileW(
             pipeName,
@@ -564,6 +589,7 @@ void sendLogs()
             0,
             NULL
         );
+
         
         WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
         CloseHandle(hPipe);
@@ -615,14 +641,26 @@ void LogHookedFunction(std::string functionName)
 
 DWORD WINAPI nitHook(LPVOID)
 {
-    if (MH_Initialize() != MH_OK)
+    g_hMinHook = LoadLibraryA("C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
+    if (!g_hMinHook) {
+        OutputDebugStringW(L"LoadLibraryA(MinHook) failed\n");
+        return 0;
+    }
+    g_MH_Initialize = (pMH_Initialize)GetProcAddress(g_hMinHook, "MH_Initialize");
+    g_MH_Uninitialize = (pMH_Uninitialize)GetProcAddress(g_hMinHook, "MH_Uninitialize");
+    g_MH_CreateHookApi = (pMH_CreateHookApi)GetProcAddress(g_hMinHook, "MH_CreateHookApi");
+    g_MH_EnableHook = (pMH_EnableHook)GetProcAddress(g_hMinHook, "MH_EnableHook");
+    g_MH_DisableHook = (pMH_DisableHook)GetProcAddress(g_hMinHook, "MH_DisableHook");
+
+
+    if (g_MH_Initialize() != MH_OK)
     {
-        OutputDebugStringW(L"MH_Initialize failed\n");
+        OutputDebugStringW(L"MH_Initializee failed\n");
         return 0;
     }
 
     for (const auto& hook : hooks) {
-        if (MH_CreateHookApi(hook.dllName, hook.funcName, hook.hookFunc, hook.originalFunc) != MH_OK)
+        if (g_MH_CreateHookApi(hook.dllName, hook.funcName, hook.hookFunc, hook.originalFunc) != MH_OK)
         {
             std::string name = hook.funcName;
             std::wstring msg = std::wstring(L"[HOOK FAIL] ") + std::wstring(name.begin(), name.end()) + std::wstring(L"\n");
@@ -630,7 +668,7 @@ DWORD WINAPI nitHook(LPVOID)
         }
     }
 
-    if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
+    if (g_MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
     {
         OutputDebugStringW(L"MH_EnableHook failed");
     }
@@ -652,14 +690,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     case DLL_PROCESS_ATTACH:
         // Add this function to your dllmain.cpp
         OutputDebugStringW(L"DLL_PROCESS_ATTACH called\n");
+		hModulee = hModule;
         DisableThreadLibraryCalls(hModule);
         (QueueUserWorkItem(nitHook, nullptr, WT_EXECUTEDEFAULT));
         break;
 
     case DLL_PROCESS_DETACH:
-        MH_DisableHook(MH_ALL_HOOKS);
-        MH_Uninitialize();
-
+        g_MH_DisableHook(MH_ALL_HOOKS);
+        g_MH_Uninitialize();
+        FreeLibrary(g_hMinHook);
         break;
     }
 

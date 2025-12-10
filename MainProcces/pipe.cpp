@@ -31,7 +31,9 @@ void createPipe(wchar_t* pipe)
 		}
 
 		std::cout << "Client connected!" << std::endl;
-		char buffer[1000];
+
+		//bytes to read
+		char buffer[10000];
 		DWORD bytesRead = 0;
 		BOOL success = ReadFile(
 			hPipe,
