@@ -12,4 +12,5 @@ public:
     static UINT32 IPStringToUInt32(const std::string& ip);
     static std::string UInt32ToIPString(UINT32 ip);
     static std::string GetProtocolName(UINT8 protocol);
+    static void SendMetadataToPipe(UINT32 pid, const std::string& origIP, UINT16 origPort);
 };

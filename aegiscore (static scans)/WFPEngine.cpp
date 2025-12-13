@@ -1,5 +1,6 @@
 #include "WFPEngine.h"
 #include "NetworkUtils.h"
+#include "CertificateScanner.h"
 
 WFPEngine::WFPEngine(std::shared_ptr<PacketLogger> log)
     : engineHandle(NULL), isInitialized(false), logger(log) {
@@ -59,6 +60,35 @@ bool WFPEngine::AddFilter(const FilterRule& rule) {
     return AddIPv4Filter(rule);
 }
 
+void WINAPI WFPEngine::RedirectClassify(...) {
+    // 1. Extract Metadata
+    UINT32 remoteIP = inFixedValues->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V4_IP_REMOTE_ADDRESS].value.uint32;
+    UINT16 remotePort = inFixedValues->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V4_IP_REMOTE_PORT].value.uint16;
+    UINT32 pid = inMetadata->currentProcessId;
+
+    // 2. Identify why we are here (Rule Type)
+    FilterType type = (FilterType)filter->context;
+    bool shouldBlock = false;
+
+    if (type == FilterType::REDIRECT_PORT) {
+        shouldBlock = true; // Port 4444 etc.
+    }
+    else if (type == FilterType::REDIRECT_UNSIGNED) {
+        // Check signature (Bridge to your CertificateScanner)
+        // if (CertificateScanner::isUnsigned(pid)) shouldBlock = true;
+    }
+
+    if (shouldBlock) {
+        // 3. FORWARD METADATA (The Pipe!)
+        std::string ipStr = NetworkUtils::UInt32ToIPString(remoteIP);
+        // Helper we discussed in the previous turn
+        NetworkUtils::SendMetadataToPipe(pid, ipStr, remotePort);
+
+        // 4. BLOCK THE FLOW
+        classifyOut->actionType = FWP_ACTION_BLOCK;
+        classifyOut->rights &= ~FWPS_RIGHT_ACTION_WRITE;
+    }
+}
 bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
     FWPM_FILTER0 filter = { 0 };
     FWPM_FILTER_CONDITION0 conditions[2] = { 0 }; // Max 2 conditions (IP + Port)
