@@ -4,9 +4,17 @@
 #include <cstdint>
 
 enum class FilterType {
+
+    //BLOCKING FILTERS
     BLOCK_IP,
     BLOCK_PORT,
-    BLOCK_IP_PORT
+    BLOCK_IP_PORT,
+
+    // REDIRECTION FILTERS (to deep scan)
+    REDIRECT_PORT,
+    REDIRECT_UNSIGNED,
+    REDIRECT_BAD_HOOK
+
 };
 
 struct FilterRule {
