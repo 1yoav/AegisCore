@@ -1,10 +1,17 @@
 #include "WFPEngine.h"
 #include "NetworkUtils.h"
-#include "CertificateScanner.h"
+#include <iostream>
+#include <vector>
+
+// Required libraries
+#pragma comment(lib, "fwpuclnt.lib")
+#pragma comment(lib, "rpcrt4.lib") 
 
 WFPEngine::WFPEngine(std::shared_ptr<PacketLogger> log)
     : engineHandle(NULL), isInitialized(false), logger(log) {
-    CoCreateGuid(&subLayerGUID);
+    if (UuidCreate(&subLayerGUID) != RPC_S_OK) {
+        ZeroMemory(&subLayerGUID, sizeof(GUID));
+    }
 }
 
 WFPEngine::~WFPEngine() {
@@ -12,24 +19,13 @@ WFPEngine::~WFPEngine() {
 }
 
 bool WFPEngine::Initialize() {
-    DWORD result = FwpmEngineOpen0(
-        NULL,
-        RPC_C_AUTHN_WINNT,
-        NULL,
-        NULL,
-        &engineHandle
-    );
-
+    DWORD result = FwpmEngineOpen0(NULL, RPC_C_AUTHN_WINNT, NULL, NULL, &engineHandle);
     if (result != ERROR_SUCCESS) {
-        logger->LogError("Failed to open WFP engine. Error: " + std::to_string(result));
+        logger->LogError("Failed to open WFP engine: " + std::to_string(result));
         return false;
     }
 
-    logger->LogInfo("WFP engine opened successfully");
-
     if (!CreateSubLayer()) {
-        FwpmEngineClose0(engineHandle);
-        engineHandle = NULL;
         return false;
     }
 
@@ -40,93 +36,47 @@ bool WFPEngine::Initialize() {
 bool WFPEngine::CreateSubLayer() {
     FWPM_SUBLAYER0 subLayer = { 0 };
     subLayer.subLayerKey = subLayerGUID;
-    subLayer.displayData.name = (wchar_t*)L"Antivirus Network Monitor";
-    subLayer.displayData.description = (wchar_t*)L"Passive network monitoring for antivirus";
+    subLayer.displayData.name = (wchar_t*)L"AegisCore AV SubLayer";
     subLayer.flags = 0;
-    subLayer.weight = 0xFFFF; // High priority
+    subLayer.weight = 0xFFFF;
 
     DWORD result = FwpmSubLayerAdd0(engineHandle, &subLayer, NULL);
-
-    if (result != ERROR_SUCCESS && result != FWP_E_ALREADY_EXISTS) {
-        logger->LogError("Failed to create sublayer. Error: " + std::to_string(result));
-        return false;
-    }
-
-    logger->LogInfo("WFP sublayer created successfully");
-    return true;
+    return (result == ERROR_SUCCESS || result == FWP_E_ALREADY_EXISTS);
 }
+
+// --------------------------------------------------------------------------------
+// Standard Blocking Logic (IP/Port)
+// --------------------------------------------------------------------------------
 bool WFPEngine::AddFilter(const FilterRule& rule) {
-    // Pass the updated rule structure to the specific version handler
     return AddIPv4Filter(rule);
 }
 
-void WINAPI WFPEngine::RedirectClassify(...) {
-    // 1. Extract Metadata
-    UINT32 remoteIP = inFixedValues->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V4_IP_REMOTE_ADDRESS].value.uint32;
-    UINT16 remotePort = inFixedValues->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V4_IP_REMOTE_PORT].value.uint16;
-    UINT32 pid = inMetadata->currentProcessId;
-
-    // 2. Identify why we are here (Rule Type)
-    FilterType type = (FilterType)filter->context;
-    bool shouldBlock = false;
-
-    if (type == FilterType::REDIRECT_PORT) {
-        shouldBlock = true; // Port 4444 etc.
-    }
-    else if (type == FilterType::REDIRECT_UNSIGNED) {
-        // Check signature (Bridge to your CertificateScanner)
-        // if (CertificateScanner::isUnsigned(pid)) shouldBlock = true;
-    }
-
-    if (shouldBlock) {
-        // 3. FORWARD METADATA (The Pipe!)
-        std::string ipStr = NetworkUtils::UInt32ToIPString(remoteIP);
-        // Helper we discussed in the previous turn
-        NetworkUtils::SendMetadataToPipe(pid, ipStr, remotePort);
-
-        // 4. BLOCK THE FLOW
-        classifyOut->actionType = FWP_ACTION_BLOCK;
-        classifyOut->rights &= ~FWPS_RIGHT_ACTION_WRITE;
-    }
-}
 bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
     FWPM_FILTER0 filter = { 0 };
-    FWPM_FILTER_CONDITION0 conditions[2] = { 0 }; // Max 2 conditions (IP + Port)
+    FWPM_FILTER_CONDITION0 conditions[2] = { 0 };
     UINT32 conditionCount = 0;
-
-    // We need these structs to persist until FwpmFilterAdd0 is called
     FWP_RANGE0 rangeValue = { };
 
-    // 1. Set Filter Metadata
     filter.subLayerKey = subLayerGUID;
-    filter.displayData.name = (wchar_t*)L"AV Network Filter";
-    // Convert std::string description to wchar_t* for the description field if desired
-    // (For simplicity, we are leaving description generic or you can convert rule.description)
+    filter.displayData.name = (wchar_t*)L"AegisCore Block Filter";
     filter.weight.type = FWP_UINT8;
-    filter.weight.uint8 = 0xF; // Weight
-    filter.action.type = FWP_ACTION_BLOCK;
-    filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4; // Standard outbound connection layer
+    filter.weight.uint8 = 0xF;
+    filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
+    filter.action.type = FWP_ACTION_BLOCK; // Standard Block
 
-    // 2. Configure IP Condition
+    // 1. IP Condition
     if (rule.type == FilterType::BLOCK_IP || rule.type == FilterType::BLOCK_IP_PORT) {
         conditions[conditionCount].fieldKey = FWPM_CONDITION_IP_REMOTE_ADDRESS;
-
-        // CHECK: Is this a single IP or a Range?
         if (rule.min_ip == rule.max_ip) {
-            // SINGLE IP: Use standard equality match
             conditions[conditionCount].matchType = FWP_MATCH_EQUAL;
             conditions[conditionCount].conditionValue.type = FWP_UINT32;
             conditions[conditionCount].conditionValue.uint32 = rule.min_ip;
         }
         else {
-            // IP RANGE: Use WFP Range match
-            // We must construct an FWP_RANGE0 struct
             rangeValue.valueLow.type = FWP_UINT32;
             rangeValue.valueLow.uint32 = rule.min_ip;
-
             rangeValue.valueHigh.type = FWP_UINT32;
             rangeValue.valueHigh.uint32 = rule.max_ip;
-
             conditions[conditionCount].matchType = FWP_MATCH_RANGE;
             conditions[conditionCount].conditionValue.type = FWP_RANGE_TYPE;
             conditions[conditionCount].conditionValue.rangeValue = &rangeValue;
@@ -134,8 +84,7 @@ bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
         conditionCount++;
     }
 
-    // 3. Configure Port Condition
-    // Note: We check if port > 0 to avoid blocking port 0 accidentally
+    // 2. Port Condition
     if ((rule.type == FilterType::BLOCK_PORT || rule.type == FilterType::BLOCK_IP_PORT) && rule.port > 0) {
         conditions[conditionCount].fieldKey = FWPM_CONDITION_IP_REMOTE_PORT;
         conditions[conditionCount].matchType = FWP_MATCH_EQUAL;
@@ -144,25 +93,65 @@ bool WFPEngine::AddIPv4Filter(const FilterRule& rule) {
         conditionCount++;
     }
 
-    // 4. Apply Conditions
     filter.numFilterConditions = conditionCount;
-    if (conditionCount > 0) {
-        filter.filterCondition = conditions;
-    }
+    if (conditionCount > 0) filter.filterCondition = conditions;
 
-    // 5. Add to WFP Engine
     UINT64 filterId;
     DWORD result = FwpmFilterAdd0(engineHandle, &filter, NULL, &filterId);
+    if (result == ERROR_SUCCESS) {
+        filterIds.push_back(filterId);
+        return true;
+    }
+    return false;
+}
 
-    if (result != ERROR_SUCCESS) {
-        logger->LogError("Failed to add filter: " + rule.description +
-            ". Error: " + std::to_string(result));
+bool WFPEngine::AddRedirectFilterByProcess(const std::wstring& processPath, UINT16 proxyPort) {
+    if (!isInitialized) return false;
+
+    FWPM_FILTER0 filter = { 0 };
+    FWPM_FILTER_CONDITION0 condition = { 0 };
+    UINT64 filterId = 0;
+
+    // 1. Convert process path to AppID
+    FWP_BYTE_BLOB* appID = nullptr;
+    DWORD result = FwpmGetAppIdFromFileName0(processPath.c_str(), &appID);
+
+    if (result != ERROR_SUCCESS || appID == nullptr) {
+        logger->LogError("AppID Conversion Failed: " + std::to_string(result));
         return false;
     }
 
-    filterIds.push_back(filterId);
-    logger->LogInfo("Filter added: " + rule.description);
-    return true;
+    // 2. Set up condition - target the specific EXE
+    condition.fieldKey = FWPM_CONDITION_ALE_APP_ID;
+    condition.matchType = FWP_MATCH_EQUAL;
+    condition.conditionValue.type = FWP_BYTE_BLOB_TYPE;
+    condition.conditionValue.byteBlob = appID;
+
+    // 3. Configure filter
+    filter.subLayerKey = subLayerGUID;
+    filter.displayData.name = (wchar_t*)L"AegisCore Trap Filter";
+    filter.weight.type = FWP_UINT8;
+    filter.weight.uint8 = 0xF;
+    filter.numFilterConditions = 1;
+    filter.filterCondition = &condition;
+    filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
+    filter.action.type = FWP_ACTION_BLOCK;
+
+    // 4. Add the filter
+    result = FwpmFilterAdd0(engineHandle, &filter, NULL, &filterId);
+
+    // 5. CRITICAL: Free the AppID memory
+    FwpmFreeMemory0((void**)&appID);
+
+    if (result == ERROR_SUCCESS) {
+        filterIds.push_back(filterId);
+        std::string pathStr(processPath.begin(), processPath.end());
+        logger->LogInfo("TRAP ACTIVATED: Blocked suspicious process: " + pathStr);
+        return true;
+    }
+
+    logger->LogError("Failed to add filter: " + std::to_string(result));
+    return false;
 }
 
 bool WFPEngine::RemoveAllFilters() {
@@ -170,20 +159,14 @@ bool WFPEngine::RemoveAllFilters() {
         FwpmFilterDeleteById0(engineHandle, filterId);
     }
     filterIds.clear();
-    logger->LogInfo("All filters removed");
     return true;
 }
 
-void WFPEngine::Shutdown() {
+bool WFPEngine::Shutdown() {
     if (isInitialized) {
         RemoveAllFilters();
-
-        if (engineHandle) {
-            FwpmEngineClose0(engineHandle);
-            engineHandle = NULL;
-        }
-
-        logger->LogInfo("WFP engine shut down");
+        if (engineHandle) FwpmEngineClose0(engineHandle);
         isInitialized = false;
     }
+    return true;
 }
