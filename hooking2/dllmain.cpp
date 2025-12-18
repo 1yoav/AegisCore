@@ -220,17 +220,17 @@ HANDLE WINAPI HookCreateRemoteThread(
     HANDLE a, LPSECURITY_ATTRIBUTES b, SIZE_T c,
     LPTHREAD_START_ROUTINE d, LPVOID e, DWORD f, LPDWORD g
 ) {
-    LogHookedFunction("[API] CreateRemoteThread\n");
+    LogHookedFunction("CreateRemoteThread");
     return fpCreateRemoteThread(a, b, c, d, e, f, g);
 }
 
 BOOL WINAPI HookLookupPrivilegeValue(LPCWSTR a, LPCWSTR b, PLUID c) {
-    LogHookedFunction("[API] LookupPrivilegeValue\n");
+    LogHookedFunction("LookupPrivilegeValue");
     return fpLookupPrivilegeValue(a, b, c);
 }
 
 BOOL WINAPI HookWriteProcessMemory(HANDLE a, LPVOID b, LPCVOID c, SIZE_T d, SIZE_T* e) {
-    LogHookedFunction("[API] WriteProcessMemory\n");
+    LogHookedFunction("WriteProcessMemory");
     return fpWriteProcessMemory(a, b, c, d, e);
 }
 
@@ -238,27 +238,27 @@ BOOL WINAPI HookAdjustTokenPrivileges(
     HANDLE a, BOOL b, PTOKEN_PRIVILEGES c, DWORD d,
     PTOKEN_PRIVILEGES e, PDWORD f
 ) {
-    LogHookedFunction("[API] AdjustTokenPrivileges\n");
+    LogHookedFunction("AdjustTokenPrivileges");
     return fpAdjustTokenPrivileges(a, b, c, d, e, f);
 }
 
 BOOL WINAPI HookOpenProcessToken(HANDLE a, DWORD b, PHANDLE c) {
-    LogHookedFunction("[API] OpenProcessToken\n");
+    LogHookedFunction("OpenProcessToken");
     return fpOpenProcessToken(a, b, c);
 }
 
 HANDLE WINAPI HookOpenProcess(DWORD a, BOOL b, DWORD c) {
-    LogHookedFunction("[API] OpenProcess\n");
+    LogHookedFunction("OpenProcess");
     return fpOpenProcess(a, b, c);
 }
 
 LPVOID WINAPI HookVirtualAllocEx(HANDLE a, LPVOID b, SIZE_T c, DWORD d, DWORD e) {
-    LogHookedFunction("[API] VirtualAllocEx\n");
+    LogHookedFunction("VirtualAllocEx");
     return fpVirtualAllocEx(a, b, c, d, e);
 }
 
 BOOL WINAPI HookVirtualProtect(LPVOID a, SIZE_T b, DWORD c, PDWORD d) {
-    LogHookedFunction("[API] VirtualProtect\n");
+    LogHookedFunction("VirtualProtect");
     return fpVirtualProtect(a, b, c, d);
 }
 
@@ -269,7 +269,7 @@ BOOL WINAPI HookCreateProcessA(
     LPCSTR a, LPSTR b, LPSECURITY_ATTRIBUTES c, LPSECURITY_ATTRIBUTES d,
     BOOL e, DWORD f, LPVOID g, LPCSTR h, LPSTARTUPINFOA i, LPPROCESS_INFORMATION j
 ) {
-    LogHookedFunction("[API] CreateProcessA\n");
+    LogHookedFunction("CreateProcessA");
     return fpCreateProcessA(a, b, c, d, e, f, g, h, i, j);
 }
 
@@ -280,7 +280,7 @@ BOOL WINAPI HookCreateProcessW(
     LPCWSTR a, LPWSTR b, LPSECURITY_ATTRIBUTES c, LPSECURITY_ATTRIBUTES d,
     BOOL e, DWORD f, LPVOID g, LPCWSTR h, LPSTARTUPINFOW i, LPPROCESS_INFORMATION j
 ) {
-    LogHookedFunction("[API] CreateProcessW\n");
+    LogHookedFunction("CreateProcessW");
     return fpCreateProcessW(a, b, c, d, e, f, g, h, i, j);
 }
 
@@ -292,7 +292,7 @@ BOOL WINAPI HookCreateProcessInternalW(
     BOOL f, DWORD g, LPVOID h, LPCWSTR i, LPSTARTUPINFOW j,
     LPPROCESS_INFORMATION k, HANDLE l
 ) {
-    LogHookedFunction("[API] CreateProcessInternalW\n");
+    LogHookedFunction("CreateProcessInternalW");
     return fpCreateProcessInternalW(a, b, c, d, e, f, g, h, i, j, k, l);
 }
 
@@ -304,7 +304,7 @@ BOOL WINAPI HookCreateProcessInternalA(
     BOOL f, DWORD g, LPVOID h, LPCSTR i, LPSTARTUPINFOA j,
     LPPROCESS_INFORMATION k, HANDLE l
 ) {
-    LogHookedFunction("[API] CreateProcessInternalA\n");
+    LogHookedFunction("CreateProcessInternalA");
     return fpCreateProcessInternalA(a, b, c, d, e, f, g, h, i, j, k, l);
 }
 
@@ -312,7 +312,7 @@ BOOL WINAPI HookCreateProcessInternalA(
 // Process32Next
 // ================================
 BOOL WINAPI HookProcess32Next(HANDLE a, LPPROCESSENTRY32 b) {
-    LogHookedFunction("[API] Process32Next\n");
+    LogHookedFunction("Process32Next");
     return fpProcess32Next(a, b);
 }
 
@@ -320,7 +320,7 @@ BOOL WINAPI HookProcess32Next(HANDLE a, LPPROCESSENTRY32 b) {
 // Process32First
 // ================================
 BOOL WINAPI HookProcess32First(HANDLE a, LPPROCESSENTRY32 b) {
-    LogHookedFunction("[API] Process32First\n");
+    LogHookedFunction("Process32First");
     return fpProcess32First(a, b);
 }
 
@@ -328,8 +328,8 @@ BOOL WINAPI HookProcess32First(HANDLE a, LPPROCESSENTRY32 b) {
 // CreateToolhelp32Snapshot
 // ================================
 HANDLE WINAPI HookCreateToolhelp32Snapshot(DWORD a, DWORD b) {
-    OutputDebugStringW(L"tool32 snapshot called\n");
-    LogHookedFunction("[API] CreateToolhelp32Snapshot");
+    OutputDebugStringW(L"tool32 snapshot called");
+    LogHookedFunction("CreateToolhelp32Snapshot");
     return fpCreateToolhelp32Snapshot(a, b);
 }
 
@@ -340,7 +340,7 @@ NTSTATUS NTAPI HookNtCreateSection(
     PHANDLE a, ACCESS_MASK b, POBJECT_ATTRIBUTES c,
     PLARGE_INTEGER d, ULONG e, ULONG f, HANDLE g
 ) {
-    LogHookedFunction("[API] NtCreateSection\n");
+    LogHookedFunction("NtCreateSection");
     return fpNtCreateSection(a, b, c, d, e, f, g);
 }
 
@@ -351,7 +351,7 @@ NTSTATUS NTAPI HookNtMapViewOfSection(
     HANDLE a, HANDLE b, PVOID* c, ULONG_PTR d, SIZE_T e,
     PLARGE_INTEGER f, PSIZE_T g, DWORD h, ULONG i, ULONG j
 ) {
-    LogHookedFunction("[API] NtMapViewOfSection\n");
+    LogHookedFunction("NtMapViewOfSection");
     return fpNtMapViewOfSection(a, b, c, d, e, f, g, h, i, j);
 }
 
@@ -361,7 +361,7 @@ NTSTATUS NTAPI HookNtMapViewOfSection(
 NTSTATUS NTAPI HookNtUnmapViewOfSection(
     HANDLE a, PVOID b
 ) {
-    LogHookedFunction("[API] NtUnmapViewOfSection\n");
+    LogHookedFunction("NtUnmapViewOfSection");
     return fpNtUnmapViewOfSection(a, b);
 }
 
@@ -369,7 +369,7 @@ NTSTATUS NTAPI HookNtUnmapViewOfSection(
 // QueueUserAPC
 // ================================
 DWORD WINAPI HookQueueUserAPC(PAPCFUNC a, HANDLE b, ULONG_PTR c) {
-    LogHookedFunction("[API] QueueUserAPC\n");
+    LogHookedFunction("QueueUserAPC");
     return fpQueueUserAPC(a, b, c);
 }
 
@@ -377,7 +377,7 @@ DWORD WINAPI HookQueueUserAPC(PAPCFUNC a, HANDLE b, ULONG_PTR c) {
 // SuspendThread
 // ================================
 DWORD WINAPI HookSuspendThread(HANDLE a) {
-    LogHookedFunction("[API] SuspendThread\n");
+    LogHookedFunction("SuspendThread");
     return fpSuspendThread(a);
 }
 
@@ -385,7 +385,7 @@ DWORD WINAPI HookSuspendThread(HANDLE a) {
 // ResumeThread
 // ================================
 DWORD WINAPI HookResumeThread(HANDLE a) {
-    LogHookedFunction("[API] ResumeThread\n");
+    LogHookedFunction("ResumeThread");
     return fpResumeThread(a);
 }
 
@@ -396,7 +396,7 @@ NTSTATUS NTAPI HookRtlCreateUserThread(
     HANDLE a, PSECURITY_DESCRIPTOR b, BOOLEAN c, ULONG d,
     PULONG e, PULONG f, PVOID g, PVOID h, PHANDLE i, PCLIENT_ID j
 ) {
-    LogHookedFunction("[API] RtlCreateUserThread\n");
+    LogHookedFunction("RtlCreateUserThread");
     return fpRtlCreateUserThread(a, b, c, d, e, f, g, h, i, j);
 }
 
@@ -407,7 +407,7 @@ NTSTATUS NTAPI HookNtCreateThreadEx(
     PHANDLE a, ACCESS_MASK b, POBJECT_ATTRIBUTES c, HANDLE d,
     PVOID e, PVOID f, ULONG g, SIZE_T h, SIZE_T i, SIZE_T j, PVOID k
 ) {
-    LogHookedFunction("[API] NtCreateThreadEx\n");
+    LogHookedFunction("NtCreateThreadEx");
     return fpNtCreateThreadEx(a, b, c, d, e, f, g, h, i, j, k);
 }
 
@@ -415,7 +415,7 @@ NTSTATUS NTAPI HookNtCreateThreadEx(
 // GetThreadContext
 // ================================
 BOOL WINAPI HookGetThreadContext(HANDLE a, LPCONTEXT b) {
-    LogHookedFunction("[API] GetThreadContext\n");
+    LogHookedFunction("GetThreadContext");
     return fpGetThreadContext(a, b);
 }
 
@@ -423,7 +423,7 @@ BOOL WINAPI HookGetThreadContext(HANDLE a, LPCONTEXT b) {
 // SetThreadContext
 // ================================
 BOOL WINAPI HookSetThreadContext(HANDLE a, const CONTEXT* b) {
-    LogHookedFunction("[API] SetThreadContext\n");
+    LogHookedFunction("SetThreadContext");
     return fpSetThreadContext(a, b);
 }
 
@@ -615,7 +615,7 @@ void LogHookedFunction(std::string functionName)
 
     // 3. Build message: timestamp|function|pid
     std::stringstream ss;
-    ss << timeBuffer << "|"
+    ss << "\n" << timeBuffer << "|"
         << functionName << "|"
         << pid << "|";
 
@@ -641,7 +641,7 @@ void LogHookedFunction(std::string functionName)
 
 DWORD WINAPI nitHook(LPVOID)
 {
-    g_hMinHook = LoadLibraryA("C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
+    g_hMinHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
     if (!g_hMinHook) {
         OutputDebugStringW(L"LoadLibraryA(MinHook) failed\n");
         return 0;

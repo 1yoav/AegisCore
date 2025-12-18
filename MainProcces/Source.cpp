@@ -46,8 +46,7 @@ int main()
 
 
 	//load the hooking DLL
-    /*HMODULE hDLL = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll");
-	Sleep(2000);*/
+    HMODULE hDLL = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll");
     // ---------------------------
     // 2. Toolhelp32Snapshot / Process32
     // ---------------------------
@@ -59,7 +58,7 @@ int main()
 
     //FreeLibrary(GetModuleHandleW(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll"));
 
-    DWORD pid = GetPIDByName(L"chrome.exe");
+    DWORD pid = GetPIDByName(L"SnippingTool.exe");
     // Open the target process with permissions to create threads and write memory
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
     if (!hProcess)
