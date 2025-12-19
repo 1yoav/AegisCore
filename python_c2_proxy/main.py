@@ -207,7 +207,13 @@ class C2Proxy:
             return response
 
     def start(self, host: str = None, port: int = None):
-        """Start the C2 Proxy server"""
+        """Start the C2 Proxy server AND the Pipe Listener"""
+
+        # 1. Start Listening for C++ Alerts
+        self.driver.start_listening(self.handle_cpp_alert)
+
+        # 2. Start the TCP Proxy (Existing logic for Manual Mode)
+
         host = host or cfg.LISTEN_IP
         port = port or cfg.LISTEN_PORT
 
@@ -251,6 +257,23 @@ class C2Proxy:
                           f"Conns: {threat['connections']:3d} | "
                           f"Killed: {'YES' if threat['killed'] else 'NO'}")
                 print(f"{'='*60}\n")
+
+    def handle_cpp_alert(self, metadata: dict):
+        pid = metadata.get('pid')
+        orig_ip = metadata.get('orig_ip')
+        orig_port = metadata.get('orig_port')
+        # Use the name sent from C++, or fallback to a generic string
+        proc_name = metadata.get('process_name', f"PID {pid}")
+
+        verdict = {
+            'timestamp': datetime.now().isoformat(),
+            'pid': pid,
+            'process': proc_name, # <-- Updated this
+            'dest_ip': orig_ip,
+            'dest_port': orig_port,
+            'protocol': 'BLOCKED',
+            # ... rest of your code ...
+        }
 
 def main():
     """Entry point"""

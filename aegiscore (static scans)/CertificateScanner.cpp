@@ -1,6 +1,5 @@
 // ==================== CertificateScanner.cpp ====================
 #include "CertificateScanner.h"
-#include "AVProcess.h"
 #include <softpub.h>
 #include <wincrypt.h>
 #include <wintrust.h>
@@ -24,6 +23,8 @@ std::string CertificateScanner::getSignerName(const std::wstring& filePath) {
     HCERTSTORE hStore = NULL;
     HCRYPTMSG hMsg = NULL;
     PCCERT_CONTEXT pCertContext = NULL;
+    DWORD          cbSignerCertInfo;
+    PCERT_INFO     pSignerCertInfo;
     std::string signerName = "Unknown Publisher";
 
     // 1. Query the file for certificate information
@@ -47,13 +48,37 @@ std::string CertificateScanner::getSignerName(const std::wstring& filePath) {
         return signerName;
     }
 
+    if (CryptMsgGetParam(
+        hMsg,                         // handle to the message
+        CMSG_SIGNER_CERT_INFO_PARAM,  // parameter type
+        0,                            // index
+        NULL,
+        &cbSignerCertInfo))           // size of the returned information
+
+    {
+        printf("%d bytes needed for the buffer.\n", cbSignerCertInfo);
+    }
+    else
+    {
+        printf("Verify SIGNER_CERT_INFO #1 failed\n");
+        exit(1);
+    }
+
+    pSignerCertInfo = (PCERT_INFO)malloc(cbSignerCertInfo);
+    if (!pSignerCertInfo)
+    {
+        printf("Verify memory allocation failed.\n");
+        exit(1);
+    }
+
     // 2. Get the certificate context from the store
     // We assume the first certificate found is the primary signer
     pCertContext = CertGetSubjectCertificateFromStore(
         hStore,
         CERT_FIND_ANY,
-        0
+        pSignerCertInfo
     );
+
 
     if (pCertContext) {
         // 3. Extract the Subject Name (e.g., "Google LLC")
@@ -96,6 +121,7 @@ std::string CertificateScanner::getSignerName(const std::wstring& filePath) {
 // Main Function: Verifies the integrity and trust of the signature
 // ----------------------------------------------------------------
 bool CertificateScanner::checkSignature(Process& proc) {
+    // std::wcout << L">>> ENTRANCE: Checking signature for: " << proc.exePath << std::endl;
     bool isReliable = false;
 
     // 1. Prepare the File Info structure

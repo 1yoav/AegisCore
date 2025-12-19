@@ -19,4 +19,7 @@ struct Process {
     Process(uint32_t id, const std::wstring& path, const std::wstring& name)
         : pid(id), exePath(path), processName(name), verdict("under_review") {
     }
+    // default constructor
+    Process() : pid(0) {}
+
 };

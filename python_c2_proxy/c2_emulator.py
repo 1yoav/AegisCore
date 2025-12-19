@@ -119,7 +119,7 @@ class C2Emulator:
             b"HTTP/1.1 200 OK\r\n"
             b"Server: Apache/2.4.41\r\n"
             b"Content-Type: application/json\r\n"
-            f"Content-Length: {len(body)}\r\n".encode('utf-8') +
+            b"Content-Length: " + str(len(body)).encode('utf-8') + b"\r\n" +
             b"Connection: close\r\n"
             b"Cache-Control: no-cache\r\n"
             b"\r\n" +

@@ -1,9 +1,9 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN  // exclude rarely used stuff from windows headers
+#define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>      // FIRST
+#include <ws2tcpip.h>      // SECOND
+#include <Windows.h>       // THIRD
 #include <string>
-
-#include <ws2tcpip.h>
-#include <windows.h>
 
 
 

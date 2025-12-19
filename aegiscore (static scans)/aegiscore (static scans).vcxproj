@@ -109,7 +109,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>"C:\Users\Cyber_User\Documents\Pcap++\npcap-sdk-1.15\Lib";C:\Users\Cyber_User\Documents\Pcap++\pcap\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Common++.lib;Packet++.lib;Pcap++.lib;wpcap.lib;ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common++.lib;Packet++.lib;Pcap++.lib;wpcap.lib;ws2_32.lib;iphlpapi.lib;WinDivert.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -140,9 +140,11 @@
     <ClCompile Include="NetworkUtils.cpp" />
     <ClCompile Include="PacketLogger.cpp" />
     <ClCompile Include="CertificateScanner.h" />
+    <ClCompile Include="PipeClient.cpp" />
     <ClCompile Include="SQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="TrafficDiverter.cpp" />
     <ClCompile Include="WFPEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,9 +153,12 @@
     <ClInclude Include="NetworkUtils.h" />
     <ClInclude Include="PacketLogger.h" />
     <ClInclude Include="AVProcess.h" />
+    <ClInclude Include="PipeClient.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="TrafficDiverter.h" />
     <ClInclude Include="WFPEngine.h" />
+    <ClInclude Include="windivert.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

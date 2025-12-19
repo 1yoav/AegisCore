@@ -38,7 +38,7 @@ struct FilterRule {
 
     // Constructor 2: Port only
     FilterRule(uint16_t p, FilterType t, const std::string& desc)
-        : ipStr(""), min_ip(0), max_ip(0), port(p), type(t), description(desc), process_path(0) {
+        : ipStr(""), min_ip(0), max_ip(0), port(p), type(t), description(desc), process_path("portblock") {
     }
 
     // Constructor 3: IP String + Port
@@ -52,6 +52,6 @@ struct FilterRule {
 
     // Constructor 4: INTEGER RANGE (For your Database)
     FilterRule(uint32_t start, uint32_t end, FilterType t, const std::string& desc)
-        : ipStr("CIDR_RANGE"), min_ip(start), max_ip(end), port(0), type(t), description(desc), process_path(0) {
+        : ipStr("CIDR_RANGE"), min_ip(start), max_ip(end), port(0), type(t), description(desc), process_path("") {
     }
 };

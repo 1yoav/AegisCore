@@ -48,6 +48,12 @@
     <ClCompile Include="HelperFunctions.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="PipeClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrafficDiverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SQLDatabase.h">
@@ -72,6 +78,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AVProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PipeClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TrafficDiverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="windivert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

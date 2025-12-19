@@ -1,6 +1,5 @@
 #pragma once
 #include "AVProcess.h"
-#include <string>
 #include "Windows.h"
 
 
