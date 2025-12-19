@@ -4,7 +4,10 @@
 #include <iostream>
 #include "pipe.h"
 #include <thread>
+#include "programsValidation.h"
 
+size_t pathLen;
+const char* dllPath;
 
 void log(const wchar_t* msg)
 {
@@ -13,63 +16,9 @@ void log(const wchar_t* msg)
     OutputDebugStringW(buffer);
 }
 
-DWORD GetPIDByName(const wchar_t* name) {
-    PROCESSENTRY32 pe32;
-    pe32.dwSize = sizeof(PROCESSENTRY32);
 
-    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (snapshot == INVALID_HANDLE_VALUE)
-        return 0;
-
-    if (Process32First(snapshot, &pe32)) {
-        do {
-            if (_wcsicmp(pe32.szExeFile, name) == 0) {
-                CloseHandle(snapshot);
-                return pe32.th32ProcessID;
-            }
-        } while (Process32Next(snapshot, &pe32));
-    }
-
-    CloseHandle(snapshot);
-    return 0;
-}
-
-
-
-int main()
+int injectHooking(HANDLE hProcess)
 {
-	//get the pipe server up and running
-    std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
-    pipe.detach();
-    Sleep(2000);
-
-
-
-	//load the hooking DLL
-    HMODULE hDLL = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll");
-    // ---------------------------
-    // 2. Toolhelp32Snapshot / Process32
-    // ---------------------------
-    /*HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    PROCESSENTRY32 pe = { sizeof(pe) };
-    Process32First(snap, &pe);
-    while (Process32Next(snap, &pe));
-    CloseHandle(snap);*/
-
-    //FreeLibrary(GetModuleHandleW(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll"));
-
-    DWORD pid = GetPIDByName(L"SnippingTool.exe");
-    // Open the target process with permissions to create threads and write memory
-    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-    if (!hProcess)
-    {
-        std::cout << "Failed to open process. Error: " << GetLastError() << std::endl;
-        return 1;
-    }
-    // Path to the DLL to inject
-    const char* dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
-    size_t pathLen = strlen(dllPath) + 1;
-    // Allocate memory in the target process
     LPVOID remoteMemory = VirtualAllocEx(hProcess, NULL, pathLen, MEM_COMMIT, PAGE_READWRITE);
     if (!remoteMemory)
     {
@@ -111,9 +60,7 @@ int main()
     }
     else
     {
-        std::cout << "Remote thread created successfully!" << std::endl;
         WaitForSingleObject(hThread, INFINITE);
-        std::cin >> std::ws; // Wait for user input before proceeding
         CloseHandle(hThread);
     }
 
@@ -121,8 +68,57 @@ int main()
     VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
     CloseHandle(hProcess);
 
-   return 0;
+    return 0;
+
 
 
 }
+
+
+int main()
+{
+	//get the pipe server up and running
+    std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
+    pipe.detach();
+    Sleep(2000);
+
+    dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
+    pathLen = strlen(dllPath) + 1;
+
+
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32W pe;
+    pe.dwSize = sizeof(pe);
+
+
+    if (Process32FirstW(snapshot, &pe))
+    {
+        do {
+            if (/*ShouldSkipProcess(pe.th32ProcessID) == 0 &&*/ wcscmp(pe.szExeFile, L"SnippingTool.exe") == 0) //procces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
+            {
+                std::wcout << L"[allow] "
+                    << pe.th32ProcessID << L"| "
+                    << pe.szExeFile << std::endl;
+                injectHooking(OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID));                
+            }
+             else
+             {
+                 /*std::wcout << L"[Forbid] "
+                     << pe.th32ProcessID << L" "
+                     << pe.szExeFile << std::endl;*/
+             }
+        } while (Process32NextW(snapshot, &pe));
+
+        CloseHandle(snapshot);
+        std::cin >> std::ws; //clear the input buffer
+
+    }
+    return 0;
+
+}
+
+   
+
+
+
 

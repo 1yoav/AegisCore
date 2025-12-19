@@ -87,6 +87,34 @@ typedef HANDLE(WINAPI* pCreateRemoteThread)(
     );
 pCreateRemoteThread fpCreateRemoteThread = nullptr;
 
+typedef BOOL(WINAPI* pReadFile)(
+                   HANDLE       hFile,
+                  LPVOID       lpBuffer,
+                DWORD        nNumberOfBytesToRead,
+         LPDWORD      lpNumberOfBytesRead,
+     LPOVERLAPPED lpOverlapped
+);
+pReadFile fpReadFile = nullptr;
+
+typedef VOID(WINAPI* pSleep)(
+    DWORD dwMilliseconds
+    );
+pSleep fpSleep = nullptr;
+
+typedef BOOL(WINAPI* pCloseHandle)(
+    HANDLE hObject
+    );
+pCloseHandle fpCloseHandle = nullptr;
+
+typedef BOOL(WINAPI* pWriteFile)(
+    HANDLE hFile,
+    LPCVOID lpBuffer,
+    DWORD nNumberOfBytesToWrite,
+    LPDWORD lpNumberOfBytesWritten,
+    LPOVERLAPPED lpOverlapped
+    );
+pWriteFile fpWriteFile = nullptr;
+
 typedef BOOL(WINAPI* pLookupPrivilegeValue)(
     LPCWSTR, LPCWSTR, PLUID
     );
@@ -232,6 +260,31 @@ BOOL WINAPI HookLookupPrivilegeValue(LPCWSTR a, LPCWSTR b, PLUID c) {
 BOOL WINAPI HookWriteProcessMemory(HANDLE a, LPVOID b, LPCVOID c, SIZE_T d, SIZE_T* e) {
     LogHookedFunction("WriteProcessMemory");
     return fpWriteProcessMemory(a, b, c, d, e);
+}
+
+BOOL WINAPI HookWriteFile(
+    HANDLE a, LPCVOID b, DWORD c, LPDWORD d, LPOVERLAPPED e
+) {
+    LogHookedFunction("WriteFile");
+    return fpWriteFile(a, b, c, d, e);
+}
+
+BOOL WINAPI HookReadFile(
+    HANDLE a, LPVOID b, DWORD c, LPDWORD d, LPOVERLAPPED e
+) {
+    LogHookedFunction("ReadFile");
+    return fpReadFile(a, b, c, d, e);
+}
+
+BOOL WINAPI HookCloseHandle(HANDLE a) {
+    LogHookedFunction("CloseHandle");
+    return fpCloseHandle(a);
+}
+
+BOOL WINAPI HookSleep(DWORD a) {
+    LogHookedFunction("Sleep");
+    fpSleep(a);
+    return TRUE;
 }
 
 BOOL WINAPI HookAdjustTokenPrivileges(
@@ -435,6 +488,22 @@ std::vector<HookInfo> hooks = {
         (LPVOID)&HookCreateProcessA,
         (LPVOID*)&fpCreateProcessA },
 
+    { L"kernel32.dll", "ReadFile",
+    (LPVOID)&HookReadFile,
+    (LPVOID*)&fpReadFile },
+
+    { L"kernel32.dll", "WriteFile",
+    (LPVOID)&HookWriteFile,
+    (LPVOID*)&fpWriteFile },
+
+    { L"kernel32.dll", "CloseHandle",
+    (LPVOID)&HookCloseHandle,
+    (LPVOID*)&fpCloseHandle },
+
+    { L"kernel32.dll", "Sleep",
+    (LPVOID)&HookSleep,
+    (LPVOID*)&fpSleep },
+
     { L"kernel32.dll", "CreateProcessW",
         (LPVOID)&HookCreateProcessW,
         (LPVOID*)&fpCreateProcessW },
@@ -545,54 +614,66 @@ std::vector<HookInfo> hooks = {
 //send logs to named pipe
     void sendLogs()
 {
+	int logCount = 0;
     while (true)
     {
-		logMutex.lock();
-        if(loggedApi.empty())
+        if(logCount == 0)
         {
+            logMutex.lock();
+			loggedApi.clear();
+            logCount = 1;
             logMutex.unlock();
-            Sleep(10000); // Sleep for 10 seconds if there are no logs
-            continue;
 		}
-
-        //create the msg
-        std::string msg;
-        for (auto item : loggedApi)
+        else
         {
-            msg += item;
+            logMutex.lock();
+            if (loggedApi.empty())
+            {
+                logMutex.unlock();
+                Sleep(10000); // Sleep for 10 seconds if there are no logs
+                continue;
+            }
+
+            //create the msg
+            std::string msg;
+            for (auto item : loggedApi)
+            {
+                msg += item;
+            }
+            msg += "END_WINDOW\n";
+
+            //create whide string for debug output
+            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+            std::wstring wide_string = converter.from_bytes(msg);
+            OutputDebugStringW(wide_string.c_str());
+            loggedApi.clear();
+            logMutex.unlock();
+
+
+
+            if (!WaitNamedPipeW(pipeName, NMPWAIT_WAIT_FOREVER))
+            {
+                g_MH_DisableHook(MH_ALL_HOOKS);
+                g_MH_Uninitialize();
+                FreeLibrary(g_hMinHook);
+                FreeLibrary((hModulee));
+                return;
+            }
+
+            HANDLE hPipe = CreateFileW(
+                pipeName,
+                GENERIC_WRITE,
+                0,
+                NULL,
+                OPEN_EXISTING,
+                0,
+                NULL
+            );
+
+
+            WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
+            CloseHandle(hPipe);
         }
-
-		//create whide string for debug output
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-        std::wstring wide_string = converter.from_bytes(msg);
-        OutputDebugStringW(wide_string.c_str());
-		loggedApi.clear();
-        logMutex.unlock();
-
-
-
-        if (!WaitNamedPipeW(pipeName, NMPWAIT_WAIT_FOREVER))
-        {
-            g_MH_DisableHook(MH_ALL_HOOKS);
-            g_MH_Uninitialize();
-            FreeLibrary(g_hMinHook);
-            FreeLibrary((hModulee));
-            return;
-        }
-
-        HANDLE hPipe = CreateFileW(
-            pipeName,
-            GENERIC_WRITE,
-            0,
-            NULL,
-            OPEN_EXISTING,
-            0,
-            NULL
-        );
-
-        
-        WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
-        CloseHandle(hPipe);
 		Sleep(10000); // Send logs every 10 seconds
     }
     
@@ -602,29 +683,21 @@ std::vector<HookInfo> hooks = {
 //create log entry
 void LogHookedFunction(std::string functionName)
 {    
-    //create time
-    SYSTEMTIME st;
-    GetLocalTime(&st);
-    char timeBuffer[32];
-    sprintf_s(timeBuffer, "%04d-%02d-%02d %02d:%02d:%02d",
-        st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute, st.wSecond);
+    static DWORD pid = 0;
+    if (pid == 0)
+        pid = GetCurrentProcessId();
 
-    // 2. Process ID
-    DWORD pid = GetCurrentProcessId();
+    std::string msg = functionName + "\n";
 
-    // 3. Build message: timestamp|function|pid
-    std::stringstream ss;
-    ss << "\n" << timeBuffer << "|"
-        << functionName << "|"
-        << pid << "|";
-
-	//push to log vector
-    std::string msg = ss.str();
-	logMutex.lock();
-	loggedApi.push_back(msg);
-	logMutex.unlock();
+    logMutex.lock();
+    if (loggedApi.empty())
+    {
+        loggedApi.push_back(std::to_string(pid) + "\n");
+    }
+    loggedApi.push_back(msg);
+    logMutex.unlock();
 }
+
 
 
 
