@@ -9,6 +9,8 @@ from typing import Tuple, List, Dict
 from protocol_detector import ProtocolDetector
 from config_extractor import ConfigExtractor
 import config as cfg
+
+
 class SessionManager:
     """Tracks connection history to detect beaconing patterns"""
     def __init__(self):
@@ -49,6 +51,8 @@ class SessionManager:
             return 1.0, f"Periodic beacon detected (~{avg_interval:.1f}s interval, {jitter_pct:.1f}% jitter)"
 
         return 0.0, f"Irregular timing (σ={std_dev:.1f}s)"
+
+
 class Analyzer:
     """Main analysis engine - the 'brain' of the C2 proxy"""
     def __init__(self, known_c2_ips: set = None):
@@ -147,44 +151,44 @@ class Analyzer:
 
         return final_score, findings, metadata
 
-def _analyze_http(self, parsed_data: Dict) -> Tuple[float, List[str]]:
-    """HTTP-specific analysis"""
-    score = 0.0
-    findings = []
+    def _analyze_http(self, parsed_data: Dict) -> Tuple[float, List[str]]:
+        """HTTP-specific analysis"""
+        score = 0.0
+        findings = []
 
-    user_agent = parsed_data.get('user_agent', '').lower()
-    path = parsed_data.get('path', '')
-    method = parsed_data.get('method', '')
+        user_agent = parsed_data.get('user_agent', '').lower()
+        path = parsed_data.get('path', '')
+        method = parsed_data.get('method', '')
 
-    # Check 1: Missing or suspicious User-Agent
-    if user_agent == 'missing':
-        score += cfg.WEIGHT_USER_AGENT
-        findings.append("[HTTP] Missing User-Agent header")
-    elif any(bad_ua in user_agent for bad_ua in cfg.BAD_USER_AGENTS):
-        score += cfg.WEIGHT_USER_AGENT
-        findings.append(f"[HTTP] Automation tool User-Agent: {user_agent}")
+        # Check 1: Missing or suspicious User-Agent
+        if user_agent == 'missing':
+            score += cfg.WEIGHT_USER_AGENT
+            findings.append("[HTTP] Missing User-Agent header")
+        elif any(bad_ua in user_agent for bad_ua in cfg.BAD_USER_AGENTS):
+            score += cfg.WEIGHT_USER_AGENT
+            findings.append(f"[HTTP] Automation tool User-Agent: {user_agent}")
 
-    # Check 2: Suspicious paths
-    suspicious_paths = ['/admin', '/upload', '/cmd', '/shell', '/beacon', '/c2']
-    if any(sp in path.lower() for sp in suspicious_paths):
-        score += 0.15
-        findings.append(f"[HTTP] Suspicious path: {path}")
+        # Check 2: Suspicious paths
+        suspicious_paths = ['/admin', '/upload', '/cmd', '/shell', '/beacon', '/c2']
+        if any(sp in path.lower() for sp in suspicious_paths):
+            score += 0.15
+            findings.append(f"[HTTP] Suspicious path: {path}")
 
-    # Check 3: Non-standard methods
-    if method not in ['GET', 'POST', 'HEAD']:
-        score += 0.10
-        findings.append(f"[HTTP] Unusual method: {method}")
+        # Check 3: Non-standard methods
+        if method not in ['GET', 'POST', 'HEAD']:
+            score += 0.10
+            findings.append(f"[HTTP] Unusual method: {method}")
 
-    # Check 4: Host header analysis
-    host = parsed_data.get('host', '').lower()
-    if host and (host.endswith('.tk') or host.endswith('.ml') or
-                 host.endswith('.ga') or '.onion' in host):
-        score += 0.20
-        findings.append(f"[HTTP] Suspicious TLD in Host: {host}")
+        # Check 4: Host header analysis
+        host = parsed_data.get('host', '').lower()
+        if host and (host.endswith('.tk') or host.endswith('.ml') or
+                     host.endswith('.ga') or '.onion' in host):
+            score += 0.20
+            findings.append(f"[HTTP] Suspicious TLD in Host: {host}")
 
-    return score, findings
+        return score, findings
 
-def load_threat_intel(self, c2_ips: set):
-    """Update known C2 IPs from threat intelligence"""
-    self.known_c2_ips.update(c2_ips)
-    print(f"[*] Loaded {len(c2_ips)} known C2 IPs into analyzer")
+    def load_threat_intel(self, c2_ips: set):
+        """Update known C2 IPs from threat intelligence"""
+        self.known_c2_ips.update(c2_ips)
+        print(f"[*] Loaded {len(c2_ips)} known C2 IPs into analyzer")

@@ -119,7 +119,7 @@ int main() {
 
                 if (!isTrusted) {
                     std::wcout << L"[!] Unsigned Process: " << process.exePath << std::endl;
-                    diverter.StartDiverting(process.pid);
+                    // diverter.StartDiverting(process.pid); //FUCK THIS
                     
                     // Convert the wide path to a narrow string
                     std::string narrowPath = converter.to_bytes(process.exePath);

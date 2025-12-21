@@ -3,16 +3,8 @@
 #include <regex>
 bool PipeClient::SendAlert(uint32_t pid, const std::string& processName, const std::string& destIP, uint16_t destPort) {
     std::cout << "SENDING ALERT\n";
-    // 1. ESCAPE THE PATH: Turn single \ into double \\ 
+    // 1. ESCAPE THE PATH: Turn single \ into double
     std::string escapedPath = "";
-    for (char c : processName) {
-        if (c == '\\') {
-            escapedPath += "\\\\";
-        }
-        else {
-            escapedPath += c;
-        }
-    }
 
     // 2. Prepare the JSON payload using the escaped path
     std::string jsonPayload = "{ \"pid\": " + std::to_string(pid) +

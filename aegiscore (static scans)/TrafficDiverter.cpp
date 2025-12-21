@@ -15,7 +15,7 @@ TrafficDiverter::~TrafficDiverter() {
 
 bool TrafficDiverter::StartDiverting(uint32_t pid) {
     // Build WinDivert filter for this PID
-    std::string filter = "processId == " + std::to_string(pid) + " and tcp";
+    std::string filter = "tcp";
 
     // Open WinDivert handle
     HANDLE handle = WinDivertOpen(filter.c_str(), WINDIVERT_LAYER_NETWORK, 0, 0);
