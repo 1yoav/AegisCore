@@ -5,8 +5,8 @@
 #include "HelperFunctions.h"
 #include "CertificateScanner.h"
 #include "TrafficDiverter.h"
-#include "NetworkUtils.h" // For SendMetadataToPipe
-#include "AVProcess.h"    // For process structures
+#include "NetworkUtils.h"
+#include "AVProcess.h"
 #include "PipeClient.h"
 #include <iostream>
 #include <memory>
@@ -15,7 +15,7 @@
 #include <vector>
 #include <codecvt>
 #include <locale>
-#include <tlhelp32.h>     // For process enumeration
+#include <tlhelp32.h>
 #include <set>
 
 #include <psapi.h> // You need this for GetModuleFileNameEx
@@ -69,13 +69,12 @@ int main() {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
 
-    // 1. Initialize Database
+    // init db
     sqlite3* database = nullptr;
     SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
     db.open();
 
-    // 2. Initialize Logger and Engine
-    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true);
+    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
     WFPEngine wfpEngine(logger);
     CertificateScanner certScanner;
 
@@ -87,10 +86,7 @@ int main() {
     }
 
     // 3. Load Static & Database Rules
-    std::vector<FilterRule> rules = {
-        FilterRule("8.8.8.8", FilterType::BLOCK_IP, "Block Google DNS"),
-        FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP"),
-    };
+    std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
 
     std::vector<FilterRule> dbRules = db.getC2Rules();
     rules.insert(rules.end(), dbRules.begin(), dbRules.end());
@@ -99,8 +95,7 @@ int main() {
         wfpEngine.AddFilter(rule);
     }
 
-    // 4. MAIN MONITORING LOOP
-    // This is the "upgraded" part that talks to Python
+
     std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
     bool running = true;
 
@@ -112,7 +107,7 @@ int main() {
         for (auto& process : currentProcesses) {
             if (process.pid < 100) continue;
 
-            // ONLY scan if we haven't seen this PID before
+            // only scan if we havent seen this id before
             if (scannedPids.find(process.pid) == scannedPids.end()) {
 
                 bool isTrusted = certScanner.checkSignature(process);
@@ -130,12 +125,13 @@ int main() {
             }
         }
 
-        // Optional: Periodically clear scannedPids if you want to re-scan
-        // For now, let's keep it simple to fix the performance bug.
+        // wait a few seconds before rescanning
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
-    // Cleanup
+    // exit
     wfpEngine.Shutdown();
     return 0;
+
+    /*bool sent = PipeClient::SendAlert(1544, "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "0.0.0.0", 0); one line tester*/ 
 }
