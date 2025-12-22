@@ -82,6 +82,8 @@ int main()
     pipe.detach();
     Sleep(2000);
 
+
+
     dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
     pathLen = strlen(dllPath) + 1;
 
@@ -94,7 +96,7 @@ int main()
     if (Process32FirstW(snapshot, &pe))
     {
         do {
-            if (/*ShouldSkipProcess(pe.th32ProcessID) == 0 &&*/ wcscmp(pe.szExeFile, L"SnippingTool.exe") == 0) //procces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
+            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"notepad++.exe") == 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
             {
                 std::wcout << L"[allow] "
                     << pe.th32ProcessID << L"| "

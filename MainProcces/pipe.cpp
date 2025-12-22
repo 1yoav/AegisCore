@@ -1,12 +1,14 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <fstream>
 #include "pipe.h"
 #include <TlHelp32.h>
 #include <fileSystem>
+
+#define TRAINING 0
 
 
 std::string wstring_to_string(const std::wstring wstr)
@@ -35,7 +37,7 @@ void createPipe(wchar_t* pipeName)
         "TokenPrivileges"
     };
 
-    std::unordered_map<std::string, std::string> apiMap = {
+    std::map<std::string, std::string> apiMap = {
         {"CreateProcessA", "CreateProcess"},
         {"CreateProcessW", "CreateProcess"},
         {"CreateProcessInternalA", "CreateProcess"},
@@ -64,11 +66,22 @@ void createPipe(wchar_t* pipeName)
         {"Sleep", "Sleep"}
     };
 
-    //create the lines in the csv
-    
+    //connect to the python server
+    HANDLE pythonPipe = CreateFileW(
+        L"\\\\.\\pipe\\pythonPipe",
+        GENERIC_WRITE,
+        0,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL
+
+
+    );
 
     while (true)
     {
+        //create the communication between the hooking dlls
         HANDLE hPipe = CreateNamedPipeW(
             pipeName,
             PIPE_ACCESS_INBOUND,
@@ -80,6 +93,7 @@ void createPipe(wchar_t* pipeName)
             nullptr
         );
 
+        //check for errors
         if (hPipe == INVALID_HANDLE_VALUE)
         {
             std::wcerr << L"[-] CreateNamedPipe failed. Error: "
@@ -87,30 +101,35 @@ void createPipe(wchar_t* pipeName)
             return;
         }
 
+        //connect to client
         BOOL connected = ConnectNamedPipe(hPipe, nullptr) ?
             TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
-
         if (!connected)
         {
             CloseHandle(hPipe);
             continue;
         }
-
         std::cout << "[+] Client connected\n";
 
-        std::unordered_map<std::string, int> counters;
+        //create counters for each feature
+        std::map<std::string, int> counters;
         for (auto f : featureList)
         {
-			counters[f] = 0;
+            counters[f] = 0;
         }
         std::string pid;
         std::string streamBuffer;
 
+
+        //read all the data from the client
         while (true)
         {
+            //define varaibles
             char buffer[4096];
             DWORD bytesRead = 0;
+            std::string name;
 
+            //read the data from the client
             BOOL success = ReadFile(
                 hPipe,
                 buffer,
@@ -118,80 +137,103 @@ void createPipe(wchar_t* pipeName)
                 &bytesRead,
                 nullptr
             );
-
             if (!success || bytesRead == 0)
                 break;
 
             buffer[bytesRead] = '\0';
             streamBuffer += buffer;
+            if (bytesRead < (sizeof(buffer) - 1))
+                break;
+        }
 
-            size_t pos;
-            while ((pos = streamBuffer.find_first_of("\r\n")) != std::string::npos)
+        size_t pos;
+        std::string name;
+
+        while ((pos = streamBuffer.find_first_of("\r\n")) != std::string::npos)
+        {
+            std::string line = streamBuffer.substr(0, pos);
+            std::cout << "[DEBUG] Received line: " << line << std::endl;
+            if (!line.empty() && line.back() == '\r')
+                line.pop_back();
+
+            streamBuffer.erase(0, pos + 1);
+
+            if (line.empty())
+                continue;
+
+            if (line == "END_WINDOW")
             {
-                std::string line = streamBuffer.substr(0, pos);
-				std::cout << "[DEBUG] Received line: " << line << std::endl;
-                if (!line.empty() && line.back() == '\r')
-                    line.pop_back();
-
-                streamBuffer.erase(0, pos + 1);
-
-                if (line.empty())
-                    continue;
-
-                if (line == "END_WINDOW")
+                name = wstring_to_string(getNameByPid(std::stoi(pid)));
+                if (!pid.empty())
                 {
-                    if (!pid.empty())
+                    std::string msg;
+                    if (TRAINING == 1)
                     {
+						name += ".csv";
                         std::ofstream csv;
-						std::string name = wstring_to_string(getNameByPid(std::stoi(pid))) + ".csv";
                         if (std::filesystem::exists(name))
                         {
                             csv.open(name, std::ios::app);
                         }
                         else
                         {
-							//add the header
+                            //add the header
                             csv.open(name);
-                            for (auto& f : featureList)
+                            for (auto& f : counters)
                             {
-                                if (&(*featureList.begin()) == &f)
-                                    csv << f;
-                                else
-                                {
-                                    csv << "," << f;
-                                }
-                                
+                                msg += f.first + ",";
                             }
-                            csv << "\n";
+                            msg.pop_back();
+                            msg += "\n";
+                            csv << msg;
                             csv.flush();
-                                
-						}
-                        
-						//add the data line
+
+                        }
+
+                        msg.clear();
+
+                        //add the data line
                         for (auto& f : counters)
                         {
-                            if (&(*counters.begin()) == &f)
-                                csv << f.second;
-                            else
-                            {
-                                csv << "," << f.second;
-                            }
-                           
+                            msg += std::to_string(f.second) + ",";
                         }
-                        csv << "\n";
+                        msg.pop_back();
+                        msg += "\n";
+                        csv << msg;
                         csv.flush();
+                        csv.close();
+                        std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
+
                     }
-                    counters.clear();
-                    pid.clear();
+                    //if its not training mode, send to python server
+                    else
+                    {
+                        name += ".pkl";
+                        msg = name + ",";
+                        //add the counters
+                        for (auto& f : counters)
+                        {
+                            msg += std::to_string(f.second) + ",";
+                        }
+                        msg.pop_back();
+
+                        //add the process name
+                        WriteFile(pythonPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
+                    }
                 }
-                else if (pid.empty())
-                {
-                    pid = line; 
-                }
-                else
-                {
-                    counters[apiMap[line]]++;
-                }
+                break;
+
+            }
+
+            //get the pid of teh sender process
+            else if (pid.empty())
+            {
+                pid = line;
+            }
+            //count the api calls
+            else
+            {
+                counters[apiMap[line]]++;
             }
         }
 
@@ -225,3 +267,5 @@ std::wstring getNameByPid(int pid)
     }
     return processName;
 }
+
+
