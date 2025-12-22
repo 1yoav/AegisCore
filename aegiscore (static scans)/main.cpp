@@ -8,56 +8,8 @@
 #include "NetworkUtils.h"
 #include "AVProcess.h"
 #include "PipeClient.h"
-#include <iostream>
-#include <memory>
-#include <thread>
-#include <chrono>
-#include <vector>
-#include <codecvt>
-#include <locale>
-#include <tlhelp32.h>
-#include <set>
+ // You need this for GetModuleFileNameEx
 
-#include <psapi.h> // You need this for GetModuleFileNameEx
-
-std::vector<Process> GetRunningProcesses() {
-    std::vector<Process> processes;
-    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnap == INVALID_HANDLE_VALUE) return processes;
-
-    PROCESSENTRY32W pe32;
-    pe32.dwSize = sizeof(PROCESSENTRY32W);
-
-    if (Process32FirstW(hSnap, &pe32)) {
-        do {
-            Process proc;
-            proc.pid = pe32.th32ProcessID;
-
-            // 1. Open the process to find its home address
-            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, proc.pid);
-            if (hProcess) {
-                wchar_t fullPath[MAX_PATH];
-                DWORD size = MAX_PATH;
-
-                // 2. Get the REAL full path
-                if (QueryFullProcessImageNameW(hProcess, 0, fullPath, &size)) {
-                    proc.exePath = fullPath;
-                }
-                else {
-                    proc.exePath = pe32.szExeFile; // Fallback to name if path fails
-                }
-                CloseHandle(hProcess);
-            }
-            else {
-                proc.exePath = pe32.szExeFile;
-            }
-
-            processes.push_back(proc);
-        } while (Process32NextW(hSnap, &pe32));
-    }
-    CloseHandle(hSnap);
-    return processes;
-}
 
 int main() {
     std::cout << "==================================" << std::endl;
@@ -102,29 +54,25 @@ int main() {
     std::set<uint32_t> scannedPids; // Track PIDs we've already checked
 
     while (running) {
-        std::vector<Process> currentProcesses = GetRunningProcesses();
+    std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
 
-        for (auto& process : currentProcesses) {
-            if (process.pid < 100) continue;
+    // Inside main() while loop
+    for (auto& process : currentProcesses) {
+        if (process.pid < 100) continue;
 
-            // only scan if we havent seen this id before
-            if (scannedPids.find(process.pid) == scannedPids.end()) {
+        if (scannedPids.find(process.pid) == scannedPids.end()) {
+            bool isTrusted = certScanner.checkSignature(process);
 
-                bool isTrusted = certScanner.checkSignature(process);
-
-                if (!isTrusted) {
-                    std::wcout << L"[!] Unsigned Process: " << process.exePath << std::endl;
-                    // diverter.StartDiverting(process.pid); //FUCK THIS
-                    
-                    // Convert the wide path to a narrow string
-                    std::string narrowPath = converter.to_bytes(process.exePath);
-                    bool sent = PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
-                }
-
-                scannedPids.insert(process.pid); // Mark as done
+            if (!isTrusted) {
+                // ONLY if both WinVerifyTrust AND our path-fallback fail
+                std::string narrowPath = converter.to_bytes(process.exePath);
+                std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
+                PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
             }
-        }
 
+            scannedPids.insert(process.pid);
+        }
+    }
         // wait a few seconds before rescanning
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }

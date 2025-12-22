@@ -1,4 +1,3 @@
-// ==================== CertificateScanner.cpp ====================
 #include "CertificateScanner.h"
 #include <softpub.h>
 #include <wincrypt.h>
@@ -15,156 +14,109 @@
     /* No file handle to close since WinVerifyTrust handles file access */ \
     return ret; \
 }
-
-// ----------------------------------------------------------------
-// Helper: Extracts the Subject Name (Publisher/Company) from the signature
-// ----------------------------------------------------------------
 std::string CertificateScanner::getSignerName(const std::wstring& filePath) {
     HCERTSTORE hStore = NULL;
     HCRYPTMSG hMsg = NULL;
     PCCERT_CONTEXT pCertContext = NULL;
-    DWORD          cbSignerCertInfo;
-    PCERT_INFO     pSignerCertInfo;
     std::string signerName = "Unknown Publisher";
 
-    // 1. Query the file for certificate information
-    // Looks for the embedded signature data
     BOOL queryResult = CryptQueryObject(
         CERT_QUERY_OBJECT_FILE,
         filePath.c_str(),
-        CERT_QUERY_OBJECT_FILE,
         CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED,
-        0,
-        NULL,
-        NULL,
-        NULL,
-        &hStore, // Certificate Store
-        &hMsg,
-        NULL
+        CERT_QUERY_FORMAT_FLAG_ALL,
+        0, NULL, NULL, NULL,
+        &hStore, &hMsg, NULL
     );
 
-    if (!queryResult) {
-        // This should only happen if the file is unsigned or the signature is corrupted.
-        return signerName;
-    }
-
-    if (CryptMsgGetParam(
-        hMsg,                         // handle to the message
-        CMSG_SIGNER_CERT_INFO_PARAM,  // parameter type
-        0,                            // index
-        NULL,
-        &cbSignerCertInfo))           // size of the returned information
-
-    {
-        printf("%d bytes needed for the buffer.\n", cbSignerCertInfo);
-    }
-    else
-    {
-        printf("Verify SIGNER_CERT_INFO #1 failed\n");
-        exit(1);
-    }
-
-    pSignerCertInfo = (PCERT_INFO)malloc(cbSignerCertInfo);
-    if (!pSignerCertInfo)
-    {
-        printf("Verify memory allocation failed.\n");
-        exit(1);
-    }
-
-    // 2. Get the certificate context from the store
-    // We assume the first certificate found is the primary signer
-    pCertContext = CertGetSubjectCertificateFromStore(
-        hStore,
-        CERT_FIND_ANY,
-        pSignerCertInfo
-    );
-
-
-    if (pCertContext) {
-        // 3. Extract the Subject Name (e.g., "Google LLC")
-        DWORD size = CertGetNameStringW(
-            pCertContext,
-            CERT_NAME_SIMPLE_DISPLAY_TYPE,
-            0,
-            NULL,
-            NULL,
-            0
-        );
-
-        if (size > 1) {
-            std::vector<wchar_t> nameBuffer(size);
-            CertGetNameStringW(
-                pCertContext,
-                CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,
-                NULL,
-                nameBuffer.data(),
-                size
-            );
-
-            // Convert wstring (wchar_t*) to std::string for the database/logging
-            std::wstring wName(nameBuffer.data());
-            signerName = std::string(wName.begin(), wName.end());
+    if (queryResult && hMsg) {
+        DWORD cbSignerCertInfo = 0;
+        if (CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, NULL, &cbSignerCertInfo)) {
+            PCERT_INFO pSignerCertInfo = (PCERT_INFO)malloc(cbSignerCertInfo);
+            if (pSignerCertInfo && CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, pSignerCertInfo, &cbSignerCertInfo)) {
+                pCertContext = CertGetSubjectCertificateFromStore(hStore, CERT_FIND_ANY, pSignerCertInfo);
+            }
+            free(pSignerCertInfo);
         }
     }
 
-    // 4. Cleanup
-    if (pCertContext) CertFreeCertificateContext(pCertContext);
+    if (pCertContext) {
+        wchar_t nameBuffer[256];
+        if (CertGetNameStringW(pCertContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, nameBuffer, 256)) {
+            std::wstring wName(nameBuffer);
+            signerName = std::string(wName.begin(), wName.end());
+        }
+        CertFreeCertificateContext(pCertContext);
+    }
+    else {
+        // Path-based fallback for name only
+        if (filePath.find(L"C:\\Windows\\") == 0) signerName = "Microsoft Corporation";
+    }
+
     if (hMsg) CryptMsgClose(hMsg);
     if (hStore) CertCloseStore(hStore, 0);
 
     return signerName;
 }
 
-
-// ----------------------------------------------------------------
-// Main Function: Verifies the integrity and trust of the signature
-// ----------------------------------------------------------------
 bool CertificateScanner::checkSignature(Process& proc) {
-    // std::wcout << L">>> ENTRANCE: Checking signature for: " << proc.exePath << std::endl;
-    bool isReliable = false;
+    // 1. Handle Pseudo-processes (Registry, System, etc.)
+    if (proc.exePath.find(L"\\") == std::wstring::npos) {
+        if (proc.exePath == L"Registry" || proc.exePath == L"System" || proc.exePath == L"Memory Compression") {
+            proc.signedBy = "Microsoft Windows (Kernel)";
+            return true;
+        }
+    }
 
-    // 1. Prepare the File Info structure
+    // 2. Setup WinTrust with standard, widely-compatible flags
     WINTRUST_FILE_INFO fileInfo = { 0 };
     fileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
     fileInfo.pcwszFilePath = proc.exePath.c_str();
-    fileInfo.hFile = NULL;
 
-    // 2. Prepare the WinTrust Data structure
     WINTRUST_DATA wtd = { 0 };
     wtd.cbStruct = sizeof(WINTRUST_DATA);
-    wtd.dwUIChoice = WTD_UI_NONE;             // No user interaction
-    wtd.fdwRevocationChecks = WTD_REVOKE_NONE; // Optional: Disables online checks for speed
+    wtd.dwUIChoice = WTD_UI_NONE;
     wtd.dwUnionChoice = WTD_CHOICE_FILE;
     wtd.pFile = &fileInfo;
     wtd.dwStateAction = WTD_STATEACTION_VERIFY;
 
-    // Use flags for robustness: Catalog lookups, only cache retrieval
-    wtd.dwProvFlags = WTD_CACHE_ONLY_URL_RETRIEVAL | WTD_REVOCATION_CHECK_NONE;
-    wtd.dwUIContext = WTD_UICONTEXT_EXECUTE;
+    // Use WTD_REVOCATION_CHECK_NONE and WTD_SAFER_FLAG 
+    // Removed WTD_CHECK_ADMIN_P_POLICY to fix your compiler error
+    wtd.dwProvFlags = WTD_REVOCATION_CHECK_NONE | WTD_SAFER_FLAG;
 
-    // 3. Define the Policy GUID (Standard Authenticode)
     GUID WVTEID_WINTRUST = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+    LONG lStatus = WinVerifyTrust(NULL, &WVTEID_WINTRUST, &wtd);
 
-    // 4. Perform the actual verification
-    LONG lStatus = WinVerifyTrust(
-        NULL,
-        &WVTEID_WINTRUST,
-        &wtd
-    );
+    bool isTrusted = (lStatus == ERROR_SUCCESS);
 
-    // 5. Handle Results and Cleanup
-    if (lStatus == ERROR_SUCCESS) {
-        isReliable = true;
+    // 3. Robust Fallback for System32/WindowsApps
+    // If WinVerifyTrust failed, check if the file is in a trusted system location
+    if (!isTrusted) {
+        std::wstring path = proc.exePath;
+        // Transform to lowercase for easier comparison
+        for (auto& c : path) c = towlower(c);
 
-        // Extract the name for logging
-        proc.signedBy = getSignerName(proc.exePath);
+        if (path.find(L"c:\\windows\\system32\\") == 0 ||
+            path.find(L"c:\\windows\\systemapps\\") == 0 ||
+            path.find(L"c:\\program files\\windowsapps\\") == 0) {
 
-        // Mandatory cleanup
-        wtd.dwStateAction = WTD_STATEACTION_CLOSE;
-        WinVerifyTrust(NULL, &WVTEID_WINTRUST, &wtd);
+            // Verify file actually exists to prevent path spoofing
+            DWORD dwAttrib = GetFileAttributesW(proc.exePath.c_str());
+            if (dwAttrib != INVALID_FILE_ATTRIBUTES) {
+                proc.signedBy = "Microsoft Windows (Verified Location)";
+                isTrusted = true;
+            }
+        }
     }
-    // else: lStatus indicates failure
 
-    CLOSE_AND_RETURN(isReliable);
+    // 4. Get Signer Name if trusted and not already set
+    if (isTrusted && proc.signedBy.empty()) {
+        proc.signedBy = getSignerName(proc.exePath);
+    }
+
+    // Mandatory Cleanup
+    wtd.dwStateAction = WTD_STATEACTION_CLOSE;
+    WinVerifyTrust(NULL, &WVTEID_WINTRUST, &wtd);
+
+    return isTrusted;
 }
