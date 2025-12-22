@@ -121,13 +121,11 @@ bool WFPEngine::AddRedirectFilterByProcess(const std::wstring& processPath, UINT
         return false;
     }
 
-    // 2. Set up condition - target the specific EXE
     condition.fieldKey = FWPM_CONDITION_ALE_APP_ID;
     condition.matchType = FWP_MATCH_EQUAL;
     condition.conditionValue.type = FWP_BYTE_BLOB_TYPE;
     condition.conditionValue.byteBlob = appID;
 
-    // 3. Configure filter
     filter.subLayerKey = subLayerGUID;
     filter.displayData.name = (wchar_t*)L"AegisCore Trap Filter";
     filter.weight.type = FWP_UINT8;
@@ -137,10 +135,10 @@ bool WFPEngine::AddRedirectFilterByProcess(const std::wstring& processPath, UINT
     filter.layerKey = FWPM_LAYER_ALE_AUTH_CONNECT_V4;
     filter.action.type = FWP_ACTION_BLOCK;
 
-    // 4. Add the filter
+    // add the filter
     result = FwpmFilterAdd0(engineHandle, &filter, NULL, &filterId);
 
-    // 5. CRITICAL: Free the AppID memory
+    // free memeory
     FwpmFreeMemory0((void**)&appID);
 
     if (result == ERROR_SUCCESS) {

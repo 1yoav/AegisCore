@@ -22,11 +22,10 @@ public:
 
     bool RemoveAllFilters();
 
-    // Basic Blocking Rules (IP/Port)
+    // basic blocking rules (ip/port)
     bool AddFilter(const FilterRule& rule);
 
-    // NEW: The Redirect Logic
-    // Call this when your main loop detects an unsigned process
+    // scrapped ::-
     bool AddRedirectFilterByProcess(const std::wstring& processPath, UINT16 proxyPort);
 
 private:

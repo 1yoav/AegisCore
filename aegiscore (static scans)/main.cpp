@@ -51,12 +51,11 @@ int main() {
     std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
     bool running = true;
 
-    std::set<uint32_t> scannedPids; // Track PIDs we've already checked
+    std::set<uint32_t> scannedPids; // track PIDs weve already checked
 
     while (running) {
     std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
 
-    // Inside main() while loop
     for (auto& process : currentProcesses) {
         if (process.pid < 100) continue;
 
@@ -64,7 +63,7 @@ int main() {
             bool isTrusted = certScanner.checkSignature(process);
 
             if (!isTrusted) {
-                // ONLY if both WinVerifyTrust AND our path-fallback fail
+
                 std::string narrowPath = converter.to_bytes(process.exePath);
                 std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
                 PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);

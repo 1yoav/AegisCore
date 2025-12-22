@@ -5,17 +5,17 @@ bool PipeClient::SendAlert(uint32_t pid, const std::string& processName, const s
     std::cout << "SENDING ALERT JSON PAYLOAD: \n";
     const char* pipeName = "\\\\.\\pipe\\AVDeepScanPipe";
 
-    // 1. ESCAPE THE PATH: Turn single \ into double \\ so JSON doesn't break
+    // replace \ with \\ for python
     std::string escapedPath = std::regex_replace(processName, std::regex("\\\\"), "\\\\");
 
-    // 2. Prepare the JSON payload using the now populated escapedPath
+    // pdate json with correct escape strings
     std::string jsonPayload = "{ \"pid\": " + std::to_string(pid) +
         ", \"process_name\": \"" + escapedPath + "\"" +
         ", \"orig_ip\": \"" + destIP + "\"" +
         ", \"orig_port\": " + std::to_string(destPort) + " }";
     std::cout << jsonPayload << std::endl;
-    // NEW: Wait for the pipe to become available (up to 1 second)
-    // This prevents "File Not Found" errors if two alerts happen at once
+
+    // wait for the pipe to become available (up to 1 second)
     if (!WaitNamedPipeA(pipeName, 1000)) {
         return false;
     }

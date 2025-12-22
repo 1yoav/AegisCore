@@ -48,10 +48,10 @@ void PacketLogger::LogPacket(const PacketLog& log) {
 
     if (consoleOutput) {
         if (log.action == "BLOCKED") {
-            std::cout << "\033[1;31m" << logLine << "\033[0m" << std::endl; // Red
+            std::cout << "\033[1;31m" << logLine << "\033[0m" << std::endl; // red
         }
         else {
-            std::cout << "\033[1;32m" << logLine << "\033[0m" << std::endl; // Green
+            std::cout << "\033[1;32m" << logLine << "\033[0m" << std::endl; // green
         }
     }
 
