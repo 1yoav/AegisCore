@@ -69,8 +69,8 @@ def predict():
 
             data = list(map(int, newMsg))
             score = model.decision_function([data])
-
-            print("score is", score[0])
+            if score[0] < -0.3:
+                print("score is", score[0])
 
     except Exception as e:
         win32pipe.DisconnectNamedPipe(pipe)
