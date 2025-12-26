@@ -104,6 +104,7 @@
 ;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\pcap\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +142,7 @@
     <ClCompile Include="PacketLogger.cpp" />
     <ClCompile Include="CertificateScanner.h" />
     <ClCompile Include="PipeClient.cpp" />
+    <ClCompile Include="SigScanner.cpp" />
     <ClCompile Include="SQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
@@ -154,6 +156,7 @@
     <ClInclude Include="PacketLogger.h" />
     <ClInclude Include="AVProcess.h" />
     <ClInclude Include="PipeClient.h" />
+    <ClInclude Include="SigScanner.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="TrafficDiverter.h" />
