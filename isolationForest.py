@@ -62,27 +62,32 @@ def predict():
             msg = res[1].decode("utf-8")
 
             newMsg = msg.split(",")
-            print(newMsg)
+            fileName = newMsg[0]
 
-            model = joblib.load(newMsg[0])
-            newMsg.remove(newMsg[0])
+            my_file = Path(fileName)
+            if(my_file.exists()):
+                model = joblib.load(fileName)
+                newMsg.remove(newMsg[0])
 
-            data = list(map(int, newMsg))
-            score = model.decision_function([data])
-            if score[0] < -0.3:
-                print("score is", score[0])
 
+                data = list(map(int, newMsg))
+                print(data)
+                score = model.decision_function([data])
+                if score[0] < 1:
+                    print(fileName ,"score is", score[0])
+            else:
+                print(fileName , " ", "not exsist")
     except Exception as e:
         win32pipe.DisconnectNamedPipe(pipe)
         print("error occur:", e)
 
 
 def main():
-    # training()
+    #training()
     predict()
 
 
 if __name__ == "__main__":
     main()
-    input("Press Enter to exit...")
+    #input("Press Enter to exit...")
 

@@ -96,7 +96,7 @@ int main()
     if (Process32FirstW(snapshot, &pe))
     {
         do {
-            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"notepad++.exe") == 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
+            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
             {
                 std::wcout << L"[allow] "
                     << pe.th32ProcessID << L"| "

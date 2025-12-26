@@ -8,7 +8,7 @@
 #include <TlHelp32.h>
 #include <fileSystem>
 
-#define TRAINING 0
+#define TRAINING 1
 
 
 std::string wstring_to_string(const std::wstring wstr)
@@ -202,7 +202,7 @@ void createPipe(wchar_t* pipeName)
                         csv << msg;
                         csv.flush();
                         csv.close();
-                        std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
+						pid.clear();
 
                     }
                     //if its not training mode, send to python server
@@ -218,6 +218,7 @@ void createPipe(wchar_t* pipeName)
                         msg.pop_back();
 
                         //add the process name
+						std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
                         WriteFile(pythonPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
                     }
                 }
