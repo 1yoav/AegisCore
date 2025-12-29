@@ -13,7 +13,7 @@ public:
     DownloadMonitor(SQLDatabase* db) : database(db) {}
 
     // The main entry point for the monitoring thread
-    void startMonitor();
+    void startMonitor(std::wstring dir_path);
 
 private:
     SQLDatabase* database;

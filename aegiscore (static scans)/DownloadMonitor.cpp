@@ -3,13 +3,13 @@
 #include <thread>
 #include <vector>
 
-void DownloadMonitor::startMonitor()
+void DownloadMonitor::startMonitor(std::wstring dir_path)
 {
     // 1. Open a handle to the directory we want to watch
-    std::wstring dirPath = L"C:\\Users\\Cyber_User\\Downloads";
+    
     
     HANDLE hDir = CreateFileW(
-        dirPath.c_str(),
+        dir_path.c_str(),
         FILE_LIST_DIRECTORY,
         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
         NULL,
@@ -23,7 +23,7 @@ void DownloadMonitor::startMonitor()
         return;
     }
 
-    std::cout << "[*] Real-time download monitor started on: " << std::string(dirPath.begin(), dirPath.end()) << std::endl;
+    std::cout << "[*] Real-time download monitor started on: " << std::string(dir_path.begin(), dir_path.end()) << std::endl;
 
     // Buffer to hold the file system events
     // 1024 bytes is usually enough for a batch of short filenames, but 4KB is safer
@@ -38,7 +38,7 @@ void DownloadMonitor::startMonitor()
             hDir,
             buffer.data(),
             BUFFER_SIZE,
-            FALSE, // Watch subtree? (FALSE = only this folder, TRUE = all subfolders)
+            TRUE, // Watch subtree? (FALSE = only this folder, TRUE = all subfolders)
             FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_CREATION,
             &bytesReturned,
             NULL,
@@ -54,23 +54,25 @@ void DownloadMonitor::startMonitor()
         
         do {
             std::wstring fileName(pInfo->FileName, pInfo->FileNameLength / sizeof(wchar_t));
-            std::wstring fullPath = dirPath + L"\\" + fileName;
+            std::wstring fullPath = dir_path + L"\\" + fileName;
             
+
+
             // Handle specific actions
             switch (pInfo->Action) {
                 case FILE_ACTION_ADDED:
                 case FILE_ACTION_MODIFIED:
-                    // Only scan if it's NOT a temp file
+                    // Only scan if it's NOT a temp file or a folder
                     if (fullPath.find(L".crdownload") == std::string::npos && 
-                        fullPath.find(L".tmp") == std::string::npos) 
+                        fullPath.find(L".tmp") == std::string::npos &&
+                        std::filesystem::is_directory(fullPath))
                     {
                         processFile(fullPath);
                     }
                     break;
 
                 case FILE_ACTION_RENAMED_NEW_NAME:
-                    // This is the CRITICAL event for browsers.
-                    // They rename "Unconfirmed 1234.crdownload" -> "virus.exe"
+                    // if file was renamed from temp to exe (or any other pe), scan it
                     processFile(fullPath);
                     break;
             }
@@ -87,49 +89,76 @@ void DownloadMonitor::startMonitor()
 
 void DownloadMonitor::processFile(std::wstring filePath)
 {
-    // Filter out temp files immediately
-    if (filePath.find(L".crdownload") != std::string::npos || 
-        filePath.find(L".tmp") != std::string::npos ||
-        filePath.find(L".part") != std::string::npos) {
+    // 1. FILTER: Ignore known temporary/active download extensions
+    // If a file is "Malware.exe.crdownload", we ignore it here.
+    // We will catch it later when it is RENAMED to "Malware.exe".
+    std::wstring lowerPath = filePath;
+    std::transform(lowerPath.begin(), lowerPath.end(), lowerPath.begin(), ::tolower);
+
+    if (lowerPath.find(L".crdownload") != std::string::npos ||
+        lowerPath.find(L".tmp") != std::string::npos ||
+        lowerPath.find(L".part") != std::string::npos) {
         return;
     }
 
-    // Thread Safety: Check if we are already scanning this file
+    // 2. DEDUPLICATION (Thread Safety)
+    // This prevents multiple threads from "settling" the same file 
+    // if the OS sends multiple notifications for one download.
     {
         std::lock_guard<std::mutex> lock(processingMutex);
         if (filesInProcess.count(filePath)) {
-            return; // Already being processed
+            return;
         }
         filesInProcess.insert(filePath);
     }
 
-    // Launch the scan in a detached thread so we don't block the monitor loop
+    // 3. THE PIPELINE THREAD
     std::thread([this, filePath]() {
-        
-        // Wait a tiny bit for the file handle to be released by the browser
-        // (Browsers sometimes rename the file but hold the handle for a few ms)
-        int retries = 0;
-        while (isFileLocked(filePath) && retries < 10) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            retries++;
+        uint64_t lastSize = 0;
+        int stabilityCount = 0;
+        const int REQUIRED_STABILITY = 5; // Must be stable for 5 checks (1 second total)
+
+        std::wcout << L"[*] Tracking file completion: " << filePath << std::endl;
+
+        // PHASE A: Wait for file to exist and stop growing (Handles Torrents/Large Files)
+        while (stabilityCount < REQUIRED_STABILITY) {
+            if (std::filesystem::exists(filePath)) {
+                std::error_code ec;
+                uint64_t currentSize = std::filesystem::file_size(filePath, ec);
+
+                if (!ec && currentSize > 0 && currentSize == lastSize) {
+                    stabilityCount++;
+                }
+                else {
+                    stabilityCount = 0;
+                    lastSize = currentSize;
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
 
-        std::wcout << L"[*] New Download Detected: " << filePath << std::endl;
-        
-        // Call your existing scanner
-        // Note: We need to make sure SigScanner::checkSignature is thread safe too!
-        // For now, we assume the scanner instance is safe or we create a local one.
-        scanner.checkSignature(filePath);
+        // PHASE B: Wait for the downloader to release the file handle (Handles Chrome Rename)
+        // Even if the size is stable, the browser might still be "touching" it.
+        int lockRetries = 0;
+        while (isFileLocked(filePath) && lockRetries < 20) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+            lockRetries++;
+        }
 
-        // Remove from processing set when done
+        // PHASE C: The Final Scan
+        if (std::filesystem::exists(filePath)) {
+            std::wcout << L"[!] Scanning finalized file: " << filePath << std::endl;
+            scanner.checkSignature(filePath);
+        }
+
+        // 4. CLEANUP: Allow this file to be monitored again in the future
         {
             std::lock_guard<std::mutex> lock(processingMutex);
             filesInProcess.erase(filePath);
         }
 
-    }).detach();
+        }).detach();
 }
-
 bool DownloadMonitor::isFileLocked(const std::wstring& filePath) {
     HANDLE hFile = CreateFileW(filePath.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {

@@ -50,7 +50,7 @@ void SigScanner::checkSignature(std::filesystem::path path)
     if (!isSafe)
     {
         std::wcout << L"??  THREAT DETECTED: " << path << std::endl;
-        std::wcout << L"Quarantining malicious file..." << std::endl;
+        std::wcout << L"Quarantining malicious file... (TODO)" << std::endl;
         // quarantineFile(path); // no need for this. file will be sent to deeper analysis
     }
     else

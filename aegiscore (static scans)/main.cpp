@@ -1,130 +1,103 @@
-//#include "WFPEngine.h"
-//#include "PacketLogger.h"
-//#include "FilterRule.h"
-//#include "SQLDatabase.h"
-//#include "HelperFunctions.h"
-//#include "CertificateScanner.h"
-//#include "TrafficDiverter.h"
-//#include "NetworkUtils.h"
-//#include "AVProcess.h"
-//#include "PipeClient.h"
-//#include "SigScanner.h"
-//#include "DownloadMonitor.h"
-//
-//
-//int main() {
-//    std::cout << "==================================" << std::endl;
-//    std::cout << "  AegisCore upgraded Commander" << std::endl;
-//    std::cout << "  WFP + Signature-Based Monitor" << std::endl;
-//    std::cout << "==================================" << std::endl;
-//
-//    #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-//    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; // create converter
-//
-//    // init db
-//    sqlite3* database = nullptr;
-//    SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
-//    db.open();
-//
-//    //OPEN DOWNLOAD SCANNER THREAD
-//    /*DownloadMonitor download_monitor(&db);
-//    std::thread t(DownloadMonitor::startDownloadScan, download_monitor);*/
-//
-//    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
-//    WFPEngine wfpEngine(logger);
-//    CertificateScanner certScanner;
-//
-//    TrafficDiverter diverter(8080); // diverter
-//
-//    if (!wfpEngine.Initialize()) {
-//        logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
-//        return 1;
-//    }
-//
-//    // 3. Load Static & Database Rules
-//    std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
-//
-//    std::vector<FilterRule> dbRules = db.getC2Rules();
-//    rules.insert(rules.end(), dbRules.begin(), dbRules.end());
-//
-//    for (const auto& rule : rules) {
-//        wfpEngine.AddFilter(rule);
-//    }
-//
-//
-//    std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
-//    bool running = true;
-//
-//    std::set<uint32_t> scannedPids; // track PIDs weve already checked
-//
-//    while (running) {
-//    std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
-//
-//    for (auto& process : currentProcesses) {
-//        if (process.pid < 100) continue;
-//
-//        if (scannedPids.find(process.pid) == scannedPids.end()) {
-//            bool isTrusted = certScanner.checkSignature(process);
-//
-//            if (!isTrusted) {
-//
-//                #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-//                std::string narrowPath = converter.to_bytes(process.exePath);
-//                std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
-//                PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
-//            }
-//
-//            scannedPids.insert(process.pid);
-//        }
-//    }
-//        // wait a few seconds before rescanning
-//        std::this_thread::sleep_for(std::chrono::seconds(2));
-//    }
-//
-//    // exit
-//    wfpEngine.Shutdown();
-//    return 0;
-//
-//    /*bool sent = PipeClient::SendAlert(1544, "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "0.0.0.0", 0); one line tester*/ 
-//}
-
+#include "WFPEngine.h"
+#include "PacketLogger.h"
+#include "FilterRule.h"
+#include "SQLDatabase.h"
+#include "HelperFunctions.h"
+#include "CertificateScanner.h"
+#include "TrafficDiverter.h"
+#include "NetworkUtils.h"
+#include "AVProcess.h"
+#include "PipeClient.h"
+#include "SigScanner.h"
 #include "DownloadMonitor.h"
-#include <iostream>
-#include <thread>
-#include <chrono>
+
 
 int main() {
-    std::cout << "============================================" << std::endl;
-    std::cout << "      DOWNLOAD MONITOR TEST HARNESS         " << std::endl;
-    std::cout << "============================================" << std::endl;
+    std::cout << "==================================" << std::endl;
+    std::cout << "  AegisCore upgraded Commander" << std::endl;
+    std::cout << "  WFP + Signature-Based Monitor" << std::endl;
+    std::cout << "==================================" << std::endl;
 
-    // 1. Initialize Monitor (Passing nullptr for DB as requested)
+    #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; // create converter
+
+    // init db
+    sqlite3* database = nullptr;
+    SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
+    db.open();
+
+    //OPEN DOWNLOAD SCANNER THREAD
     std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;
     DownloadMonitor monitor(nullptr);
 
-    // 2. Start the monitor in a separate thread
-    // This allows the main thread to handle user input (like quitting)
-    std::thread monitorThread([&monitor]() {
-        monitor.startMonitor();
-        });
+    // 2. Start the monitors of common download destinations in a separate thread
+    std::wstring downloads = GetFolder(FOLDERID_Downloads);
+    std::wstring desktop = GetFolder(FOLDERID_Desktop);
+    std::wstring temp = L"C:\\Windows\\Temp"; // Or get User Temp
 
-    // 3. Keep the app running
-    std::cout << "\n--------------------------------------------" << std::endl;
-    std::cout << "   TEST INSTRUCTIONS:" << std::endl;
-    std::cout << "   1. Open your web browser." << std::endl;
-    std::cout << "   2. Download a file (e.g., an image or PDF)." << std::endl;
-    std::cout << "   3. Watch the console for 'File Finished' event." << std::endl;
-    std::cout << "--------------------------------------------\n" << std::endl;
+    // 1. Start threads (using joinable check)
+    std::thread t1([&]() { if (!downloads.empty()) monitor.startMonitor(downloads); });
+    std::thread t2([&]() { if (!desktop.empty()) monitor.startMonitor(desktop); });
+    std::thread t3([&]() { monitor.startMonitor(temp); });
 
-    std::cout << "Press ENTER to stop the test..." << std::endl;
-    std::cin.get(); // Blocks here until user hits Enter
 
-    // 4. Cleanup
-    std::cout << "[Exit] Stopping monitor..." << std::endl;
-    // monitor.stopMonitor();
+    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
+    WFPEngine wfpEngine(logger);
+    CertificateScanner certScanner;
 
-    // Force detach or join (in a real app, you'd signal the thread to stop cleanly)
-    monitorThread.detach();
+    TrafficDiverter diverter(8080); // diverter
 
+    if (!wfpEngine.Initialize()) {
+        logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
+        return 1;
+    }
+
+    // 3. Load Static & Database Rules
+    std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
+
+    std::vector<FilterRule> dbRules = db.getC2Rules();
+    rules.insert(rules.end(), dbRules.begin(), dbRules.end());
+
+    for (const auto& rule : rules) {
+        wfpEngine.AddFilter(rule);
+    }
+
+
+    std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
+    bool running = true;
+
+    std::set<uint32_t> scannedPids; // track PIDs weve already checked
+
+    while (running) {
+    std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
+
+    for (auto& process : currentProcesses) {
+        if (process.pid < 100) continue;
+
+        if (scannedPids.find(process.pid) == scannedPids.end()) {
+            bool isTrusted = certScanner.checkSignature(process);
+
+            if (!isTrusted) {
+
+                #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
+                std::string narrowPath = converter.to_bytes(process.exePath);
+                std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
+                PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
+            }
+
+            scannedPids.insert(process.pid);
+        }
+    }
+        // wait a few seconds before rescanning
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+
+    std::cout << "[!] Shutting down..." << std::endl;
+    wfpEngine.Shutdown();
+    // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
+
+    if (t1.joinable()) t1.join();
+    if (t2.joinable()) t2.join();
+    if (t3.joinable()) t3.join();
     return 0;
 }
