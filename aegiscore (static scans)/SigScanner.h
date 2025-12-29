@@ -17,6 +17,7 @@
 #include <sstream>
 #include <tlhelp32.h>
 #include <vector>
+#include <mutex>
 
 class SigScanner
 {
@@ -29,4 +30,7 @@ public:
 	// static void quarantineFile(const std::filesystem::path& filePath);
 
 	std::vector<std::wstring> files;
+
+private:
+	std::mutex vectorMutex;
 };

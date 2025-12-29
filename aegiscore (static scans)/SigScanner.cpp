@@ -28,6 +28,11 @@ std::string SigScanner::getMD5Hash(const std::filesystem::path& path) {
 
 void SigScanner::checkSignature(std::filesystem::path path)
 {
+    {
+        std::lock_guard<std::mutex> lock(vectorMutex);
+        files.push_back(path.wstring());
+    }
+
     files.push_back(path);
 
     // 1. Generate the hash

@@ -1,22 +1,17 @@
-#include "WFPEngine.h"
-#include "PacketLogger.h"
-#include "FilterRule.h"
-#include "SQLDatabase.h"
-#include "HelperFunctions.h"
-#include "CertificateScanner.h"
-#include "TrafficDiverter.h"
-#include "NetworkUtils.h"
-#include "AVProcess.h"
-#include "PipeClient.h"
-#include "SigScanner.h"
-#include <thread>
-
-// tester main
-int main() {
-	SigScanner scanner;
-	scanner.checkSignature("C:\\Users\\Cyber_User\\ZAP\\webdriver\\windows\\64\\chromedriver.exe");
-}
-
+//#include "WFPEngine.h"
+//#include "PacketLogger.h"
+//#include "FilterRule.h"
+//#include "SQLDatabase.h"
+//#include "HelperFunctions.h"
+//#include "CertificateScanner.h"
+//#include "TrafficDiverter.h"
+//#include "NetworkUtils.h"
+//#include "AVProcess.h"
+//#include "PipeClient.h"
+//#include "SigScanner.h"
+//#include "DownloadMonitor.h"
+//
+//
 //int main() {
 //    std::cout << "==================================" << std::endl;
 //    std::cout << "  AegisCore upgraded Commander" << std::endl;
@@ -30,6 +25,10 @@ int main() {
 //    sqlite3* database = nullptr;
 //    SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
 //    db.open();
+//
+//    //OPEN DOWNLOAD SCANNER THREAD
+//    /*DownloadMonitor download_monitor(&db);
+//    std::thread t(DownloadMonitor::startDownloadScan, download_monitor);*/
 //
 //    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
 //    WFPEngine wfpEngine(logger);
@@ -88,3 +87,44 @@ int main() {
 //
 //    /*bool sent = PipeClient::SendAlert(1544, "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "0.0.0.0", 0); one line tester*/ 
 //}
+
+#include "DownloadMonitor.h"
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+int main() {
+    std::cout << "============================================" << std::endl;
+    std::cout << "      DOWNLOAD MONITOR TEST HARNESS         " << std::endl;
+    std::cout << "============================================" << std::endl;
+
+    // 1. Initialize Monitor (Passing nullptr for DB as requested)
+    std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;
+    DownloadMonitor monitor(nullptr);
+
+    // 2. Start the monitor in a separate thread
+    // This allows the main thread to handle user input (like quitting)
+    std::thread monitorThread([&monitor]() {
+        monitor.startMonitor();
+        });
+
+    // 3. Keep the app running
+    std::cout << "\n--------------------------------------------" << std::endl;
+    std::cout << "   TEST INSTRUCTIONS:" << std::endl;
+    std::cout << "   1. Open your web browser." << std::endl;
+    std::cout << "   2. Download a file (e.g., an image or PDF)." << std::endl;
+    std::cout << "   3. Watch the console for 'File Finished' event." << std::endl;
+    std::cout << "--------------------------------------------\n" << std::endl;
+
+    std::cout << "Press ENTER to stop the test..." << std::endl;
+    std::cin.get(); // Blocks here until user hits Enter
+
+    // 4. Cleanup
+    std::cout << "[Exit] Stopping monitor..." << std::endl;
+    // monitor.stopMonitor();
+
+    // Force detach or join (in a real app, you'd signal the thread to stop cleanly)
+    monitorThread.detach();
+
+    return 0;
+}
