@@ -6,7 +6,7 @@ from typing import Tuple, List
 from events import InvestigationContext
 from static_analyzer import StaticAnalyzer
 from yara_analyzer import YaraAnalyzer
-
+from behavioral_analyzer import BehavioralAnalyzer
 
 class Analyzer:
     """Enhanced analyzer with multiple detection methods"""
@@ -20,7 +20,8 @@ class Analyzer:
     def __init__(self):
         self.process_cache = {}
         self.static_analyzer = StaticAnalyzer()
-        self.yara_analyzer = YaraAnalyzer() # <--- Initialize YARA
+        self.yara_analyzer = YaraAnalyzer()
+        self.behavioral_analyzer = BehavioralAnalyzer()
 
     def analyze_context(self, ctx: InvestigationContext) -> float:
         """
@@ -66,18 +67,20 @@ class Analyzer:
         dynamic_raw_score += network_score
         findings.extend(network_findings)
 
-        # Normalize Dynamic Score to 0-100 (Max raw is 60)
-        dynamic_score_normalized = min((dynamic_raw_score / 60.0) * 100, 100.0)
+        # 4. NEW: Behavioral / Live Process Analysis (Max 40 pts)
+        # Assuming ctx.pid exists (it should if you are listening to a driver)
+        beh_score, beh_findings = self.behavioral_analyzer.analyze_running_process(ctx.pid)
+        dynamic_raw_score += beh_score
+        findings.extend(beh_findings)
+
+        # Normalize Dynamic Score: New Max Raw is 100 (20+30+10+40)
+        dynamic_score_normalized = min(dynamic_raw_score, 100.0)
 
         # --- PART C: Final Calculation ---
-        # 50% Static + 50% Dynamic
         final_score = (final_static_score * 0.5) + (dynamic_score_normalized * 0.5)
 
-        # Store findings in context
         ctx.findings = findings
         ctx.confidence = min(final_score, 100.0)
-
-        # Add a meta-finding to explain the score split
         ctx.findings.append(f"[SCORE] Static: {final_static_score:.1f}% | Dynamic: {dynamic_score_normalized:.1f}%")
 
         return ctx.confidence

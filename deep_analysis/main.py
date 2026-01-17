@@ -10,9 +10,9 @@ def print_banner():
     print("""
     ╔═══════════════════════════════════════════════════════════╗
     ║                                                           ║
-    ║         C2 PROXY - Malware Analysis System v2.0           ║
+    ║         DEEP SCAN - Malware Analysis System v2.0          ║
     ║                                                           ║
-    ║   Detects unsigned processes and analyzes C2 behavior    ║
+    ║    Detects unsigned processes and analyzes C2 behavior    ║
     ║                                                           ║
     ╚═══════════════════════════════════════════════════════════╝
     """)
