@@ -41,59 +41,59 @@ int main() {
     std::thread t3([&]() { monitor.startMonitor(temp); });
 
 
-    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
-    WFPEngine wfpEngine(logger);
-    CertificateScanner certScanner;
+    //auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
+    //WFPEngine wfpEngine(logger);
+    //CertificateScanner certScanner;
 
-    TrafficDiverter diverter(8080); // diverter
+    //TrafficDiverter diverter(8080); // diverter
 
-    if (!wfpEngine.Initialize()) {
-        logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
-        return 1;
-    }
+    //if (!wfpEngine.Initialize()) {
+    //    logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
+    //    return 1;
+    //}
 
-    // 3. Load Static & Database Rules
-    std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
+    //// 3. Load Static & Database Rules
+    //std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
 
-    std::vector<FilterRule> dbRules = db.getC2Rules();
-    rules.insert(rules.end(), dbRules.begin(), dbRules.end());
+    //std::vector<FilterRule> dbRules = db.getC2Rules();
+    //rules.insert(rules.end(), dbRules.begin(), dbRules.end());
 
-    for (const auto& rule : rules) {
-        wfpEngine.AddFilter(rule);
-    }
+    //for (const auto& rule : rules) {
+    //    wfpEngine.AddFilter(rule);
+    //}
 
 
-    std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
-    bool running = true;
+    //std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
+    //bool running = true;
 
-    std::set<uint32_t> scannedPids; // track PIDs weve already checked
+    //std::set<uint32_t> scannedPids; // track PIDs weve already checked
 
-    while (running) {
-    std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
+    //while (running) {
+    //std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
 
-    for (auto& process : currentProcesses) {
-        if (process.pid < 100) continue;
+    //for (auto& process : currentProcesses) {
+    //    if (process.pid < 100) continue;
 
-        if (scannedPids.find(process.pid) == scannedPids.end()) {
-            bool isTrusted = certScanner.checkSignature(process);
+    //    if (scannedPids.find(process.pid) == scannedPids.end()) {
+    //        bool isTrusted = certScanner.checkSignature(process);
 
-            if (!isTrusted) {
+    //        if (!isTrusted) {
 
-                #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-                std::string narrowPath = converter.to_bytes(process.exePath);
-                std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
-                PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
-            }
+    //            #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
+    //            std::string narrowPath = converter.to_bytes(process.exePath);
+    //            std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
+    //            PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
+    //        }
 
-            scannedPids.insert(process.pid);
-        }
-    }
-        // wait a few seconds before rescanning
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-    }
+    //        scannedPids.insert(process.pid);
+    //    }
+    //}
+    //    // wait a few seconds before rescanning
+    //    std::this_thread::sleep_for(std::chrono::seconds(2));
+    //}
 
-    std::cout << "[!] Shutting down..." << std::endl;
-    wfpEngine.Shutdown();
+    //std::cout << "[!] Shutting down..." << std::endl;
+    //wfpEngine.Shutdown();
     // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
 
     if (t1.joinable()) t1.join();
