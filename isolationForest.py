@@ -38,8 +38,27 @@ def training():
         joblib.dump(model, f.stem + ".pkl")
 
 
+
+def send_msg_to_deepAnalyze(msg):
+        handle = win32file.CreateFile(
+                r'\\.\pipe\hooking',
+                win32file.GENERIC_READ | win32file.GENERIC_WRITE,
+                0,
+                None,
+                win32file.OPEN_EXISTING,
+                0,
+                None
+            )
+        win32file.WriteFile(handle ,msg.encode() ,None)
+        win32file.CloseHandle(handle)
+
+
+
+
 def predict():
     print("pipe server")
+    send_msg_to_deepAnalyze("malware.exe is suspect")
+
 
     pipe = win32pipe.CreateNamedPipe(
         pipe_path,
@@ -75,6 +94,10 @@ def predict():
                 score = model.decision_function([data])
                 if score[0] < 1:
                     print(fileName ,"score is", score[0])
+
+                    # send msg to deepAnalyze
+
+
             else:
                 print(fileName , " ", "not exsist")
     except Exception as e:
