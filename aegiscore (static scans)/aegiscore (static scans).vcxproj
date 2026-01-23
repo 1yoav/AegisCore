@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="CertificateScanner.cpp" />
     <ClCompile Include="DownloadMonitor.cpp" />
+    <ClCompile Include="ExtensionScanner.cpp" />
     <ClCompile Include="HelperFunctions.h" />
     <ClCompile Include="NetworkMonitor.cpp" />
     <ClCompile Include="NetworkMonitor.h" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DownloadMonitor.h" />
+    <ClInclude Include="ExtensionScanner.h" />
     <ClInclude Include="FilterRule.h" />
     <ClInclude Include="Ip.h" />
     <ClInclude Include="NetworkUtils.h" />
