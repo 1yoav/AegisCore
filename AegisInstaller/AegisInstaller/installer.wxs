@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*"
+			 Name="Aegis Antivirus"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="AegisCore Ltd."
+			 UpgradeCode="44d47d66-2e34-4e6b-9ed6-e8bb092a902f">
+
+		<Package InstallerVersion="200"
+				 Compressed="yes"
+				 InstallScope="perMachine"
+				 InstallPrivileges="elevated" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of AegisCore is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="AegisCore Antivirus" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ServiceComponent" />
+		</Feature>
+
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="AegisAV" />
+			</Directory>
+
+			<Directory Id="ProgramMenuFolder">
+			</Directory>
+
+			<Directory Id="StartupFolder" />
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="EngineExecutable" Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
+				<File Id="AegisCoreExe"
+					  Source="C:\Users\Cyber_User\Documents\AegisCore\aegiscore (static scans)\x64\Debug\aegiscore (static scans).exe"
+					  KeyPath="yes" />
+			</Component>
+
+		</ComponentGroup>
+
+		<Component Id="ServiceComponent" Directory="INSTALLFOLDER" Guid="abf5921b-e496-49bc-b451-cd8f4503b17e">
+			<File Id="ServiceFile" Source="C:\Users\Cyber_User\Documents\AegisCore\AegisService\x64\Release\AegisService.exe" />
+			<ServiceInstall Id="AegisServiceInstaller"
+							Type="ownProcess"
+							Name="AegisService"
+							DisplayName="Aegis Antivirus Service"
+							Description="Provides real-time protection against malware and threats"
+							Start="auto"
+							Account="LocalSystem"
+							ErrorControl="normal"
+							Interactive="no" />
+
+			<ServiceControl Id="AegisServiceControl"
+							Start="install"
+							Stop="both"
+							Remove="uninstall"
+							Name="AegisService"
+							Wait="yes" />
+		</Component>
+
+	</Fragment>
+</Wix>
