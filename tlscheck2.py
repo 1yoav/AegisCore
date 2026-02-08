@@ -1,6 +1,7 @@
 from scapy.all import *
 from scapy.layers.tls.all import *
 from cryptography import x509
+import win32pipe, win32file, pywintypes
 from cryptography.hazmat.backends import default_backend
 import datetime
 
@@ -9,7 +10,48 @@ load_layer("tls")
 
 collector = {}
 
+def sendMsg(msg):
+    pipe_name = r'\\.\pipe\MyPipe'
 
+    print(f"Connecting to pipe: {pipe_name}")
+
+    try:
+        # Connect to the named pipe
+        handle = win32file.CreateFile(
+            pipe_name,
+            win32file.GENERIC_READ | win32file.GENERIC_WRITE,
+            0,
+            None,
+            win32file.OPEN_EXISTING,
+            0,
+            None
+        )
+
+        # Set the pipe mode to message mode
+        res = win32pipe.SetNamedPipeHandleState(handle, win32pipe.PIPE_READMODE_MESSAGE, None, None)
+        if res == 0:
+            print(f"SetNamedPipeHandleState return code: {res}")
+
+        # 1. Send message to Server
+        win32file.WriteFile(handle, str.encode(msg))
+        print(f"Sent: {msg}")
+
+        # 2. Receive response from Server
+        response_data = win32file.ReadFile(handle, 4096)
+        print(f"Received from server: {response_data[1].decode()}")
+
+        # Close the handle
+        win32file.CloseHandle(handle)
+
+    except pywintypes.error as e:
+        if e.args[0] == 2:  # ERROR_FILE_NOT_FOUND
+            print("Pipe not found, retrying in 1 second...")
+            time.sleep(1)
+        elif e.args[0] == 231:  # ERROR_PIPE_BUSY
+            print("Pipe is busy, waiting...")
+            win32pipe.WaitNamedPipe(pipe_name, 5000)
+        else:
+            print(f"An error occurred: {e}")
 
 def tlsCheck(data):
     try:
