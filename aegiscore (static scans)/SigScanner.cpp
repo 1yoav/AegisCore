@@ -26,12 +26,35 @@ std::string SigScanner::getMD5Hash(const std::filesystem::path& path) {
     return ss.str();
 }
 
+//connect to deep analysis pipe and send message
+void SigScanner::connectToDeepAnalyze(std::string msg)
+{
+	std::wstring pipeName = L"\\.\\pipe\\signatureScanner";
+
+    HANDLE hPipe = CreateFileW(
+        pipeName.c_str(),
+        GENERIC_WRITE,
+        0,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL
+    );
+
+
+    WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
+	CloseHandle(hPipe);
+}
+
 void SigScanner::checkSignature(std::filesystem::path path)
 {
     {
         std::lock_guard<std::mutex> lock(vectorMutex);
         files.push_back(path.wstring());
     }
+	//just for testing, send all files to deep analysis
+    connectToDeepAnalyze("THREAT_DETECTED:" + std::string(path.string()));
+
 
     files.push_back(path);
 
@@ -51,6 +74,9 @@ void SigScanner::checkSignature(std::filesystem::path path)
     {
         std::wcout << L"??  THREAT DETECTED: " << path << std::endl;
         std::wcout << L"Quarantining malicious file... (TODO)" << std::endl;
+
+		//send msg to deep analysis
+		connectToDeepAnalyze("THREAT_DETECTED:" + std::string(path.string()));
         // quarantineFile(path); // no need for this. file will be sent to deeper analysis
     }
     else
