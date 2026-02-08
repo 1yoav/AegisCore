@@ -10,6 +10,7 @@
 
 
 
+
 \## Overview
 
 AegisCore is designed to detect, analyze, and neutralize malware on Windows systems.
@@ -26,9 +27,11 @@ The system (will) consists of four main components:
 
 
 
+
 2\. \*\*Signature Checker\*\*
 
    Scans files and processes using a database of known malware signatures (hash-based or pattern-based). (Maybe add checks to file metadata too?)
+
 
 
 
@@ -38,9 +41,11 @@ The system (will) consists of four main components:
 
 
 
+
 4\. \*\*Tranquilization Engine\*\*
 
    Terminates malicious processes, removes infected files, and cleans up applications or artifacts created by the malware.
+
 
 
 
@@ -71,6 +76,7 @@ The system (will) consists of four main components:
   - MinHook / Microsoft Detours (for API hooking in sandbox)
 
   - Sysinternals Suite (testing \& analysis)
+
 
 \- \*\*Test Environment:\*\* VirtualBox VM snapshots
 
@@ -109,4 +115,5 @@ This repository currently focuses on building a \*\*Proof of Concept\*\* that de
 
 
 The final product will integrate these modules into a cohesive antivirus framework.
+
 
