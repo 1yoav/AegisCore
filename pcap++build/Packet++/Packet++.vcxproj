@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EECAE9F2-44A8-354C-97EF-518C46DA3629}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>Packet++</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Packet++.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Packet++</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packet++.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packet++</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Packet++.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Packet++</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Packet++.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Packet++</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="Debug";Packet___EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"Debug\";Packet___EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Common++\Debug\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/Debug/Packet++.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/Debug/Packet++.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+      <Version>25.5</Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="Release";Packet___EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"Release\";Packet___EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Common++\Release\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/Release/Packet++.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/Release/Packet++.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+      <Version>25.5</Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="MinSizeRel";Packet___EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"MinSizeRel\";Packet___EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Common++\MinSizeRel\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/MinSizeRel/Packet++.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/MinSizeRel/Packet++.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+      <Version>25.5</Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4068;4200;4244;4267;4819</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT="63874993";GIT_BRANCH="master";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR="RelWithDebInfo";Packet___EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;GIT_COMMIT=\"63874993\";GIT_BRANCH=\"master\";_CRT_SECURE_NO_WARNINGS;HAS_PCAP_IMMEDIATE_MODE;HAS_TIMESTAMP_TYPES_ENABLED;HAS_TIMESTAMP_PRECISION_ENABLED;CMAKE_INTDIR=\"RelWithDebInfo\";Packet___EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\hash-library;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\EndianPortable\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\3rdParty\json\include;C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Common++\header;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\Common++\RelWithDebInfo\Common++.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/RelWithDebInfo/Packet++.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/RelWithDebInfo/Packet++.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem></SubSystem>
+      <Version>25.5</Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Packet++/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Packet++/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Packet++/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus/Packet++/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Cyber_User/Documents/Pcap++/PcapPlusPlus -BC:/Users/Cyber_User/Documents/AegisCore/pcap++build --check-stamp-file C:/Users/Cyber_User/Documents/AegisCore/pcap++build/Packet++/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Packet++\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\3rdParty\hash-library\hash-library.dir\$(Configuration)\md5.obj" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\ArpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Asn1Codec.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\BgpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CiscoHdlcLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CotpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\CryptoKeyDecoder.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DhcpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DhcpV6Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsResource.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DnsResourceData.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\DoIpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\EthDot3Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\EthLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\FtpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\GreLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\GtpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\HttpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IcmpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IcmpV6Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IgmpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPReassembly.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPSecLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv4Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv6Extensions.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\IPv6Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\LdapLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\LLCLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\ModbusLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\MplsLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NdpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NflogLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NtpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\NullLoopbackLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Packet.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PacketTrailerLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PacketUtils.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PayloadLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PemCodec.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\PPPoELayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\RadiusLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\RawPacket.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\S7CommLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SdpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SingleCommandTextProtocol.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SipLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\Sll2Layer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SllLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SmtpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SomeIpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SomeIpSdLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSHLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLCommon.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLHandshake.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\SSLLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\StpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TcpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TcpReassembly.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TelnetLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TextBasedProtocol.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TLVData.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\TpktLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\UdpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VlanLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VrrpLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\VxlanLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\WakeOnLanLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\WireGuardLayer.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\X509Decoder.cpp" />
+    <ClCompile Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\src\X509ExtensionDataDecoder.cpp" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\ArpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Asn1Codec.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\BgpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CiscoHdlcLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CotpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CryptoDataReader.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\CryptoKeyDecoder.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DhcpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DhcpV6Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsLayerEnums.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsResourceData.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DnsResource.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\DoIpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\EthDot3Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\EthLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\FtpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\GreLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\GtpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\HttpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IcmpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IcmpV6Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IgmpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPReassembly.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPSecLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv4Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv6Extensions.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\IPv6Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\LdapLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\LLCLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\MplsLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NullLoopbackLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NdpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NflogLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\NtpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Packet.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PacketTrailerLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PacketUtils.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PayloadLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PemCodec.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\PPPoELayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\ProtocolType.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\RadiusLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\RawPacket.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\S7CommLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SdpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SingleCommandTextProtocol.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SipLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SllLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\Sll2Layer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SmtpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SomeIpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SomeIpSdLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSHLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLCommon.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLHandshake.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\SSLLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\StpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TcpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TcpReassembly.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TelnetLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TextBasedProtocol.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TLVData.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\TpktLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\UdpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VlanLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VrrpLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\VxlanLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\WakeOnLanLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\WireGuardLayer.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\X509Decoder.h" />
+    <ClInclude Include="C:\Users\Cyber_User\Documents\Pcap++\PcapPlusPlus\Packet++\header\X509ExtensionDataDecoder.h" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\ZERO_CHECK.vcxproj">
+      <Project>{FB93BE45-279C-3A62-A9C9-74E70EE80EE8}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\Common++\Common++.vcxproj">
+      <Project>{59D6E9B8-185D-35BA-BB12-CD68A323E009}</Project>
+      <Name>Common++</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Cyber_User\Documents\AegisCore\pcap++build\3rdParty\hash-library\hash-library.vcxproj">
+      <Project>{BA4CEFA1-4E57-3C10-A22B-0095543F1DF0}</Project>
+      <Name>hash-library</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

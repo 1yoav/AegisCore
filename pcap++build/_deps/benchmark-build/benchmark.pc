@@ -1,0 +1,12 @@
+prefix=C:/Program Files (x86)/PcapPlusPlus
+exec_prefix=${prefix}
+libdir=C:/Program Files (x86)/PcapPlusPlus/lib
+includedir=C:/Program Files (x86)/PcapPlusPlus/include
+
+Name: benchmark
+Description: Google microbenchmark framework
+Version: v1.9.0
+
+Libs: -L${libdir} -lbenchmark
+Libs.private: -lpthread 
+Cflags: -I${includedir}
