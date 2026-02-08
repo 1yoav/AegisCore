@@ -2,14 +2,18 @@ from scapy.all import *
 from scapy.layers.tls.all import *
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+import datetime
 
 load_layer("tls")
 # Optional: conf.tls_session_enable = True
 
 collector = {}
 
+
+
 def tlsCheck(data):
     try:
+        # extract the cert
         start_idx = data.find(b"\x30\x82")
         if start_idx != -1:
             cert_len_bytes = data[start_idx + 2 : start_idx + 4]
@@ -19,8 +23,16 @@ def tlsCheck(data):
             asn1_blob = data[start_idx : start_idx + total_size]
             cert = x509.load_der_x509_certificate(asn1_blob, default_backend())
             
-            print(f"\n[+] SUCCESS: {cert.subject}")
-            print(f"    Issuer: {cert.issuer}")
+            # check the cert
+            # date check
+            if cert.not_valid_after < datetime.datetime.now():
+                print("[!!!] ALERT: Expired Certificate detected!")
+            # self signed check
+            if cert.issuer == cert.subject:
+                print("[!!!] WARNING: Self-Signed Certificate. Possible MITM or Malware!")
+
+            # to do: add database for suspicious certs
+
             return True
     except Exception as e:
         pass
