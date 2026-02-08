@@ -17,7 +17,7 @@ class DriverContext:
 
     def start_listening(self, alert_callback: Callable):
         """
-        Starts the pipe server thread.
+        Starts the pipe server tשhread.
         alert_callback: Function to call when C++ sends data.
         """
         self.running = True
