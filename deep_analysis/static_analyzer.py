@@ -25,6 +25,7 @@ class StaticAnalyzer:
     }
 
     SUSPICIOUS_NAMES = ['svchost', 'csrss', 'lsass', 'updater', 'update',
+
                        'payload', 'shell', 'backdoor', 'rat', 'crypted',
                         'chrome.exe', 'services', 'winlogon']
 

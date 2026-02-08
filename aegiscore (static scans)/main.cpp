@@ -10,6 +10,31 @@
 #include "PipeClient.h"
 #include "SigScanner.h"
 #include "DownloadMonitor.h"
+#include "ExtensionScanner.h"
+
+//int main() {
+//    // Data as requested
+//    uint32_t pid = 19860;
+//    std::string processName = "chrome.exe";
+//    std::string destIP = "192.168.1.50"; // Example destination IP
+//    uint16_t destPort = 443;             // Example destination port
+//
+//    std::cout << "[*] Sending alert to Python analysis system..." << std::endl;
+//    std::cout << "[*] Target: " << processName << " (PID: " << pid << ")" << std::endl;
+//
+//    // Call the static function from your PipeClient.h
+//    bool success = PipeClient::SendAlert(pid, processName, destIP, destPort);
+//
+//    if (success) {
+//        std::cout << "[+] Alert sent successfully!" << std::endl;
+//    }
+//    else {
+//        std::cerr << "[-] Failed to send alert. Is the Python driver_ctx listening?" << std::endl;
+//        return 1;
+//    }
+//
+//    return 0;
+//}
 
 
 int main() {
@@ -25,6 +50,23 @@ int main() {
     sqlite3* database = nullptr;
     SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
     db.open();
+
+    // OPEN EXTENSION CHECKCS:
+    std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
+    ExtensionScanner extScanner(&db);
+    extScanner.ScanExtensions();
+
+    std::vector<ChromeExtension> flagged = extScanner.GetFlaggedExtensions();
+    if (!flagged.empty()) {
+        std::cout << "[!] FOUND " << flagged.size() << " MALICIOUS EXTENSIONS!" << std::endl;
+        for (const auto& ext : flagged) {
+            // Optional: Send to Python backend via PipeClient
+            PipeClient::SendAlert(0, "CHROME_EXT_" + ext.name, "0.0.0.0", 0);
+        }
+    }
+    else {
+        std::cout << "[+] Chrome extensions look clean." << std::endl;
+    }
 
     //OPEN DOWNLOAD SCANNER THREAD
     std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;
