@@ -1,0 +1,2 @@
+MemoryManipulation,ReadFile,CreateProcess,WriteFile,CloseHandle,ThreadManipulation,Sleep,ProcessSnapshot,TokenPrivileges
+0,0,0,0,0,0,1,0,0

@@ -27,6 +27,7 @@ public:
 	void checkSignature(std::filesystem::path);
 	static bool scanWithVirusTotal(const std::string& fileHash);
 	static std::string getMD5Hash(const std::filesystem::path& path);
+	static void connectToDeepAnalyze(std::string msg);
 	// static void quarantineFile(const std::filesystem::path& filePath);
 
 	std::vector<std::wstring> files;
