@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AegisCore</title>
+    <title>AegisCore - Main</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
+        /* Professional Font Stack */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Product Sans', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #000000;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #050505;
             color: #ffffff;
             overflow: hidden;
             height: 100vh;
@@ -23,64 +20,27 @@
             flex-direction: column;
         }
 
-        /* Custom Window Controls */
-        .window-controls {
-            position: fixed;
-            top: 0;
-            right: 0;
-            display: flex;
-            gap: 0;
-            z-index: 2000;
-            -webkit-app-region: no-drag;
-        }
-
+        /* Title Bar */
         .titlebar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 40px;
-            -webkit-app-region: drag;
-            background: rgba(20, 20, 25, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            z-index: 1999;
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 1000;
             display: flex;
             align-items: center;
-            padding-left: 1rem;
+            padding-left: 1.5rem;
         }
 
         .titlebar-title {
-            font-size: 0.9rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.4);
+            font-family: 'JetBrains Mono', monospace; /* Tech feel */
         }
 
-        .window-button {
-            width: 46px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .window-button:hover {
-            background: rgba(139, 92, 246, 0.2);
-            color: #ffffff;
-        }
-
-        .window-button.close:hover {
-            background: #e74c3c;
-            color: #ffffff;
-        }
-
-        /* Content Area */
         .content-wrapper {
             flex: 1;
             display: flex;
@@ -89,210 +49,130 @@
             margin-top: 40px;
         }
 
-        /* Main Menu */
         .main-menu {
-            width: 100%;
-            height: 100%;
             display: flex;
             gap: 2rem;
-            padding: 3rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            height: 75vh; 
         }
 
         .menu-button {
+            --background: linear-gradient(145deg, #7c3aed 0%, #2563eb 100%);
             flex: 1;
-            border-radius: 30px;
-            background: #212121;
-            box-shadow: 15px 15px 30px rgb(25, 25, 25),
-                        -15px -15px 30px rgb(60, 60, 60);
+            height: 100%;
+            padding: 1px; /* Thin, elegant border */
+            border-radius: 12px; /* Sharper corners = less goofy */
+            background: var(--background);
             position: relative;
+            z-index: 1;
             cursor: pointer;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .menu-button::before {
-            content: '';
+        /* Subtle Glow */
+        .menu-button::after {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(196, 181, 253, 0.15) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            content: "";
+            top: 20px; left: 0; right: 0;
+            z-index: -1;
+            height: 90%; width: 100%;
+            filter: blur(30px);
+            background: var(--background);
+            opacity: 0.3;
+            transition: opacity 0.5s ease;
         }
 
-        .menu-button:hover::before {
-            opacity: 1;
-        }
-
-        .menu-button:hover {
-            transform: scale(1.05);
-            border-color: rgba(167, 139, 250, 0.4);
-        }
+        .menu-button:hover { transform: translateY(-8px); }
+        .menu-button:hover::after { opacity: 0.6; }
 
         .card-info {
-            color: #ffffff;
+            background: #0a0a0a;
+            width: 100%;
+            height: 100%;
+            border-radius: 11px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
             position: relative;
-            border-radius: 30px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
         }
 
         .card-info .title {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
+            font-size: 1.8rem;
+            font-weight: 600; /* Bolder, more serious */
+            letter-spacing: -0.02em; /* Tighter tracking */
             text-align: center;
-            transition: all 0.5s ease;
+            color: #fff;
+            transition: 0.4s ease;
+            z-index: 2;
         }
 
+        /* Glassmorphic Description */
         .card-info .description {
             position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            opacity: 0;
-            font-size: 0.9rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
+            bottom: 3rem;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
             transition: all 0.4s ease;
-            pointer-events: none;
-            max-width: 80%;
-            white-space: nowrap;
         }
 
-        .menu-button:hover .card-info {
-            color: #a78bfa;
-        }
-
-        .menu-button:hover .card-info .description {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .menu-button:hover .card-info .title {
-            transform: translateY(-15px);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .card-info .title {
-                font-size: 2rem;
-            }
-            
-            .card-info .description {
-                font-size: 0.8rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-menu {
-                flex-direction: column;
-                padding: 2rem;
-                gap: 1.5rem;
-            }
-            
-            .card-info .title {
-                font-size: 1.5rem;
-            }
-            
-            .card-info .description {
-                font-size: 0.7rem;
-                padding: 0.5rem 1rem;
-            }
-        }
+        .menu-button:hover .title { transform: translateY(-30px); }
+        .menu-button:hover .description { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
-    <!-- Custom Title Bar -->
     <div class="titlebar">
-        <span class="titlebar-title">AEGISCORE</span>
-    </div>
-    <div class="window-controls">
-        <button class="window-button minimize" onclick="minimizeWindow()">
-            <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
-                <rect width="12" height="2"/>
-            </svg>
-        </button>
-        <button class="window-button maximize" onclick="maximizeWindow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
-                <rect x="0.5" y="0.5" width="11" height="11"/>
-            </svg>
-        </button>
-        <button class="window-button close" onclick="closeWindow()">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
-                <path d="M1 1L11 11M11 1L1 11"/>
-            </svg>
-        </button>
+        <span class="titlebar-title">AEGISCORE // SYSTEM_ACTIVE</span>
     </div>
 
     <div class="content-wrapper">
-        <!-- Main Menu -->
         <div class="main-menu">
-            <div class="menu-button" onclick="handleMenuClick('manual-scanning')">
+            <div class="menu-button" onclick="navigate('manual')">
                 <div class="card-info">
-                    <p class="title">Manual<br>Scanning</p>
-                    <span class="description">Scan files and system on demand</span>
+                    <p class="title">Manual Scan</p>
+                    <span class="description">INITIATE_SCAN_PROTOCOL</span>
                 </div>
             </div>
 
-            <div class="menu-button" onclick="handleMenuClick('fine-tuning')">
+            <div class="menu-button" style="--background: linear-gradient(145deg, #8b5cf6 0%, #6366f1 100%);" onclick="navigate('tuning')">
                 <div class="card-info">
-                    <p class="title">Fine-Tuning<br>System</p>
-                    <span class="description">Customize protection features</span>
+                    <p class="title">System Tuning</p>
+                    <span class="description">CONFIG_PARAMETERS</span>
                 </div>
             </div>
 
-            <div class="menu-button" onclick="handleMenuClick('threat-history')">
+            <div class="menu-button" style="--background: linear-gradient(145deg, #ec4899 0%, #8b5cf6 100%);" onclick="navigate('history')">
                 <div class="card-info">
-                    <p class="title">Threat<br>History</p>
-                    <span class="description">Review past security events</span>
+                    <p class="title">Threat Logs</p>
+                    <span class="description">VIEW_ARCHIVES</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const { ipcRenderer } = require('electron');
-
-        function minimizeWindow() {
-            ipcRenderer.send('minimize-window');
-        }
-
-        function maximizeWindow() {
-            ipcRenderer.send('maximize-window');
-        }
-
-        function closeWindow() {
-            ipcRenderer.send('close-window');
-        }
-
-        function handleMenuClick(section) {
-            console.log(`${section} clicked - navigation will be implemented here`);
-            // Future: Navigate to respective sections
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                console.log('ESC pressed - could return to main menu');
+        function navigate(section) {
+            console.log("Navigating to:", section);
+            
+            if (section === 'history') {
+                // Navigate to the history page
+                window.location.href = 'threat_history.html';
+            } else {
+                // Placeholder for other pages
+                console.log("Page not linked yet.");
             }
-        });
+        }
     </script>
 </body>
 </html>

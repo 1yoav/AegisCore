@@ -14,7 +14,7 @@
         }
 
         body {
-            font-family: 'Product Sans', sans-serif;
+            font-family: 'Product Sans', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: #000000;
             color: #ffffff;
             overflow: hidden;
@@ -23,26 +23,50 @@
             flex-direction: column;
         }
 
-        /* Custom Title Bar */
+        /* Custom Window Controls */
         .titlebar {
             position: fixed;
             top: 0; left: 0; right: 0;
             height: 40px;
-            background: rgba(15, 15, 15, 0.9);
+            -webkit-app-region: drag;
+            background: rgba(20, 20, 25, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(139, 92, 246, 0.2);
             z-index: 1999;
             display: flex;
             align-items: center;
-            padding-left: 1.5rem;
+            padding-left: 1rem;
         }
 
         .titlebar-title {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: bold;
-            letter-spacing: 0.3em;
-            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.5);
         }
+
+        .window-controls {
+            position: fixed;
+            top: 0; right: 0;
+            display: flex;
+            z-index: 2000;
+        }
+
+        .window-button {
+            width: 46px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .window-button:hover { background: rgba(139, 92, 246, 0.2); }
+        .window-button.close:hover { background: #e74c3c; }
 
         /* Content Area */
         .content-wrapper {
@@ -53,105 +77,93 @@
             margin-top: 40px;
         }
 
+        /* The New Glowing Menu Section */
         .main-menu {
             display: flex;
-            gap: 2.5rem;
-            padding: 2rem;
-            width: 95%;
-            max-width: 1300px;
-            height: 80vh; /* Controlled height for the menu */
+            gap: 3rem;
+            padding: 3rem;
+            width: 90%;
+            max-width: 1200px;
         }
 
         .menu-button {
-            --background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+            --background: linear-gradient(to left, #7c3aed 0%, #a78bfa 100%);
             flex: 1;
-            height: 100%; /* Makes them tall squares/rectangles */
-            padding: 2px; 
-            border-radius: 2rem;
+            height: 350px;
+            padding: 3px; /* This creates the gradient border effect */
+            border-radius: 1.5rem;
+            overflow: visible;
             background: var(--background);
             position: relative;
             z-index: 1;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s ease;
         }
 
-        /* Enhanced Glow */
+        /* The Glow Effect */
         .menu-button::after {
             position: absolute;
             content: "";
-            top: 15px; left: 0; right: 0;
+            top: 20px;
+            left: 0;
+            right: 0;
             z-index: -1;
-            height: 100%; width: 100%;
-            transform: scale(0.85);
-            filter: blur(40px);
+            height: 100%;
+            width: 100%;
+            transform: scale(0.9);
+            filter: blur(35px);
             background: var(--background);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            opacity: 0.4;
+            transition: opacity 0.5s ease;
+            opacity: 0.6;
         }
 
         .menu-button:hover {
-            transform: scale(1.02) translateY(-10px);
+            transform: translateY(-10px);
         }
 
         .menu-button:hover::after {
-            opacity: 0.7;
+            opacity: 0.9;
             transform: scale(0.95);
         }
 
-        /* Inner Card */
+        /* Inner Content Card */
         .card-info {
-            background: #0a0a0a;
-            width: 100%;
-            height: 100%;
-            border-radius: calc(2rem - 2px);
+            background: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            height: 100%;
+            border-radius: calc(1.5rem - 3px);
             position: relative;
             overflow: hidden;
         }
 
         .card-info .title {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 300;
             letter-spacing: 0.05em;
             text-align: center;
-            line-height: 1.2;
-            transition: 0.5s ease;
-            color: #ffffff;
+            transition: 0.4s;
+            z-index: 2;
         }
 
-        /* Liquid Metal / Glossy Subtext Effect */
         .card-info .description {
             position: absolute;
-            bottom: 3rem;
-            font-size: 0.85rem;
-            font-weight: 400;
-            padding: 0.8rem 1.5rem;
-            
-            /* Glassmorphism / Liquid Metal Style */
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), 
-                        inset 0 0 10px rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            
-            color: rgba(255, 255, 255, 0.9);
+            bottom: 2rem;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            white-space: nowrap;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            transition: 0.4s;
+            transform: translateY(10px);
         }
 
-        /* Hover States */
+        /* Hover States for Text */
         .menu-button:hover .title {
-            transform: translateY(-40px);
-            background: linear-gradient(to bottom, #fff 20%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #a78bfa;
+            transform: translateY(-20px);
         }
 
         .menu-button:hover .description {
@@ -159,31 +171,23 @@
             transform: translateY(0);
         }
 
-        /* Optional: Add a subtle moving light beam inside the card on hover */
-        .card-info::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .menu-button:hover .card-info::before {
-            opacity: 1;
-        }
-
-        @media (max-width: 900px) {
-            .main-menu { flex-direction: column; height: auto; }
-            .menu-button { height: 250px; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-menu { flex-direction: column; }
+            .menu-button { height: 200px; }
         }
     </style>
 </head>
 <body>
 
     <div class="titlebar">
-        <span class="titlebar-title">AEGISCORE v2.0</span>
+        <span class="titlebar-title">AEGISCORE</span>
+    </div>
+
+    <div class="window-controls">
+        <button class="window-button" onclick="minimizeWindow()">—</button>
+        <button class="window-button" onclick="maximizeWindow()">▢</button>
+        <button class="window-button close" onclick="closeWindow()">✕</button>
     </div>
 
     <div class="content-wrapper">
@@ -191,30 +195,32 @@
             <div class="menu-button" onclick="handleMenuClick('manual-scanning')">
                 <div class="card-info">
                     <p class="title">Manual<br>Scanning</p>
-                    <span class="description">Scan files and system on demand</span>
+                    <span class="description">Scan system on demand</span>
                 </div>
             </div>
 
-            <div class="menu-button" style="--background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);" onclick="handleMenuClick('fine-tuning')">
+            <div class="menu-button" onclick="handleMenuClick('fine-tuning')">
                 <div class="card-info">
                     <p class="title">Fine-Tuning<br>System</p>
-                    <span class="description">Customize protection features</span>
+                    <span class="description">Customize features</span>
                 </div>
             </div>
 
-            <div class="menu-button" style="--background: linear-gradient(135deg, #f472b6 0%, #7c3aed 100%);" onclick="handleMenuClick('threat-history')">
+            <div class="menu-button" onclick="handleMenuClick('threat-history')">
                 <div class="card-info">
                     <p class="title">Threat<br>History</p>
-                    <span class="description">Review past security events</span>
+                    <span class="description">Review past events</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function handleMenuClick(section) {
-            console.log(`${section} selected`);
-        }
+        // Note: Replace these with your Electron logic
+        function minimizeWindow() { console.log('minimize'); }
+        function maximizeWindow() { console.log('maximize'); }
+        function closeWindow() { console.log('close'); }
+        function handleMenuClick(section) { console.log(section + ' clicked'); }
     </script>
 </body>
 </html>

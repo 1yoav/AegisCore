@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&family=JetBrains+Mono:wght@400&display=swap');
+
+        /* --- TRANSITION OVERLAY --- */
+        #transition-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none; /* Let clicks pass through when inactive */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* The big sliding background block */
+        .sweep-block {
+            position: absolute;
+            width: 150%; /* Extra wide to cover during diagonal move */
+            height: 150%;
+            background: #0a0a0a;
+            border-left: 2px solid #7c3aed; /* Purple leading edge */
+            border-right: 2px solid #7c3aed;
+            
+            /* Initial Position: Top Right */
+            transform: translate(100%, -100%) rotate(-15deg);
+            transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        /* When active, cover the screen */
+        #transition-overlay.active .sweep-block {
+            transform: translate(-15%, -15%) rotate(-15deg);
+            pointer-events: all;
+        }
+
+        /* When exiting, move to Bottom Left */
+        #transition-overlay.exiting .sweep-block {
+            transform: translate(-120%, 120%) rotate(-15deg);
+        }
+
+        /* Logo Text in the center of the sweep */
+        .logo-text {
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            font-size: 5rem;
+            color: #fff;
+            letter-spacing: -2px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.4s ease;
+            z-index: 10000;
+        }
+
+        #transition-overlay.active .logo-text {
+            opacity: 1;
+            transform: scale(1);
+            transition-delay: 0.3s;
+        }
+
+        #transition-overlay.exiting .logo-text {
+            opacity: 0;
+            transform: scale(1.2);
+        }
+
+        /* --- YOUR LOADER CSS --- */
+        .loader-wrapper {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #transition-overlay.active .loader-wrapper {
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        .loader {
+            --color: #7c3aed; /* Updated to your purple accent */
+            --size: 40px;
+            width: var(--size);
+            height: var(--size);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+        }
+
+        .loader span {
+            width: 100%;
+            height: 100%;
+            background-color: var(--color);
+            animation: keyframes-blink 0.6s alternate infinite linear;
+        }
+
+        .loader span:nth-child(1) { animation-delay: 0ms; }
+        .loader span:nth-child(2) { animation-delay: 200ms; }
+        .loader span:nth-child(3) { animation-delay: 300ms; }
+        .loader span:nth-child(4) { animation-delay: 400ms; }
+        .loader span:nth-child(5) { animation-delay: 500ms; }
+        .loader span:nth-child(6) { animation-delay: 600ms; }
+
+        @keyframes keyframes-blink {
+            0% { opacity: 0.3; transform: scale(0.5) rotate(5deg); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Demo Trigger Button */
+        .trigger-btn {
+            padding: 1rem 2rem;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono';
+        }
+    </style>
+</head>
+<body>
+
+    <button class="trigger-btn" onclick="runTransition()">Test Transition</button>
+
+    <div id="transition-overlay">
+        <div class="sweep-block"></div>
+        
+        <div class="logo-text">AegisCore™</div>
+        
+        <div class="loader-wrapper">
+            <div class="loader">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function runTransition() {
+            const overlay = document.getElementById('transition-overlay');
+            
+            // 1. Swoop In
+            overlay.classList.remove('exiting');
+            overlay.classList.add('active');
+
+            // 2. Wait for loading (Simulated 2.5 seconds)
+            setTimeout(() => {
+                // 3. Swoop Out
+                overlay.classList.add('exiting');
+                
+                // 4. Cleanup
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                    overlay.classList.remove('exiting');
+                }, 700); // Matches transition time
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
