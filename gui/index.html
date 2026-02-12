@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisCore</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Product Sans', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom Window Controls */
+        .window-controls {
+            position: fixed;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+            z-index: 2000;
+            -webkit-app-region: no-drag;
+        }
+
+        .titlebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            -webkit-app-region: drag;
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            z-index: 1999;
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+        }
+
+        .titlebar-title {
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .window-button {
+            width: 46px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .window-button:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #ffffff;
+        }
+
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        /* Main Menu */
+        .main-menu {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        .menu-button {
+            flex: 1;
+            border-radius: 30px;
+            background: #212121;
+            box-shadow: 15px 15px 30px rgb(25, 25, 25),
+                        -15px -15px 30px rgb(60, 60, 60);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(196, 181, 253, 0.15) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .menu-button:hover::before {
+            opacity: 1;
+        }
+
+        .menu-button:hover {
+            transform: scale(1.05);
+            border-color: rgba(167, 139, 250, 0.4);
+        }
+
+        .card-info {
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .card-info .title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .card-info .description {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            max-width: 80%;
+            white-space: nowrap;
+        }
+
+        .menu-button:hover .card-info {
+            color: #a78bfa;
+        }
+
+        .menu-button:hover .card-info .description {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .menu-button:hover .card-info .title {
+            transform: translateY(-15px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .card-info .title {
+                font-size: 2rem;
+            }
+            
+            .card-info .description {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-menu {
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+            
+            .card-info .title {
+                font-size: 1.5rem;
+            }
+            
+            .card-info .description {
+                font-size: 0.7rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Title Bar -->
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE</span>
+    </div>
+    <div class="window-controls">
+        <button class="window-button minimize" onclick="minimizeWindow()">
+            <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+                <rect width="12" height="2"/>
+            </svg>
+        </button>
+        <button class="window-button maximize" onclick="maximizeWindow()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                <rect x="0.5" y="0.5" width="11" height="11"/>
+            </svg>
+        </button>
+        <button class="window-button close" onclick="closeWindow()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M1 1L11 11M11 1L1 11"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- Main Menu -->
+        <div class="main-menu">
+            <div class="menu-button" onclick="handleMenuClick('manual-scanning')">
+                <div class="card-info">
+                    <p class="title">Manual<br>Scanning</p>
+                    <span class="description">Scan files and system on demand</span>
+                </div>
+            </div>
+
+            <div class="menu-button" onclick="handleMenuClick('fine-tuning')">
+                <div class="card-info">
+                    <p class="title">Fine-Tuning<br>System</p>
+                    <span class="description">Customize protection features</span>
+                </div>
+            </div>
+
+            <div class="menu-button" onclick="handleMenuClick('threat-history')">
+                <div class="card-info">
+                    <p class="title">Threat<br>History</p>
+                    <span class="description">Review past security events</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        function minimizeWindow() {
+            ipcRenderer.send('minimize-window');
+        }
+
+        function maximizeWindow() {
+            ipcRenderer.send('maximize-window');
+        }
+
+        function closeWindow() {
+            ipcRenderer.send('close-window');
+        }
+
+        function handleMenuClick(section) {
+            console.log(`${section} clicked - navigation will be implemented here`);
+            // Future: Navigate to respective sections
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                console.log('ESC pressed - could return to main menu');
+            }
+        });
+    </script>
+</body>
+</html>
