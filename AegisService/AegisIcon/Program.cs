@@ -50,7 +50,9 @@ namespace AegisTray
             _rightClickMenu = new ContextMenuStrip();
 
             // FIX: This line makes the menu look like standard Windows (white) instead of old .NET style
-            _rightClickMenu.RenderMode = ToolStripRenderMode.Professional;
+            _rightClickMenu.RenderMode = ToolStripRenderMode.System;
+            //_rightClickMenu.BackColor = Color.FromArgb(32, 32, 32); // Near-black
+            //_rightClickMenu.ForeColor = Color.Black;
 
 
             // Add Menu Items

@@ -52,21 +52,21 @@ int main() {
     db.open();
 
     // OPEN EXTENSION CHECKCS:
-    std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
-    ExtensionScanner extScanner(&db);
-    extScanner.ScanExtensions();
+    //std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
+    //ExtensionScanner extScanner(&db);
+    //extScanner.ScanExtensions();
 
-    std::vector<ChromeExtension> flagged = extScanner.GetFlaggedExtensions();
-    if (!flagged.empty()) {
-        std::cout << "[!] FOUND " << flagged.size() << " MALICIOUS EXTENSIONS!" << std::endl;
-        for (const auto& ext : flagged) {
-            // Optional: Send to Python backend via PipeClient
-            PipeClient::SendAlert(0, "CHROME_EXT_" + ext.name, "0.0.0.0", 0);
-        }
-    }
-    else {
-        std::cout << "[+] Chrome extensions look clean." << std::endl;
-    }
+    //std::vector<ChromeExtension> flagged = extScanner.GetFlaggedExtensions();
+    //if (!flagged.empty()) {
+    //    std::cout << "[!] FOUND " << flagged.size() << " MALICIOUS EXTENSIONS!" << std::endl;
+    //    for (const auto& ext : flagged) {
+    //        // Optional: Send to Python backend via PipeClient
+    //        PipeClient::SendAlert(0, "CHROME_EXT_" + ext.name, "0.0.0.0", 0);
+    //    }
+    //}
+    //else {
+    //    std::cout << "[+] Chrome extensions look clean." << std::endl;
+    //}
 
     //OPEN DOWNLOAD SCANNER THREAD
     std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;

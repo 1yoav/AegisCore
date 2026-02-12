@@ -95,9 +95,6 @@
     <ClInclude Include="TrafficDiverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="windivert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SigScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
