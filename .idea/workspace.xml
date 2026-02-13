@@ -2,10 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a563287-59fd-42f3-a8a1-77bdbe6b37fb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python_c2_proxy (old)/driver_ipc.py" beforeDir="false" afterPath="$PROJECT_DIR$/python_c2_proxy (old)/driver_ipc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/driver_context.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/static_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/static_analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iatAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/iatAnalyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/installer/installer.sln" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/installer/installer.vcxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/installer/installer.vcxproj.filters" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/installer/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainAnalyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scratch_1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tlscheck2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tlscheck2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,16 +83,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/isolationForest.py</url>
-          <line>1</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

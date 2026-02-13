@@ -9,7 +9,8 @@ def analyze(path):
         print()
         print(entry.dll)
         for func in entry.imports:
-            print(func.name)
+            # make any search
+        return 0 # to do: cimmunicate with isolationForest
 
     # to do:
 #     start an analyze about the imported functions

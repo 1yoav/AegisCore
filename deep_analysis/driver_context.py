@@ -67,8 +67,8 @@ class DriverContext:
                 if result == 0:
                     message = data.decode("utf-8")
                     try:
-                        metadata = json.loads(message)
-                        self.handle_alert(metadata)
+                        # metadata = json.loads(message)
+                        self.handle_alert(message) # for now not parsing just send the msg
                     except json.JSONDecodeError:
                         print(f"[!] Invalid JSON: {message}")
 
@@ -80,45 +80,49 @@ class DriverContext:
                 except:
                     pass
 
-    def handle_alert(self, metadata: dict):
+    def handle_alert(self, msg):
         """
         Process an alert from C++ about a suspicious process
         """
-        pid = metadata.get("pid")
-        path = metadata.get("process_name", "<unknown>")
-        orig_ip = metadata.get("orig_ip", "0.0.0.0")
-        orig_port = metadata.get("orig_port", 0)
+        # pid = metadata.get("pid")
+        # path = metadata.get("process_name", "<unknown>")
+        # orig_ip = metadata.get("orig_ip", "0.0.0.0")
+        # orig_port = metadata.get("orig_port", 0)
+        #
+        # # Get or create investigation context
+        # if pid in self.investigations:
+        #     ctx = self.investigations[pid]
+        # else:
+        path = msg.split('!')[1]
+        ctx = InvestigationContext(0, path)
 
-        # Get or create investigation context
-        if pid in self.investigations:
-            ctx = self.investigations[pid]
-        else:
-            ctx = InvestigationContext(pid, path)
-            ctx.events.append(Event("PROCESS_FLAGGED"))
-            self.investigations[pid] = ctx
-            print(f"\n{'='*60}")
-            print(f"[ALERT] New suspicious process detected")
-            print(f"  PID: {pid}")
-            print(f"  Path: {path}")
-            print(f"{'='*60}")
+        #TO DO: checks for the sender and add the related data e.g the tls cert
 
-        # Log network activity attempt
-        ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
-        ctx.dest_ip = orig_ip
-        ctx.dest_port = orig_port
-
-        # Run full analysis (Static + Dynamic)
+        ctx.events.append(Event("PROCESS_FLAGGED"))
+        #     self.investigations[pid] = ctx
+        #     print(f"\n{'='*60}")
+        #     print(f"[ALERT] New suspicious process detected")
+        #     print(f"  PID: {pid}")
+        #     print(f"  Path: {path}")
+        #     print(f"{'='*60}")
+        #
+        # # Log network activity attempt
+        # ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
+        # # ctx.dest_ip = orig_ip
+        # # ctx.dest_port = orig_port
+        #
+        # # Run full analysis (Static + Dynamic)
         confidence = self.analyzer.analyze_context(ctx)
-        verdict = self.analyzer.get_verdict(confidence)
+        # verdict = self.analyzer.get_verdict(confidence)
 
         # Display results
-        self._print_analysis(ctx, confidence, verdict)
+        # self._print_analysis(ctx, confidence, verdict)
 
         # NOTE: C2 Emulation has been removed.
         # We no longer send fake responses to the malware.
 
         # Log to database
-        self._log_threat(ctx, confidence, verdict)
+        # self._log_threat(ctx, confidence, verdict)
 
         # Check if we should recommend killing the process
         if confidence >= 85:

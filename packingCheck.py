@@ -64,11 +64,10 @@ def scan(file_path):
                             is_equal = False
                             break
                 if is_equal == True:
-                    msg = file_path + " is using " + instance[0]
-                    ctypes.windll.user32.MessageBoxW(0, msg, "Warning!", 1)
-                    break
+                    return 25
 
 
+    return 50
 
 
 
@@ -84,7 +83,6 @@ def createSignature(filePath):
 
 def main():
     file_path = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\Software.c1\\week.8\\q2.exe"
-    createSignature(file_path)
     extract()
     scan(file_path)
 

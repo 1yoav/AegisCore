@@ -40,8 +40,14 @@ def training():
 
 
 def send_msg_to_deepAnalyze(msg):
-        handle = win32file.CreateFile(
-                r'\\.\pipe\hooking',
+    pipe_name = r'\\.\pipe\AegisCore'
+
+    while True:
+        try:
+            win32pipe.WaitNamedPipe(pipe_name, 5000)
+
+            handle = win32file.CreateFile(
+                pipe_name,
                 win32file.GENERIC_READ | win32file.GENERIC_WRITE,
                 0,
                 None,
@@ -49,15 +55,20 @@ def send_msg_to_deepAnalyze(msg):
                 0,
                 None
             )
-        win32file.WriteFile(handle ,msg.encode() ,None)
-        win32file.CloseHandle(handle)
+
+            win32file.WriteFile(handle, msg.encode(), None)
+            win32file.CloseHandle(handle)
+            break
+
+        except pywintypes.error as e:
+            print(f"Waiting for pipe {pipe_name}... (Error: {e.strerror})")
+            time.sleep(1)
 
 
 
 
 def predict():
     print("pipe server")
-    send_msg_to_deepAnalyze("malware.exe is suspect")
 
 
     pipe = win32pipe.CreateNamedPipe(
@@ -90,11 +101,10 @@ def predict():
 
 
                 data = list(map(int, newMsg))
-                print(data)
                 score = model.decision_function([data])
-                if score[0] < 1:
-                    print(fileName ,"score is", score[0])
-
+                if score[0] < -0.3: # value of suspicious
+                    msg = "isolationForest!" + fileName + '!'
+                    send_msg_to_deepAnalyze(msg)
                     # send msg to deepAnalyze
 
 

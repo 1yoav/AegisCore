@@ -7,7 +7,12 @@ from events import InvestigationContext
 from static_analyzer import StaticAnalyzer
 from yara_analyzer import YaraAnalyzer
 from behavioral_analyzer import BehavioralAnalyzer
+sys.path.append(r'C:\Users\Cyber_User\Desktop\magshimim\aegiscore-av')
+import packingCheck
+import iatAnalyze
 
+
+import
 class Analyzer:
     """Enhanced analyzer with multiple detection methods"""
 
@@ -33,7 +38,7 @@ class Analyzer:
         # --- PART A: Static Analysis (50% Weight) ---
 
         # 1. Run Heuristic Analysis (PE headers, Entropy, Strings)
-        heuristic_score, heuristic_findings, _ = self.static_analyzer.analyze_file(ctx.process_path)
+        heuristic_score, heuristic_findings,metadata _ = self.static_analyzer.analyze_file(ctx.process_path)
 
         # 2. Run YARA Analysis (Signatures)
         yara_score, yara_findings, _ = self.yara_analyzer.scan_file(ctx.process_path)
@@ -76,8 +81,17 @@ class Analyzer:
         # Normalize Dynamic Score: New Max Raw is 100 (20+30+10+40)
         dynamic_score_normalized = min(dynamic_raw_score, 100.0)
 
-        # --- PART C: Final Calculation ---
-        final_score = (final_static_score * 0.5) + (dynamic_score_normalized * 0.5)
+        # --- PART C: packing check and iat check
+        entropy_val = metadata.get('entropy', {}).get('whole_file', 0.0)
+        packingResult = 0
+        if entropy_val > 7.2:
+            packingResult = packingCheck.scan(ctx.process_path)
+
+        iatResult = iatAnalyze.analyze(ctx.process_path)
+
+
+        # --- PART D: Final Calculation ---
+        final_score = (final_static_score * 0.33) + (dynamic_score_normalized * 0.33) + (0.33 * (packingResult + iatResult))
 
         ctx.findings = findings
         ctx.confidence = min(final_score, 100.0)
