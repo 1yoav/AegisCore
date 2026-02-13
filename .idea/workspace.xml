@@ -3,17 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1a563287-59fd-42f3-a8a1-77bdbe6b37fb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/driver_context.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/static_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/static_analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iatAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/iatAnalyze.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/installer/installer.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/installer/installer.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/installer/installer.vcxproj.filters" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/installer/main.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mainAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainAnalyze.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scratch_1.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tlscheck2.py" beforeDir="false" afterPath="$PROJECT_DIR$/tlscheck2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

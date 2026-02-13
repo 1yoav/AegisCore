@@ -2,6 +2,7 @@ from scapy.all import *
 from scapy.layers.tls.all import *
 from cryptography import x509
 import win32pipe, win32file, pywintypes
+import psutil
 
 from cryptography.hazmat.backends import default_backend
 import datetime
@@ -12,7 +13,7 @@ load_layer("tls")
 collector = {}
 
 def sendMsg(msg):
-    pipe_name = r'\\.\pipe\MyPipe'
+    pipe_name = r'\\.\pipe\AVDeepScanPipe'
 
     print(f"Connecting to pipe: {pipe_name}")
 
@@ -54,7 +55,19 @@ def sendMsg(msg):
         else:
             print(f"An error occurred: {e}")
 
-def tlsCheck(data):
+def get_process_path_from_port(port):
+    """Finds the file path of the process using a specific local port."""
+    for conn in psutil.net_connections(kind='inet'):
+        if conn.laddr.port == port:
+            try:
+                # Get the process object
+                proc = psutil.Process(conn.pid)
+                return proc.exe() # This returns the full path
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                return None
+    return None
+
+def tlsCheck(data , port):
     try:
         # extract the cert
         start_idx = data.find(b"\x30\x82")
@@ -68,11 +81,8 @@ def tlsCheck(data):
             
             # check the cert
             # date check
-            if cert.not_valid_after < datetime.datetime.now():
-                print("[!!!] ALERT: Expired Certificate detected!")
-            # self signed check
-            if cert.issuer == cert.subject:
-                print("[!!!] WARNING: Self-Signed Certificate. Possible MITM or Malware!")
+            if cert.not_valid_after < datetime.datetime.now() or cert.issuer == cert.subject:
+                sendMsg("tlsCheck!" + get_process_path_from_port(port))
 
             # to do: add database for suspicious certs
 
@@ -104,7 +114,7 @@ def filtering(pkt):
             collector[server_details] += payload
             
             # Try to parse immediately in case it's not fragmented
-            if tlsCheck(collector[server_details]):
+            if tlsCheck(collector[server_details] , server_details[3]):
                 del collector[server_details] # Clear buffer after success
 
     # Trigger on Change Cipher Spec (End of handshake)

@@ -13,7 +13,7 @@ warnings.filterwarnings(
 )
 
 csv_dir = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\MainProcces\\"
-pipe_path = "\\\\.\\pipe\\pythonPipe"
+pipe_path = "\\\\.\\pipe\\AVDeepScanPipe"
 
 
 def training():
