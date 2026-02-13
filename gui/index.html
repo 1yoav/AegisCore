@@ -5,173 +5,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AegisCore - Main</title>
     <style>
-        /* Professional Font Stack */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=JetBrains+Mono:wght@400&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #050505;
-            color: #ffffff;
+            color: #fff;
             overflow: hidden;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Title Bar */
-        .titlebar {
+        /* --- TRANSITION LAYER --- */
+        #transition-layer {
             position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 40px;
-            background: rgba(10, 10, 10, 0.95);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            padding-left: 1.5rem;
-        }
-
-        .titlebar-title {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            color: rgba(255, 255, 255, 0.4);
-            font-family: 'JetBrains Mono', monospace; /* Tech feel */
-        }
-
-        .content-wrapper {
-            flex: 1;
+            inset: 0;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 40px;
+            visibility: hidden;
         }
+        #transition-layer.active { visibility: visible; }
+
+        .sweep-block {
+            position: absolute;
+            width: 200%; height: 200%;
+            background: #0a0a0a;
+            border: 2px solid #7c3aed;
+            transform: translate(100%, -100%) rotate(-15deg);
+            transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        #transition-layer.covering .sweep-block { transform: translate(-10%, -10%) rotate(-15deg); }
+        #transition-layer.exiting .sweep-block { transform: translate(-120%, 120%) rotate(-15deg); }
+
+        .loader-content {
+            position: relative;
+            z-index: 10000;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #transition-layer.covering .loader-content { opacity: 1; transition-delay: 0.3s; }
+        .aegis-logo { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 1rem; }
+
+        /* BLINK LOADER */
+        .loader {
+            --color: #7c3aed; --size: 40px;
+            width: var(--size); height: var(--size);
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 5px; margin: 0 auto;
+        }
+        .loader span { background-color: var(--color); animation: keyframes-blink 0.6s alternate infinite linear; }
+        .loader span:nth-child(2) { animation-delay: 200ms; }
+        .loader span:nth-child(3) { animation-delay: 300ms; }
+        .loader span:nth-child(4) { animation-delay: 400ms; }
+        .loader span:nth-child(5) { animation-delay: 500ms; }
+        .loader span:nth-child(6) { animation-delay: 600ms; }
+        @keyframes keyframes-blink { 0% { opacity: 0.3; transform: scale(0.5) rotate(5deg); } 50% { opacity: 1; transform: scale(1); } }
+
+        /* --- MAIN UI --- */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+        }
+        .titlebar-title { font-size: 0.7rem; font-family: 'JetBrains Mono'; color: rgba(255, 255, 255, 0.4); }
 
         .main-menu {
-            display: flex;
-            gap: 2rem;
-            padding: 2rem;
-            width: 90%;
-            max-width: 1200px;
-            height: 75vh; 
+            display: flex; gap: 2rem; padding: 2rem;
+            width: 90%; max-width: 1200px; height: 75vh; margin: auto;
         }
-
         .menu-button {
-            --background: linear-gradient(145deg, #7c3aed 0%, #2563eb 100%);
-            flex: 1;
-            height: 100%;
-            padding: 1px; /* Thin, elegant border */
-            border-radius: 12px; /* Sharper corners = less goofy */
-            background: var(--background);
-            position: relative;
-            z-index: 1;
-            cursor: pointer;
+            flex: 1; background: linear-gradient(145deg, #7c3aed, #2563eb);
+            border-radius: 12px; padding: 1px; cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-
-        /* Subtle Glow */
-        .menu-button::after {
-            position: absolute;
-            content: "";
-            top: 20px; left: 0; right: 0;
-            z-index: -1;
-            height: 90%; width: 100%;
-            filter: blur(30px);
-            background: var(--background);
-            opacity: 0.3;
-            transition: opacity 0.5s ease;
-        }
-
         .menu-button:hover { transform: translateY(-8px); }
-        .menu-button:hover::after { opacity: 0.6; }
-
         .card-info {
-            background: #0a0a0a;
-            width: 100%;
-            height: 100%;
-            border-radius: 11px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            background: #0a0a0a; width: 100%; height: 100%; border-radius: 11px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
         }
-
-        .card-info .title {
-            font-size: 1.8rem;
-            font-weight: 600; /* Bolder, more serious */
-            letter-spacing: -0.02em; /* Tighter tracking */
-            text-align: center;
-            color: #fff;
-            transition: 0.4s ease;
-            z-index: 2;
+        .title { font-size: 1.8rem; font-weight: 600; text-align: center; }
+        .description {
+            position: absolute; bottom: 3rem; font-size: 0.8rem; font-family: 'JetBrains Mono';
+            background: rgba(255, 255, 255, 0.03); padding: 0.5rem 1rem; border-radius: 6px;
+            opacity: 0; transform: translateY(20px); transition: 0.4s ease;
         }
-
-        /* Glassmorphic Description */
-        .card-info .description {
-            position: absolute;
-            bottom: 3rem;
-            font-size: 0.8rem;
-            font-family: 'JetBrains Mono', monospace;
-            color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
-        }
-
-        .menu-button:hover .title { transform: translateY(-30px); }
         .menu-button:hover .description { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body>
+<body onload="revealPage()">
+
+    <div id="transition-layer" class="active covering">
+        <div class="sweep-block"></div>
+        <div class="loader-content">
+            <div class="aegis-logo">AegisCore™</div>
+            <div class="loader"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+    </div>
+
     <div class="titlebar">
         <span class="titlebar-title">AEGISCORE // SYSTEM_ACTIVE</span>
     </div>
 
-    <div class="content-wrapper">
-        <div class="main-menu">
-            <div class="menu-button" onclick="navigate('manual')">
-                <div class="card-info">
-                    <p class="title">Manual Scan</p>
-                    <span class="description">INITIATE_SCAN_PROTOCOL</span>
-                </div>
+    <div class="main-menu">
+        <div class="menu-button" onclick="navigate('manual_scan')">
+            <div class="card-info">
+                <p class="title">Manual Scan</p>
+                <span class="description">SYSTEM_ANALYSIS</span>
             </div>
+        </div>
 
-            <div class="menu-button" style="--background: linear-gradient(145deg, #8b5cf6 0%, #6366f1 100%);" onclick="navigate('tuning')">
-                <div class="card-info">
-                    <p class="title">System Tuning</p>
-                    <span class="description">CONFIG_PARAMETERS</span>
-                </div>
+        <div class="menu-button" style="--background: linear-gradient(145deg, #8b5cf6, #6366f1);" onclick="navigate('fine_tuning')">
+            <div class="card-info">
+                <p class="title">Fine-Tuning</p>
+                <span class="description">CORE_CONFIG</span>
             </div>
+        </div>
 
-            <div class="menu-button" style="--background: linear-gradient(145deg, #ec4899 0%, #8b5cf6 100%);" onclick="navigate('history')">
-                <div class="card-info">
-                    <p class="title">Threat Logs</p>
-                    <span class="description">VIEW_ARCHIVES</span>
-                </div>
+        <div class="menu-button" style="--background: linear-gradient(145deg, #ec4899, #8b5cf6);" onclick="navigate('threat_history')">
+            <div class="card-info">
+                <p class="title">Threat Logs</p>
+                <span class="description">ARCHIVE_VIEW</span>
             </div>
         </div>
     </div>
 
     <script>
-        function navigate(section) {
-            console.log("Navigating to:", section);
-            
-            if (section === 'history') {
-                // Navigate to the history page
-                window.location.href = 'threat_history.html';
-            } else {
-                // Placeholder for other pages
-                console.log("Page not linked yet.");
-            }
+        const layer = document.getElementById('transition-layer');
+
+        function revealPage() {
+            setTimeout(() => {
+                layer.classList.add('exiting');
+                setTimeout(() => { layer.classList.remove('active', 'covering', 'exiting'); }, 600);
+            }, 500);
+        }
+
+        function navigate(page) {
+            layer.classList.add('active');
+            layer.offsetHeight; 
+            layer.classList.add('covering');
+            setTimeout(() => { window.location.href = page + '.html'; }, 700);
         }
     </script>
 </body>
