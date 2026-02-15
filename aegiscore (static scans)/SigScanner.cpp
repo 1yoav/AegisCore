@@ -53,7 +53,7 @@ void SigScanner::checkSignature(std::filesystem::path path)
         files.push_back(path.wstring());
     }
 	//just for testing, send all files to deep analysis
-    connectToDeepAnalyze("THREAT_DETECTED:" + std::string(path.string()));
+    connectToDeepAnalyze("signatureScanner!" + std::string(path.string()));
 
 
     files.push_back(path);
