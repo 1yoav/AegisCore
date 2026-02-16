@@ -20,6 +20,7 @@ class BehavioralAnalyzer:
         "runtimebroker.exe": "svchost.exe"
     }
 
+
     def analyze_running_process(self, pid: int) -> Tuple[float, List[str]]:
         """Perform live checks on PID. Returns (score, findings)"""
         score = 0.0

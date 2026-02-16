@@ -31,8 +31,24 @@ class DriverContext:
         self.analyzer = Analyzer()
         # self.emulator = C2Emulator() <-- REMOVED
         self.logger = ThreatLogger(DATABASE_PATH)
+        self.tlsCheck = False
+        self.signatureScan = False
+        self.isolationForest = False
 
         print("[*] Driver Context initialized (Static Analysis Enabled)")
+
+    def get_pids_by_filename(filename):
+        pids = []
+        # מעבר על כל התהליכים הרצים במערכת
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                # בדיקה אם שם התהליך תואם לשם שחיפשנו
+                if proc.info['name'].lower() == filename.lower():
+                    pids.append(proc.info['pid'])
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                # טיפול במקרים שבהם התהליך נסגר או שאין הרשאות גישה אליו
+                continue
+        return pids
 
     def start_listening(self):
         """Start the pipe server thread"""
@@ -88,46 +104,62 @@ class DriverContext:
         # path = metadata.get("process_name", "<unknown>")
         # orig_ip = metadata.get("orig_ip", "0.0.0.0")
         # orig_port = metadata.get("orig_port", 0)
-        #
+
         # # Get or create investigation context
-        # if pid in self.investigations:
-        #     ctx = self.investigations[pid]
+
         # else:
         path = msg.split('!')[1]
-        ctx = InvestigationContext(0, path)
+        pids = self.get_pids_by_filename(path)
 
-        #TO DO: checks for the sender and add the related data e.g the tls cert
+        # if the pids empty the sender might be signature scanner and there is no procces running just filepath
+        if not pids:
+            ctx = InvestigationContext(pid, path)
 
-        ctx.events.append(Event("PROCESS_FLAGGED"))
-        #     self.investigations[pid] = ctx
-        #     print(f"\n{'='*60}")
-        #     print(f"[ALERT] New suspicious process detected")
-        #     print(f"  PID: {pid}")
-        #     print(f"  Path: {path}")
-        #     print(f"{'='*60}")
-        #
-        # # Log network activity attempt
-        # ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
-        # # ctx.dest_ip = orig_ip
-        # # ctx.dest_port = orig_port
-        #
-        # # Run full analysis (Static + Dynamic)
-        confidence = self.analyzer.analyze_context(ctx)
-        # verdict = self.analyzer.get_verdict(confidence)
+            ctx.events.append(Event("PROCESS_FLAGGED"))
 
-        # Display results
-        # self._print_analysis(ctx, confidence, verdict)
+            confidence = self.analyzer.analyze_context(ctx)
 
-        # NOTE: C2 Emulation has been removed.
-        # We no longer send fake responses to the malware.
+            if confidence >= 85:
+                print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
+                print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+                return
+        for pid in pids:
+            ctx = InvestigationContext(pid, path)
 
-        # Log to database
-        # self._log_threat(ctx, confidence, verdict)
+            #TO DO: checks for the sender and add the related data e.g the tls cert
 
-        # Check if we should recommend killing the process
-        if confidence >= 85:
-            print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
-            print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+            ctx.events.append(Event("PROCESS_FLAGGED"))
+            #     self.investigations[pid] = ctx
+            #     print(f"\n{'='*60}")
+            #     print(f"[ALERT] New suspicious process detected")
+            #     print(f"  PID: {pid}")
+            #     print(f"  Path: {path}")
+            #     print(f"{'='*60}")
+            #
+            # # Log network activity attempt
+            # ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
+            # # ctx.dest_ip = orig_ip
+            # # ctx.dest_port = orig_port
+            #
+            # # Run full analysis (Static + Dynamic)
+            confidence = self.analyzer.analyze_context(ctx)
+            # verdict = self.analyzer.get_verdict(confidence)
+
+            # Display results
+            # self._print_analysis(ctx, confidence, verdict)
+
+            # NOTE: C2 Emulation has been removed.
+            # We no longer send fake responses to the malware.
+
+            # Log to database
+            # self._log_threat(ctx, confidence, verdict)
+
+            # Check if we should recommend killing the process
+            if confidence >= 85:
+                print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
+                print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+
+
 
     def _print_analysis(self, ctx: InvestigationContext, confidence: float, verdict: str):
         """Pretty-print the analysis results"""

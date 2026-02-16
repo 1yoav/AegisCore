@@ -68,7 +68,6 @@ def send_msg_to_deepAnalyze(msg):
 
 
 def predict():
-    print("pipe server")
 
 
     pipe = win32pipe.CreateNamedPipe(
