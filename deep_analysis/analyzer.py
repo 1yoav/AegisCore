@@ -74,7 +74,7 @@ class Analyzer:
 
         # 4. NEW: Behavioral / Live Process Analysis (Max 40 pts)
         # Assuming ctx.pid exists (it should if you are listening to a driver)
-        beh_score, beh_findings = self.behavioral_analyzer.analyze_running_process(ctx.process_path)
+        beh_score, beh_findings = self.behavioral_analyzer.analyze_running_process(ctx.pid)
         dynamic_raw_score += beh_score
         findings.extend(beh_findings)
 

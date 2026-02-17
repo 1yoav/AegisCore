@@ -25,15 +25,13 @@ class DriverContext:
     def __init__(self):
         self.pipe_name = DRIVER_PIPE_NAME
         self.running = False
-        self.investigations: Dict[int, InvestigationContext] = {}
+        self.investigations: Dict[str, InvestigationContext] = {}
 
         # Core components
         self.analyzer = Analyzer()
         # self.emulator = C2Emulator() <-- REMOVED
         self.logger = ThreatLogger(DATABASE_PATH)
-        self.tlsCheck = False
-        self.signatureScan = False
-        self.isolationForest = False
+
 
         print("[*] Driver Context initialized (Static Analysis Enabled)")
 
@@ -109,55 +107,58 @@ class DriverContext:
 
         # else:
         path = msg.split('!')[1]
-        pids = self.get_pids_by_filename(path)
+        pid = self.get_pids_by_filename()[0]
+        ctx = InvestigationContext(pid, path)
+
+        if path in self.investigations: # if the invistigate in procces already
+            ctx = self.investigations[path]
 
         # if the pids empty the sender might be signature scanner and there is no procces running just filepath
-        if not pids:
-            ctx = InvestigationContext(pid, path)
 
-            ctx.events.append(Event("PROCESS_FLAGGED"))
 
-            confidence = self.analyzer.analyze_context(ctx)
+        #TO DO: checks for the sender and add the related data e.g the tls cert
 
-            if confidence >= 85:
-                print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
-                print(f"[!] C++ should call TerminateProcess() for PID {pid}")
-                return
-        for pid in pids:
-            ctx = InvestigationContext(pid, path)
+        ctx.events.append(Event("PROCESS_FLAGGED"))
+        #     self.investigations[pid] = ctx
+        #     print(f"\n{'='*60}")
+        #     print(f"[ALERT] New suspicious process detected")
+        #     print(f"  PID: {pid}")
+        #     print(f"  Path: {path}")
+        #     print(f"{'='*60}")
+        #
+        # # Log network activity attempt
+        # ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
+        # # ctx.dest_ip = orig_ip
+        # # ctx.dest_port = orig_port
+        #
+        # # Run full analysis (Static + Dynamic)
 
-            #TO DO: checks for the sender and add the related data e.g the tls cert
+        # check who send the msg
+        if msg[0] == "tlsCert":
+            ctx.tlsCheck = True
+        if msg[0] == "signatureScanner":
+            ctx.signatureScan = True
+        if msg[0] == "isolationForest":
+            ctx.isolationForest = True
 
-            ctx.events.append(Event("PROCESS_FLAGGED"))
-            #     self.investigations[pid] = ctx
-            #     print(f"\n{'='*60}")
-            #     print(f"[ALERT] New suspicious process detected")
-            #     print(f"  PID: {pid}")
-            #     print(f"  Path: {path}")
-            #     print(f"{'='*60}")
-            #
-            # # Log network activity attempt
-            # ctx.events.append(Event("NETWORK_ACTIVITY_ATTEMPT"))
-            # # ctx.dest_ip = orig_ip
-            # # ctx.dest_port = orig_port
-            #
-            # # Run full analysis (Static + Dynamic)
-            confidence = self.analyzer.analyze_context(ctx)
-            # verdict = self.analyzer.get_verdict(confidence)
+        confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze
+        # verdict = self.analyzer.get_verdict(confidence)
 
-            # Display results
-            # self._print_analysis(ctx, confidence, verdict)
+        # Display results
+        # self._print_analysis(ctx, confidence, verdict)
 
-            # NOTE: C2 Emulation has been removed.
-            # We no longer send fake responses to the malware.
+        # NOTE: C2 Emulation has been removed.
+        # We no longer send fake responses to the malware.
 
-            # Log to database
-            # self._log_threat(ctx, confidence, verdict)
+        # Log to database
+        # self._log_threat(ctx, confidence, verdict)
 
-            # Check if we should recommend killing the process
-            if confidence >= 85:
-                print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
-                print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+        # Check if we should recommend killing the process
+        if confidence >= 85:
+            print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
+            print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+
+        self.investigations[path] = ctx  # update the invistigate
 
 
 

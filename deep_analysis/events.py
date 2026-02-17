@@ -41,6 +41,9 @@ class InvestigationContext:
         # Timestamps
         self.first_seen = time.time()
         self.last_activity = time.time()
+        self.tlsCheck = False
+        self.signatureScan = False
+        self.isolationForest = False
     
     def add_event(self, event_type: str, details: dict = None):
         """Add a new event to the investigation"""
