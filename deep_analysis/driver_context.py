@@ -107,16 +107,20 @@ class DriverContext:
 
         # else:
         path = msg.split('!')[1]
-        pid = self.get_pids_by_filename()[0]
+        pid = 0
+        pids = self.get_pids_by_filename()[0]
+        if pids:
+            pid = pids[0]
+
         ctx = InvestigationContext(pid, path)
 
-        if path in self.investigations: # if the invistigate in procces already
+        if path in self.investigations:  # if the investigate in process already
             ctx = self.investigations[path]
 
         # if the pids empty the sender might be signature scanner and there is no procces running just filepath
 
 
-        #TO DO: checks for the sender and add the related data e.g the tls cert
+        # TO DO: checks for the sender and add the related data e.g the tls cert
 
         ctx.events.append(Event("PROCESS_FLAGGED"))
         #     self.investigations[pid] = ctx
