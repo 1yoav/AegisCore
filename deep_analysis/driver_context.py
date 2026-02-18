@@ -25,14 +25,28 @@ class DriverContext:
     def __init__(self):
         self.pipe_name = DRIVER_PIPE_NAME
         self.running = False
-        self.investigations: Dict[int, InvestigationContext] = {}
+        self.investigations: Dict[str, InvestigationContext] = {}
 
         # Core components
         self.analyzer = Analyzer()
         # self.emulator = C2Emulator() <-- REMOVED
         self.logger = ThreatLogger(DATABASE_PATH)
 
+
         print("[*] Driver Context initialized (Static Analysis Enabled)")
+
+    def get_pids_by_filename(filename):
+        pids = []
+        # מעבר על כל התהליכים הרצים במערכת
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                # בדיקה אם שם התהליך תואם לשם שחיפשנו
+                if proc.info['name'].lower() == filename.lower():
+                    pids.append(proc.info['pid'])
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                # טיפול במקרים שבהם התהליך נסגר או שאין הרשאות גישה אליו
+                continue
+        return pids
 
     def start_listening(self):
         """Start the pipe server thread"""
@@ -88,15 +102,25 @@ class DriverContext:
         # path = metadata.get("process_name", "<unknown>")
         # orig_ip = metadata.get("orig_ip", "0.0.0.0")
         # orig_port = metadata.get("orig_port", 0)
-        #
+
         # # Get or create investigation context
-        # if pid in self.investigations:
-        #     ctx = self.investigations[pid]
+
         # else:
         path = msg.split('!')[1]
-        ctx = InvestigationContext(0, path)
+        pid = 0
+        pids = self.get_pids_by_filename()[0]
+        if pids:
+            pid = pids[0]
 
-        #TO DO: checks for the sender and add the related data e.g the tls cert
+        ctx = InvestigationContext(pid, path)
+
+        if path in self.investigations:  # if the investigate in process already
+            ctx = self.investigations[path]
+
+        # if the pids empty the sender might be signature scanner and there is no procces running just filepath
+
+
+        # TO DO: checks for the sender and add the related data e.g the tls cert
 
         ctx.events.append(Event("PROCESS_FLAGGED"))
         #     self.investigations[pid] = ctx
@@ -112,7 +136,16 @@ class DriverContext:
         # # ctx.dest_port = orig_port
         #
         # # Run full analysis (Static + Dynamic)
-        confidence = self.analyzer.analyze_context(ctx)
+
+        # check who send the msg
+        if msg[0] == "tlsCert":
+            ctx.tlsCheck = True
+        if msg[0] == "signatureScanner":
+            ctx.signatureScan = True
+        if msg[0] == "isolationForest":
+            ctx.isolationForest = True
+
+        confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze
         # verdict = self.analyzer.get_verdict(confidence)
 
         # Display results
@@ -128,6 +161,10 @@ class DriverContext:
         if confidence >= 85:
             print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
             print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+
+        self.investigations[path] = ctx  # update the invistigate
+
+
 
     def _print_analysis(self, ctx: InvestigationContext, confidence: float, verdict: str):
         """Pretty-print the analysis results"""
