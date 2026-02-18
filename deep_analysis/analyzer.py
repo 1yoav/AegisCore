@@ -12,7 +12,6 @@ import packingCheck
 import iatAnalyze
 
 
-import
 class Analyzer:
     """Enhanced analyzer with multiple detection methods"""
 
