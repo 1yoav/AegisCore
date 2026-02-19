@@ -1,10 +1,10 @@
-#include "WFPEngine.h"
+//#include "WFPEngine.h"
 #include "PacketLogger.h"
 #include "FilterRule.h"
 #include "SQLDatabase.h"
 #include "HelperFunctions.h"
 #include "CertificateScanner.h"
-#include "TrafficDiverter.h"
+//#include "TrafficDiverter.h"
 #include "NetworkUtils.h"
 #include "AVProcess.h"
 #include "PipeClient.h"
@@ -83,61 +83,73 @@ int main() {
     std::thread t3([&]() { monitor.startMonitor(temp); });
 
 
-    auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
-    WFPEngine wfpEngine(logger);
+    //auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
+    //WFPEngine wfpEngine(logger);
     CertificateScanner certScanner;
 
-    TrafficDiverter diverter(8080); // diverter
+    //*********************************************
+    //*****for now not working because the wfp ****
+    //*********************************************
 
-    if (!wfpEngine.Initialize()) {
-        logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
-        return 1;
-    }
+    //TrafficDiverter diverter(8080); // diverter
 
-    // 3. Load Static & Database Rules
-    std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
+    //if (!wfpEngine.Initialize()) {
+    //    logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
+    //    return 1;
+    //}
 
-    std::vector<FilterRule> dbRules = db.getC2Rules();
-    rules.insert(rules.end(), dbRules.begin(), dbRules.end());
+    //// 3. Load Static & Database Rules
+    //std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
 
-    for (const auto& rule : rules) {
-        wfpEngine.AddFilter(rule);
-    }
+    //std::vector<FilterRule> dbRules = db.getC2Rules();
+    //rules.insert(rules.end(), dbRules.begin(), dbRules.end());
+
+    //for (const auto& rule : rules) {
+    //    wfpEngine.AddFilter(rule);
+    //}
 
 
-    std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
-    bool running = true;
 
-    std::set<uint32_t> scannedPids; // track PIDs weve already checked
+    //**************************************************************
+    //*****for now not use this because a lot of false positives****
+    //**************************************************************
 
-    while (running) {
-    std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
 
-    for (auto& process : currentProcesses) {
-        if (process.pid < 100) continue;
+    //std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
+    //bool running = true;
 
-        if (scannedPids.find(process.pid) == scannedPids.end()) {
-            bool isTrusted = certScanner.checkSignature(process);
+    //std::set<uint32_t> scannedPids; // track PIDs weve already checked
 
-            if (!isTrusted) {
+    //while (running) {
+    //std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
 
-                #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-                std::string narrowPath = converter.to_bytes(process.exePath);
-                std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
-                PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
-            }
+    //for (auto& process : currentProcesses) {
+    //    if (process.pid < 100) continue;
 
-            scannedPids.insert(process.pid);
-        }
-    }
-        // wait a few seconds before rescanning
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-    }
+    //    if (scannedPids.find(process.pid) == scannedPids.end()) {
+    //        bool isTrusted = certScanner.checkSignature(process);
 
-    std::cout << "[!] Shutting down..." << std::endl;
-    wfpEngine.Shutdown();
+    //        if (!isTrusted) {
+
+    //            #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
+    //            std::string narrowPath = converter.to_bytes(process.exePath);
+    //            std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
+    //            PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
+    //        }
+
+    //        scannedPids.insert(process.pid);
+    //    }
+    //}
+    //    // wait a few seconds before rescanning
+    //    std::this_thread::sleep_for(std::chrono::seconds(2));
+    //}
+
+    //std::cout << "[!] Shutting down..." << std::endl;
+    //wfpEngine.Shutdown();
     // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
 
+
+	//wait for sigScan threads to finish before exiting
     if (t1.joinable()) t1.join();
     if (t2.joinable()) t2.join();
     if (t3.joinable()) t3.join();
