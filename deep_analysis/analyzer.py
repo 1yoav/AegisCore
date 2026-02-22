@@ -7,7 +7,6 @@ from events import InvestigationContext
 from static_analyzer import StaticAnalyzer
 from yara_analyzer import YaraAnalyzer
 from behavioral_analyzer import BehavioralAnalyzer
-sys.path.append(r'C:\Users\Cyber_User\Desktop\magshimim\aegiscore-av')
 import packingCheck
 import iatAnalyze
 
