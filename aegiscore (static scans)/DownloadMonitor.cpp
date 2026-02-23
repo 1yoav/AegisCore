@@ -19,11 +19,11 @@ void DownloadMonitor::startMonitor(std::wstring dir_path)
     );
 
     if (hDir == INVALID_HANDLE_VALUE) {
-        std::cerr << "[!] Error opening directory handle: " << GetLastError() << std::endl;
+        //std::cerr << "[!] Error opening directory handle: " << GetLastError() << std::endl;
         return;
     }
 
-    std::cout << "[*] Real-time download monitor started on: " << std::string(dir_path.begin(), dir_path.end()) << std::endl;
+    //std::cout << "[*] Real-time download monitor started on: " << std::string(dir_path.begin(), dir_path.end()) << std::endl;
 
     // Buffer to hold the file system events
     // 1024 bytes is usually enough for a batch of short filenames, but 4KB is safer
@@ -118,7 +118,7 @@ void DownloadMonitor::processFile(std::wstring filePath)
         int stabilityCount = 0;
         const int REQUIRED_STABILITY = 5; // Must be stable for 5 checks (1 second total)
 
-        std::wcout << L"[*] Tracking file completion: " << filePath << std::endl;
+        //std::wcout << L"[*] Tracking file completion: " << filePath << std::endl;
 
         // PHASE A: Wait for file to exist and stop growing (Handles Torrents/Large Files)
         while (stabilityCount < REQUIRED_STABILITY) {
@@ -147,7 +147,7 @@ void DownloadMonitor::processFile(std::wstring filePath)
 
         // PHASE C: The Final Scan
         if (std::filesystem::exists(filePath)) {
-            std::wcout << L"[!] Scanning finalized file: " << filePath << std::endl;
+            //std::wcout << L"[!] Scanning finalized file: " << filePath << std::endl;
             scanner.checkSignature(filePath);
         }
 

@@ -62,11 +62,11 @@ void SigScanner::checkSignature(std::filesystem::path path)
     // 1. Generate the hash
     std::string fileHash = getMD5Hash(path);
     if (fileHash.empty()) {
-        std::wcout << L"Error generating hash for: " << path.wstring() << std::endl;
+        //std::wcout << L"Error generating hash for: " << path.wstring() << std::endl;
         return;
     }
 
-    std::wcout << L"Scanning hash: " << std::wstring(fileHash.begin(), fileHash.end()) << std::endl;
+    //std::wcout << L"Scanning hash: " << std::wstring(fileHash.begin(), fileHash.end()) << std::endl;
 
     // 2. Pass the HASH to the scan function instead of the path
     bool isSafe = scanWithVirusTotal(fileHash);

@@ -22,14 +22,14 @@ int injectHooking(HANDLE hProcess)
     LPVOID remoteMemory = VirtualAllocEx(hProcess, NULL, pathLen, MEM_COMMIT, PAGE_READWRITE);
     if (!remoteMemory)
     {
-        std::cout << "Failed to allocate memory in target process. Error: " << GetLastError() << std::endl;
+        //std::cout << "Failed to allocate memory in target process. Error: " << GetLastError() << std::endl;
         CloseHandle(hProcess);
         return 1;
     }
     // Write the DLL path into the target process memory
     if (!WriteProcessMemory(hProcess, remoteMemory, dllPath, pathLen, NULL))
     {
-        std::cout << "Failed to write memory. Error: " << GetLastError() << std::endl;
+        //std::cout << "Failed to write memory. Error: " << GetLastError() << std::endl;
         VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return 1;
@@ -38,7 +38,7 @@ int injectHooking(HANDLE hProcess)
     LPVOID loadLibraryAddr = (LPVOID)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
     if (!loadLibraryAddr)
     {
-        std::cout << "Failed to get LoadLibraryA address. Error: " << GetLastError() << std::endl;
+        //std::cout << "Failed to get LoadLibraryA address. Error: " << GetLastError() << std::endl;
         VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
         CloseHandle(hProcess);
         return 1;
@@ -54,15 +54,9 @@ int injectHooking(HANDLE hProcess)
         NULL
     );
 
-    if (!hThread)
-    {
-        std::cout << "Failed to create remote thread. Error: " << GetLastError() << std::endl;
-    }
-    else
-    {
-        WaitForSingleObject(hThread, INFINITE);
-        CloseHandle(hThread);
-    }
+    
+    WaitForSingleObject(hThread, INFINITE);
+    CloseHandle(hThread);
 
     // Cleanup
     VirtualFreeEx(hProcess, remoteMemory, 0, MEM_RELEASE);
@@ -98,9 +92,9 @@ int main()
         do {
             if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
             {
-                std::wcout << L"[allow] "
-                    << pe.th32ProcessID << L"| "
-                    << pe.szExeFile << std::endl;
+                ////std::wcout << L"[allow] "
+                //    << pe.th32ProcessID << L"| "
+                //    << pe.szExeFile << std::endl;
                 injectHooking(OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID));                
             }
              else

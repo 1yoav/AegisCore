@@ -38,10 +38,10 @@
 
 
 int main() {
-    std::cout << "==================================" << std::endl;
+   /* std::cout << "==================================" << std::endl;
     std::cout << "  AegisCore upgraded Commander" << std::endl;
     std::cout << "  WFP + Signature-Based Monitor" << std::endl;
-    std::cout << "==================================" << std::endl;
+    std::cout << "==================================" << std::endl;*/
 
     #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; // create converter

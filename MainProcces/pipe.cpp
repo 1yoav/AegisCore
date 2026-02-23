@@ -96,8 +96,8 @@ void createPipe(wchar_t* pipeName)
         //check for errors
         if (hPipe == INVALID_HANDLE_VALUE)
         {
-            std::wcerr << L"[-] CreateNamedPipe failed. Error: "
-                << GetLastError() << std::endl;
+            //std::wcerr << L"[-] CreateNamedPipe failed. Error: "
+                //<< GetLastError() << std::endl;
             return;
         }
 
@@ -109,7 +109,7 @@ void createPipe(wchar_t* pipeName)
             CloseHandle(hPipe);
             continue;
         }
-        std::cout << "[+] Client connected\n";
+        //std::cout << "[+] Client connected\n";
 
         //create counters for each feature
         std::map<std::string, int> counters;
@@ -152,7 +152,7 @@ void createPipe(wchar_t* pipeName)
         while ((pos = streamBuffer.find_first_of("\r\n")) != std::string::npos)
         {
             std::string line = streamBuffer.substr(0, pos);
-            std::cout << "[DEBUG] Received line: " << line << std::endl;
+            //std::cout << "[DEBUG] Received line: " << line << std::endl;
             if (!line.empty() && line.back() == '\r')
                 line.pop_back();
 
@@ -218,7 +218,7 @@ void createPipe(wchar_t* pipeName)
                         msg.pop_back();
 
                         //add the process name
-						std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
+						//std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
                         WriteFile(pythonPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
                     }
                 }
@@ -238,7 +238,7 @@ void createPipe(wchar_t* pipeName)
             }
         }
 
-        std::cout << "[*] Client disconnected\n";
+        //std::cout << "[*] Client disconnected\n";
         DisconnectNamedPipe(hPipe);
         CloseHandle(hPipe);
     }

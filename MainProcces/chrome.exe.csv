@@ -39,3 +39,6 @@ MemoryManipulation,ReadFile,CreateProcess,WriteFile,CloseHandle,ThreadManipulati
 34,0,0,0,27,1,0,1,128
 1,0,0,0,0,1,0,0,1
 8,0,0,0,9,1,0,0,9
+22,0,0,0,23,1,0,0,50
+4,0,0,0,11,1,0,0,8
+1,0,0,0,20,1,0,0,28
