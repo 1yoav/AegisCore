@@ -4,13 +4,28 @@
 #include "SQLDatabase.h"
 #include "HelperFunctions.h"
 #include "CertificateScanner.h"
+#include <future>
 //#include "TrafficDiverter.h"
 #include "NetworkUtils.h"
 #include "AVProcess.h"
 #include "PipeClient.h"
 #include "SigScanner.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <future>
+#include <cstdlib>
 #include "DownloadMonitor.h"
 #include "ExtensionScanner.h"
+
+namespace fs = std::filesystem;
+
+struct AnalysisTask {
+    std::string name;
+    std::string command;
+    fs::path path;
+};
 
 //int main() {
 //    // Data as requested
@@ -36,6 +51,32 @@
 //    return 0;
 //}
 
+void killPipelineProcesses() {
+    std::cout << "[*] Cleaning up background processes..." << std::endl;
+
+    // /F = Force, /IM = Image Name, /T = Kill child processes too
+    // 2>nul redirects errors to nothing (so it stays quiet if the process isn't running)
+    std::system("taskkill /F /IM \"MainProcces.exe\" /T >nul 2>&1");
+    std::system("taskkill /F /IM \"aegiscore (static scans).exe\" /T >nul 2>&1");
+    std::system("taskkill /F /IM python.exe /T >nul 2>&1");
+}
+
+bool executeTask(const AnalysisTask& task) {
+
+    // Construct the full command string
+    std::string fullCommand = task.command + " \"" + task.path.string() + "\"";
+
+    // Execute and capture the exit code
+    int result = std::system(fullCommand.c_str());
+
+    if (result == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 
 int main() {
    /* std::cout << "==================================" << std::endl;
@@ -52,9 +93,9 @@ int main() {
     db.open();
 
     // OPEN EXTENSION CHECKCS:
-    //std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
-    //ExtensionScanner extScanner(&db);
-    //extScanner.ScanExtensions();
+    std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
+    ExtensionScanner extScanner(&db);
+    extScanner.ScanExtensions();
 
     //std::vector<ChromeExtension> flagged = extScanner.GetFlaggedExtensions();
     //if (!flagged.empty()) {
@@ -147,7 +188,31 @@ int main() {
     //std::cout << "[!] Shutting down..." << std::endl;
     //wfpEngine.Shutdown();
     // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
+    const fs::path baseDir = "C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av";
+    std::vector<std::future<bool>> results;
 
+    std::vector<AnalysisTask> pipeline = {
+        {"Deep Analysis", "python", baseDir / "deep_analysis/main.py"},
+        {"Hooking Engine", "", baseDir / "MainProcces/x64/Debug/MainProcces.exe"},
+        {"TLS Cert Check", "python3", baseDir / "deep_analysis/tlscheck2.py"}
+    };
+
+    for (const auto& task : pipeline)
+    {
+        results.push_back(std::async(std::launch::async, executeTask, task));
+
+    }
+
+    for (auto& fut : results) {
+        if (!fut.get()) { // .get() waits for the thread to finish and returns the bool
+            std::cerr << "[-] Critical failure in pipeline. Aborting." << std::endl;
+            killPipelineProcesses(); // Kill them if one fails
+            return EXIT_FAILURE;
+        }
+    }
+
+    std::cout << "\n[SUCCESS] All security analysis modules completed." << std::endl;
+    return EXIT_SUCCESS;
 
 	//wait for sigScan threads to finish before exiting
     if (t1.joinable()) t1.join();

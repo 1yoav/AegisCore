@@ -19,7 +19,7 @@ bool PipeClient::SendAlert(uint32_t pid, const std::string& processName, const s
     if (!WaitNamedPipeA(pipeName, 1000)) {
         return false;
     }
-    std::cout << "CREATING PIPE\n";
+    //std::cout << "CREATING PIPE\n";
     HANDLE hPipe = CreateFileA(
         pipeName,
         GENERIC_WRITE,
