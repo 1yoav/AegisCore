@@ -73,7 +73,7 @@ def tlsCheck(data , port):
             
             # check the cert
             # date check
-            if cert.not_valid_after < datetime.datetime.now() or cert.issuer == cert.subject:
+            if cert.not_valid_after_utc < datetime.datetime.now(datetime.timezone.utc) or cert.issuer == cert.subject:
                 sendMsg("tlsCheck!" + get_process_path_from_port(port))
 
             # to do: add database for suspicious certs
@@ -117,4 +117,5 @@ def filtering(pkt):
 
 
 if __name__ == '__main__':
+    print("[Init] Initializing tlsCert check...\n")
     sniff(filter="tcp port 443", prn=filtering, store=0)

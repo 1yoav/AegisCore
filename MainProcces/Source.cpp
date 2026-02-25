@@ -73,7 +73,6 @@ int main()
 {
 	//get the pipe server up and running
     std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
-    pipe.detach();
     Sleep(2000);
 
 
@@ -106,7 +105,8 @@ int main()
         } while (Process32NextW(snapshot, &pe));
 
         CloseHandle(snapshot);
-        std::cin >> std::ws; //clear the input buffer
+        std::cout << "hooking initlized!\n";
+        pipe.join();
 
     }
     return 0;

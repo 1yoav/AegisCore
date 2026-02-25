@@ -120,6 +120,7 @@ def main():
 
 
 if __name__ == "__main__":
+    print("[Init] Initializing isolationForest...")
     main()
     #input("Press Enter to exit...")
 

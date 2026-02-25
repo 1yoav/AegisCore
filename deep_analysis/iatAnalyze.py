@@ -12,8 +12,3 @@ def analyze(path):
             print(func)
             # make any search
         return 0 # to do: cimmunicate with isolationForest
-
-    # to do:
-#     start an analyze about the imported functions
-
-analyze("C:\\Users\\Cyber_User\\Downloads\\PEiD.exe")

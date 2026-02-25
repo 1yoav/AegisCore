@@ -53,9 +53,6 @@ void SigScanner::checkSignature(std::filesystem::path path)
         std::lock_guard<std::mutex> lock(vectorMutex);
         files.push_back(path.wstring());
     }
-	//just for testing, send all files to deep analysis
-    connectToDeepAnalyze("signatureScanner!" + std::string(path.string()));
-
 
     files.push_back(path);
 
@@ -73,16 +70,10 @@ void SigScanner::checkSignature(std::filesystem::path path)
 
     if (!isSafe)
     {
-        std::wcout << L"??  THREAT DETECTED: " << path << std::endl;
-        std::wcout << L"Quarantining malicious file... (TODO)" << std::endl;
-
+        std::wcout << L"THREAT DETECTED: " << path << std::endl;
 		//send msg to deep analysis
 		connectToDeepAnalyze("signatureScanner!" + std::string(path.string()));
         // quarantineFile(path); // no need for this. file will be sent to deeper analysis
-    }
-    else
-    {
-        std::wcout << "? File is safe: " << path << std::endl;
     }
 }
 
@@ -91,13 +82,14 @@ bool SigScanner::scanWithVirusTotal(const std::string& fileHash)
 {
     // Create command to run Python script with the HASH as the argument
     std::string pythonCommand = "python virus_scanner.py " + fileHash;
+    
 
-    std::cout << "Executing: " << pythonCommand << std::endl;
+    //std::cout << "Executing: " << pythonCommand << std::endl;
 
     FILE* pipe = _popen(pythonCommand.c_str(), "r");
     if (!pipe)
     {
-        std::cerr << "Error: Could not execute Python script!" << std::endl;
+        //std::cerr << "Error: Could not execute Python script!" << std::endl;
         return true;
     }
 

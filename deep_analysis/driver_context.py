@@ -68,6 +68,7 @@ class DriverContext:
                     0, None
                 )
 
+
                 # Wait for C++ to connect
                 try:
                     win32pipe.ConnectNamedPipe(pipe, None)

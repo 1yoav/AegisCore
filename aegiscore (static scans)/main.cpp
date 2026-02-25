@@ -19,6 +19,7 @@
 #include "DownloadMonitor.h"
 #include "ExtensionScanner.h"
 
+
 namespace fs = std::filesystem;
 
 struct AnalysisTask {
@@ -58,7 +59,7 @@ void killPipelineProcesses() {
     // 2>nul redirects errors to nothing (so it stays quiet if the process isn't running)
     std::system("taskkill /F /IM \"MainProcces.exe\" /T >nul 2>&1");
     std::system("taskkill /F /IM \"aegiscore (static scans).exe\" /T >nul 2>&1");
-    std::system("taskkill /F /IM python.exe /T >nul 2>&1");
+    std::system("wmic process where \"CommandLine like '%aegiscore-av%'\" call terminate >nul 2>&1");
 }
 
 bool executeTask(const AnalysisTask& task) {
@@ -79,6 +80,9 @@ bool executeTask(const AnalysisTask& task) {
 
 
 int main() {
+
+    
+    std::atexit(killPipelineProcesses); //kill the child procces if the procces end
    /* std::cout << "==================================" << std::endl;
     std::cout << "  AegisCore upgraded Commander" << std::endl;
     std::cout << "  WFP + Signature-Based Monitor" << std::endl;
@@ -189,30 +193,25 @@ int main() {
     //wfpEngine.Shutdown();
     // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
     const fs::path baseDir = "C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av";
-    std::vector<std::future<bool>> results;
 
-    std::vector<AnalysisTask> pipeline = {
-        {"Deep Analysis", "python", baseDir / "deep_analysis/main.py"},
-        {"Hooking Engine", "", baseDir / "MainProcces/x64/Debug/MainProcces.exe"},
-        {"TLS Cert Check", "python3", baseDir / "deep_analysis/tlscheck2.py"}
+    std::vector<std::string> pipeline = {
+        "\"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/MainProcces/x64/Debug/MainProcces.exe\"",
+        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/main.py\"",
+        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/tlscheck2.py\""
     };
 
-    for (const auto& task : pipeline)
+    for (const std::string& task : pipeline)
     {
-        results.push_back(std::async(std::launch::async, executeTask, task));
+        std::string command = "start /b \"\" " + task;
 
+        std::cout << "[*] Executing: " << command << std::endl;
+        std::system(command.c_str());
     }
 
-    for (auto& fut : results) {
-        if (!fut.get()) { // .get() waits for the thread to finish and returns the bool
-            std::cerr << "[-] Critical failure in pipeline. Aborting." << std::endl;
-            killPipelineProcesses(); // Kill them if one fails
-            return EXIT_FAILURE;
-        }
-    }
+    
+    
 
-    std::cout << "\n[SUCCESS] All security analysis modules completed." << std::endl;
-    return EXIT_SUCCESS;
+    
 
 	//wait for sigScan threads to finish before exiting
     if (t1.joinable()) t1.join();
