@@ -69,7 +69,7 @@ int injectHooking(HANDLE hProcess)
 }
 
 
-int main()
+int main(int argc , char* arg[])
 {
 	//get the pipe server up and running
     std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
@@ -89,7 +89,7 @@ int main()
     if (Process32FirstW(snapshot, &pe))
     {
         do {
-            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
+            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 && wcscmp(pe.szExeFile, L"msvsmon.exe") != 0 && wcscmp(pe.szExeFile, L"aegiscore (static scans).exe") != 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
             {
                 ////std::wcout << L"[allow] "
                 //    << pe.th32ProcessID << L"| "
@@ -105,7 +105,6 @@ int main()
         } while (Process32NextW(snapshot, &pe));
 
         CloseHandle(snapshot);
-        std::cout << "hooking initlized!\n";
         pipe.join();
 
     }

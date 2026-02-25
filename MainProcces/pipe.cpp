@@ -24,6 +24,7 @@ std::string wstring_to_string(const std::wstring wstr)
 void createPipe(wchar_t* pipeName)
 {
     std::cout << "[Init] Initializing hooking...\n";
+
     std::vector<std::string> featureList = {
         "ReadFile",
         "WriteFile",

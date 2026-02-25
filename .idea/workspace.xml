@@ -3,10 +3,30 @@
   <component name="ChangeListManager">
     <list default="true" id="1a563287-59fd-42f3-a8a1-77bdbe6b37fb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/SigScanner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/SigScanner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/Discord.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/Discord.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/MSBuild.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/MSBuild.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/Microsoft.ServiceHub.Controller.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/Microsoft.ServiceHub.Controller.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/PerfWatson2.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/PerfWatson2.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.DataWarehouseHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.DataWarehouseHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.IndexingService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.IndexingService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.IntellicodeModelService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.IntellicodeModelService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.TestWindowStoreHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.TestWindowStoreHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.ThreadedWaitDialog.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/ServiceHub.ThreadedWaitDialog.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/VsDebugConsole.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/VsDebugConsole.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/WsToastNotification.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/WsToastNotification.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/Zoom.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/Zoom.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/bash.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/bash.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/chrome.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/chrome.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/cmd.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/cmd.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/copilot-language-server.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/copilot-language-server.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/fsnotifier64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/fsnotifier64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/git-bash.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/git-bash.exe.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/driver_context.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/iatAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/iatAnalyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/msedgewebview2.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/msedgewebview2.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/vctip.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/vctip.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/vshost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/vshost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/zWebview2Agent.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/zWebview2Agent.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/tlscheck2.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/tlscheck2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

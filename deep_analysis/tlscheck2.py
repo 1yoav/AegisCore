@@ -6,7 +6,7 @@ import psutil
 
 from cryptography.hazmat.backends import default_backend
 import datetime
-
+warnings.filterwarnings("ignore", category=DeprecationWarning) # shut upp teh warnings
 load_layer("tls")
 # Optional: conf.tls_session_enable = True
 

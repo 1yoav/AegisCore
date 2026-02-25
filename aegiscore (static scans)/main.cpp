@@ -12,9 +12,9 @@
 #include "SigScanner.h"
 #include <iostream>
 #include <string>
+#include <csignal>
 #include <vector>
 #include <filesystem>
-#include <future>
 #include <cstdlib>
 #include "DownloadMonitor.h"
 #include "ExtensionScanner.h"
@@ -52,14 +52,30 @@ struct AnalysisTask {
 //    return 0;
 //}
 
+
+
 void killPipelineProcesses() {
     std::cout << "[*] Cleaning up background processes..." << std::endl;
 
     // /F = Force, /IM = Image Name, /T = Kill child processes too
     // 2>nul redirects errors to nothing (so it stays quiet if the process isn't running)
     std::system("taskkill /F /IM \"MainProcces.exe\" /T >nul 2>&1");
-    std::system("taskkill /F /IM \"aegiscore (static scans).exe\" /T >nul 2>&1");
     std::system("wmic process where \"CommandLine like '%aegiscore-av%'\" call terminate >nul 2>&1");
+}
+
+BOOL WINAPI ConsoleHandler(DWORD dwType) {
+    switch (dwType) {
+    case CTRL_C_EVENT:
+    case CTRL_CLOSE_EVENT:
+        std::cout << "\n[!] Cleanup triggered by Ctrl+C or Closing window..." << std::endl;
+
+        killPipelineProcesses();
+
+
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }
 
 bool executeTask(const AnalysisTask& task) {
@@ -79,10 +95,13 @@ bool executeTask(const AnalysisTask& task) {
 }
 
 
-int main() {
+int main()
+{
 
-    
-    std::atexit(killPipelineProcesses); //kill the child procces if the procces end
+    if (!SetConsoleCtrlHandler(ConsoleHandler, TRUE)) {
+        std::cerr << "[-] Could not set control handler" << std::endl;
+        return 1;
+    }  
    /* std::cout << "==================================" << std::endl;
     std::cout << "  AegisCore upgraded Commander" << std::endl;
     std::cout << "  WFP + Signature-Based Monitor" << std::endl;
@@ -204,7 +223,6 @@ int main() {
     {
         std::string command = "start /b \"\" " + task;
 
-        std::cout << "[*] Executing: " << command << std::endl;
         std::system(command.c_str());
     }
 
