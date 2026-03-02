@@ -57,10 +57,21 @@ struct AnalysisTask {
 void killPipelineProcesses() {
     std::cout << "[*] Cleaning up background processes..." << std::endl;
 
-    // /F = Force, /IM = Image Name, /T = Kill child processes too
-    // 2>nul redirects errors to nothing (so it stays quiet if the process isn't running)
-    std::system("taskkill /F /IM \"MainProcces.exe\" /T >nul 2>&1");
-    std::system("wmic process where \"CommandLine like '%aegiscore-av%'\" call terminate >nul 2>&1");
+    std::vector<std::string> targets = {
+        "MainProcces.exe",
+        "deep_analysis/main.py",
+        "deep_analysis/tlscheck2.py",
+		"deep_analysis/isolationForest.py"
+    };
+
+    for (const std::string& target : targets) {
+        std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
+            "Where-Object { $_.CommandLine -like '*" + target + "*' } | "
+            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
+
+        std::system(command.c_str());
+    }
+    return ;
 }
 
 BOOL WINAPI ConsoleHandler(DWORD dwType) {
@@ -70,10 +81,6 @@ BOOL WINAPI ConsoleHandler(DWORD dwType) {
         std::cout << "\n[!] Cleanup triggered by Ctrl+C or Closing window..." << std::endl;
 
         killPipelineProcesses();
-
-
-        return TRUE;
-    default:
         return FALSE;
     }
 }
@@ -214,15 +221,15 @@ int main()
     const fs::path baseDir = "C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av";
 
     std::vector<std::string> pipeline = {
+         "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/isolationForest.py\"" ,
         "\"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/MainProcces/x64/Debug/MainProcces.exe\"",
         "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/main.py\"",
-        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/tlscheck2.py\""
+        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/tlscheck2.py\"",
     };
 
     for (const std::string& task : pipeline)
     {
         std::string command = "start /b \"\" " + task;
-
         std::system(command.c_str());
     }
 

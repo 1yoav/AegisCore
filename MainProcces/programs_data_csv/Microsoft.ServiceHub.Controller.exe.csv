@@ -33,3 +33,8 @@ CloseHandle,CreateProcess,MemoryManipulation,ProcessSnapshot,ReadFile,Sleep,Thre
 4,0,0,0,0,213,4,0,1
 1,0,0,0,0,1,0,0,1
 4,0,0,0,0,1,0,0,1
+0,0,0,0,0,1,0,0,0
+1,0,0,0,0,121,0,0,1
+1,0,0,0,0,1,0,0,1
+1,0,0,0,0,121,0,0,1
+1,0,0,0,0,1,0,0,1

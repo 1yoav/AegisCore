@@ -8,7 +8,7 @@
 #include <TlHelp32.h>
 #include <fileSystem>
 
-#define TRAINING 1
+#define TRAINING 0
 
 
 std::string wstring_to_string(const std::wstring wstr)
@@ -66,18 +66,24 @@ void createPipe(wchar_t* pipeName)
         {"Sleep", "Sleep"}
     };
 
-    //connect to the python server
-    HANDLE pythonPipe = CreateFileW(
-        L"\\\\.\\pipe\\pythonPipe",
-        GENERIC_WRITE,
-        0,
-        NULL,
-        OPEN_EXISTING,
-        0,
-        NULL
+
+    //connect to the isolationFirest server
+    HANDLE pythonPipe;
+    do
+    {
+        pythonPipe = CreateFileW(
+            L"\\\\.\\pipe\\isolationForest",
+            GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL
 
 
-    );
+        );
+    } while (pythonPipe == INVALID_HANDLE_VALUE);
+    
 
     while (true)
     {
@@ -217,8 +223,7 @@ void createPipe(wchar_t* pipeName)
                         }
                         msg.pop_back();
 
-                        //add the process name
-						//std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
+						//send the data to isolationForest server
                         WriteFile(pythonPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
                     }
                 }

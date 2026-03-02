@@ -51,49 +51,62 @@ class DriverContext:
     def start_listening(self):
         """Start the pipe server thread"""
         self.running = True
-        t = threading.Thread(target=self._server_loop, daemon=True)
-        t.start()
-        print(f"[*] IPC Pipe Server listening on {self.pipe_name}")
+        self._server_loop()
 
     def _server_loop(self):
-        """Main pipe server loop - waits for C++ alerts"""
+        """Main pipe server loop - spawns threads for each client"""
         while self.running:
             try:
-                # Create named pipe
+                # 1. Create the pipe instance
                 pipe = win32pipe.CreateNamedPipe(
                     self.pipe_name,
                     win32pipe.PIPE_ACCESS_INBOUND,
                     win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
-                    1, 65536, 65536,
-                    0, None
+                    win32pipe.PIPE_UNLIMITED_INSTANCES, # Support multiple concurrent clients
+                    65536, 65536, 0, None
                 )
 
+                # 2. Wait for a client to connect
+                win32pipe.ConnectNamedPipe(pipe, None)
 
-                # Wait for C++ to connect
-                try:
-                    win32pipe.ConnectNamedPipe(pipe, None)
-                except pywintypes.error as e:
-                    if e.args[0] == 109:  # ERROR_BROKEN_PIPE
-                        pass
-
-                # Read data from C++
-                result, data = win32file.ReadFile(pipe, 4096)
-
-                if result == 0:
-                    message = data.decode("utf-8")
-                    try:
-                        # metadata = json.loads(message)
-                        self.handle_alert(message) # for now not parsing just send the msg
-                    except json.JSONDecodeError:
-                        print(f"[!] Invalid JSON: {message}")
+                # 3. Start a new thread to handle this specific client
+                # This allows the loop to immediately return to CreateNamedPipe for the next client
+                client_thread = threading.Thread(
+                    target=self._handle_client_connection,
+                    args=(pipe,)
+                )
+                client_thread.daemon = True
+                client_thread.start()
 
             except Exception as e:
-                print(f"[!] Pipe Error: {e}")
-            finally:
+                if self.running:
+                    print(f"[!] Pipe Server Error: {e}")
+
+    def _handle_client_connection(self, pipe):
+        """Worker thread to read data from a single client"""
+        try:
+            full_data = b""
+            while True:
                 try:
-                    win32file.CloseHandle(pipe)
-                except:
-                    pass
+                    # Read chunks until the message is complete
+                    hr, data = win32file.ReadFile(pipe, 4096)
+                    full_data += data
+                    if hr == 0:  # Success: full message received
+                        break
+                except pywintypes.error as e:
+                    if e.args[0] == 109:  # ERROR_BROKEN_PIPE (Client disconnected)
+                        break
+                    raise
+
+            if full_data:
+                message = full_data.decode("utf-8")
+                print("got msg!")
+                self.handle_alert(message)
+
+        except Exception as e:
+            print(f"[!] Error handling client: {e}")
+        finally:
+            win32file.CloseHandle(pipe)
 
     def handle_alert(self, msg):
         """
@@ -109,7 +122,7 @@ class DriverContext:
         # else:
         path = msg.split('!')[1]
         pid = 0
-        pids = self.get_pids_by_filename()[0]
+        pids = self.get_pids_by_filename()[0] # maybe in the future active analyze about all the pids
         if pids:
             pid = pids[0]
 
@@ -137,13 +150,15 @@ class DriverContext:
         # # ctx.dest_port = orig_port
         #
         # # Run full analysis (Static + Dynamic)
-
         # check who send the msg
         if msg[0] == "tlsCert":
             ctx.tlsCheck = True
+            print("the deep analyze got tlsCert!\n")
         if msg[0] == "signatureScanner":
+            print("the deep analyze got signature scan!\n")
             ctx.signatureScan = True
         if msg[0] == "isolationForest":
+            print("the deep analyze got isolationForest!\n")
             ctx.isolationForest = True
 
         confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze

@@ -19,7 +19,7 @@ def print_banner():
 
 
 def main():
-    print("deepAnalyze initilize")
+    print("[Init] deep Analyze...\n")
     print_banner()
     
     # Initialize driver context

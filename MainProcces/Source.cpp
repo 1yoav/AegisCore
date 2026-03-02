@@ -73,6 +73,7 @@ int main(int argc , char* arg[])
 {
 	//get the pipe server up and running
     std::thread pipe([]() { createPipe((wchar_t*)L"\\\\.\\pipe\\my_pipe"); });
+	pipe.detach();
     Sleep(2000);
 
 
@@ -85,28 +86,29 @@ int main(int argc , char* arg[])
     PROCESSENTRY32W pe;
     pe.dwSize = sizeof(pe);
 
-
-    if (Process32FirstW(snapshot, &pe))
+    while (true)
     {
-        do {
-            if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 && wcscmp(pe.szExeFile, L"msvsmon.exe") != 0 && wcscmp(pe.szExeFile, L"aegiscore (static scans).exe") != 0 ) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
-            {
-                ////std::wcout << L"[allow] "
-                //    << pe.th32ProcessID << L"| "
-                //    << pe.szExeFile << std::endl;
-                injectHooking(OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID));                
-            }
-             else
-             {
-                 /*std::wcout << L"[Forbid] "
-                     << pe.th32ProcessID << L" "
-                     << pe.szExeFile << std::endl;*/
-             }
-        } while (Process32NextW(snapshot, &pe));
+        if (Process32FirstW(snapshot, &pe))  // TODO: create white risk for reducing the time of the whole injecting
+        {
+            do {
+                if (ShouldConsiderHooking(pe.th32ProcessID) && GetCurrentProcessId() != pe.th32ProcessID && wcscmp(pe.szExeFile, L"devenv.exe") != 0 && wcscmp(pe.szExeFile, L"msvsmon.exe") != 0 && wcscmp(pe.szExeFile, L"aegiscore (static scans).exe") != 0) //proc ces are forbid in 3 condition. 1 - system path. 2 - exsist on boot. 3 - got hige privilges. 
+                {
+                    ////std::wcout << L"[allow] "
+                    //    << pe.th32ProcessID << L"| "
+                    //    << pe.szExeFile << std::endl;
+                    injectHooking(OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID));
+                }
+                else
+                {
+                    /*std::wcout << L"[Forbid] "
+                        << pe.th32ProcessID << L" "
+                        << pe.szExeFile << std::endl;*/
+                }
+            } while (Process32NextW(snapshot, &pe));
 
-        CloseHandle(snapshot);
-        pipe.join();
-
+            CloseHandle(snapshot);
+        }
+        Sleep(1000000);
     }
     return 0;
 
