@@ -6,6 +6,7 @@ import joblib
 from sklearn.ensemble import IsolationForest
 import warnings
 import threading
+import  time
 import pandas as pd
 
 warnings.filterwarnings(
@@ -48,28 +49,33 @@ def send_to_pipe(msg):
     # 1. Add a null-terminator if your C++ or Python logic expects C-strings
     # This prevents 'garbage' characters at the end of the message
     full_msg = msg.encode('utf-8')
-
     handle = None
-    try:
-        # 2. Request ONLY GENERIC_WRITE (matches server's INBOUND)
-        handle = win32file.CreateFile(
-            pipe_name,
-            win32file.GENERIC_WRITE,
-            0,
-            None,
-            win32file.OPEN_EXISTING,
-            0,
-            None
-        )
+    while True:
+        try:
+            # ניסיון פתיחת ה-Pipe
+            handle = win32file.CreateFile(
+                pipe_name,
+                win32file.GENERIC_WRITE,
+                0,
+                None,
+                win32file.OPEN_EXISTING,
+                0,
+                None
+            )
+            break
+
+        except win32file.error as e:
+            # בודק אם השגיאה היא שהקובץ/Pipe לא נמצא (Error 2)
+            if e.winerror == winerror.ERROR_FILE_NOT_FOUND:
+                time.sleep(0.5)
+                continue
+            else:
+                # שגיאה אחרת (למשל הרשאות) - כדאי לעצור ולבדוק
+                print(f"Unexpected error: {e}")
+                break
         # 4. Write the data
-        result = win32file.WriteFile(handle, full_msg)
-
-
-    except Exception as e:
-        print(f"[!] Client Error: {e}")
-    finally:
-        if handle:
-            win32file.CloseHandle(handle)
+    result = win32file.WriteFile(handle, full_msg)
+    win32file.CloseHandle(handle)
 
 
 
@@ -108,10 +114,10 @@ def predict():
 
                 data = list(map(int, newMsg))
                 score = model.decision_function([data])
-                if score[0] > -0.3: # value of suspicious
+                if score[0] < -0.3: # value of suspicious
                     msg = "isolationForest!" + fileName
                     # send msg to deepAnalyze
-                    t = threading.Thread(target=send_msg_to_deepAnalyze, args=(msg,))
+                    t = threading.Thread(target=send_to_pipe(), args=(msg,))
                     t.start()
 
             # else:
@@ -128,6 +134,5 @@ def main():
 
 if __name__ == "__main__":
     print("[Init] Initializing isolationForest...")
-    #send_to_pipe("isolationForest!hello")
     main()
 
