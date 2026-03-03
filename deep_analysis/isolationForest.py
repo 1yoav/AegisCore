@@ -61,10 +61,8 @@ def send_to_pipe(msg):
             0,
             None
         )
-        print(handle)
         # 4. Write the data
         result = win32file.WriteFile(handle, full_msg)
-        print(result)
 
 
     except Exception as e:

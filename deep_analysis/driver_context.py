@@ -4,6 +4,7 @@ Updated: Removed C2 Emulator interactions
 """
 import threading
 import json
+import psutil
 import win32pipe
 import win32file
 import pywintypes
@@ -35,18 +36,18 @@ class DriverContext:
 
         print("[*] Driver Context initialized (Static Analysis Enabled)")
 
-    def get_pids_by_filename(filename):
+    def get_pids_by_filename(self,filename):
         pids = []
-        # מעבר על כל התהליכים הרצים במערכת
         for proc in psutil.process_iter(['pid', 'name']):
             try:
-                # בדיקה אם שם התהליך תואם לשם שחיפשנו
-                if proc.info['name'].lower() == filename.lower():
+                if proc.info['name'] and proc.info['name'].lower() == filename.lower():
                     pids.append(proc.info['pid'])
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                # טיפול במקרים שבהם התהליך נסגר או שאין הרשאות גישה אליו
                 continue
-        return pids
+        # maybe for later return more then one pid for deeper invistigate
+        if pids:
+            return pids[0]
+        return 0
 
     def start_listening(self):
         """Start the pipe server thread"""
@@ -87,26 +88,22 @@ class DriverContext:
         try:
             full_data = b""
             while True:
-                try:
-                    # Read chunks until the message is complete
-                    hr, data = win32file.ReadFile(pipe, 4096)
-                    full_data += data
-                    if hr == 0:  # Success: full message received
-                        break
-                except pywintypes.error as e:
-                    if e.args[0] == 109:  # ERROR_BROKEN_PIPE (Client disconnected)
-                        break
-                    raise
-
-            if full_data:
-                message = full_data.decode("utf-8")
-                print("got msg!")
-                self.handle_alert(message)
+                # Read chunks until the message is complete
+                hr, data = win32file.ReadFile(pipe, 4096)
+                full_data += data
+                if hr == 0:  # Success: full message received
+                    break
 
         except Exception as e:
-            print(f"[!] Error handling client: {e}")
-        finally:
             win32file.CloseHandle(pipe)
+            print(f"[!] Error handling client: {e}")
+
+        if full_data:              # if the data isnt NULL, activate the investigation
+            message = full_data.decode("utf-8")
+            self.handle_alert(message)
+            win32file.CloseHandle(pipe)
+
+
 
     def handle_alert(self, msg):
         """
@@ -121,10 +118,7 @@ class DriverContext:
 
         # else:
         path = msg.split('!')[1]
-        pid = 0
-        pids = self.get_pids_by_filename()[0] # maybe in the future active analyze about all the pids
-        if pids:
-            pid = pids[0]
+        pid = self.get_pids_by_filename(path) # maybe in the future active analyze about all the pids
 
         ctx = InvestigationContext(pid, path)
 
