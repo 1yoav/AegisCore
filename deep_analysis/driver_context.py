@@ -34,8 +34,6 @@ class DriverContext:
         self.logger = ThreatLogger(DATABASE_PATH)
 
 
-        print("[*] Driver Context initialized (Static Analysis Enabled)")
-
     def get_pids_by_filename(self,filename):
         pids = []
         for proc in psutil.process_iter(['pid', 'name']):
@@ -117,7 +115,8 @@ class DriverContext:
         # # Get or create investigation context
 
         # else:
-        path = msg.split('!')[1]
+        msg = msg.split("!")
+        path = msg[1]
         pid = self.get_pids_by_filename(path) # maybe in the future active analyze about all the pids
 
         ctx = InvestigationContext(pid, path)

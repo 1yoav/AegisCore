@@ -30,17 +30,25 @@ std::string SigScanner::getMD5Hash(const std::filesystem::path& path) {
 //connect to deep analysis pipe and send message
 void SigScanner::connectToDeepAnalyze(std::string msg)
 {
-	std::wstring pipeName = L"\\.\\pipe\\AVDeepScanPipe";
+	std::string pipeName = "\\\\.\\pipe\\AVDeepScanPipe";
 
-    HANDLE hPipe = CreateFileW(
-        pipeName.c_str(),
-        GENERIC_WRITE,
-        0,
-        NULL,
-        OPEN_EXISTING,
-        0,
-        NULL
-    );
+    //wait until the connection is Stable
+    HANDLE hPipe = NULL;
+    do
+    {
+        hPipe = CreateFileA(
+            pipeName.c_str(),
+            GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL);
+        if (hPipe == INVALID_HANDLE_VALUE)
+            Sleep(500);
+        else
+            break;
+    }while(true);
 
 
     WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);

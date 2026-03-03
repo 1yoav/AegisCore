@@ -128,6 +128,6 @@ def main():
 
 if __name__ == "__main__":
     print("[Init] Initializing isolationForest...")
-    send_to_pipe("isolationForest!hello")
-    # main()
+    #send_to_pipe("isolationForest!hello")
+    main()
 

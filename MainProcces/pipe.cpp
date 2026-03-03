@@ -82,7 +82,11 @@ void createPipe(wchar_t* pipeName)
 
 
         );
-    } while (pythonPipe == INVALID_HANDLE_VALUE);
+        if (pythonPipe == INVALID_HANDLE_VALUE)
+            Sleep(500);
+        else
+            break;
+    } while (true);
     
 
     while (true)
