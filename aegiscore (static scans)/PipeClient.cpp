@@ -2,7 +2,7 @@
 #include <iostream>
 #include <regex>
 bool PipeClient::SendAlert(uint32_t pid, const std::string& processName, const std::string& destIP, uint16_t destPort) {
-    std::cout << "SENDING ALERT JSON PAYLOAD: \n";
+    //std::cout << "SENDING ALERT JSON PAYLOAD: \n";
     const char* pipeName = "\\\\.\\pipe\\AVDeepScanPipe";
 
     // replace \ with \\ for python
@@ -19,7 +19,7 @@ bool PipeClient::SendAlert(uint32_t pid, const std::string& processName, const s
     if (!WaitNamedPipeA(pipeName, 1000)) {
         return false;
     }
-    std::cout << "CREATING PIPE\n";
+    //std::cout << "CREATING PIPE\n";
     HANDLE hPipe = CreateFileA(
         pipeName,
         GENERIC_WRITE,

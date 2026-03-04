@@ -8,7 +8,7 @@
 #include <TlHelp32.h>
 #include <fileSystem>
 
-#define TRAINING 1
+#define TRAINING 0
 
 
 std::string wstring_to_string(const std::wstring wstr)
@@ -23,7 +23,7 @@ std::string wstring_to_string(const std::wstring wstr)
 
 void createPipe(wchar_t* pipeName)
 {
-    std::wcout << L"[+] Pipe server started at: " << pipeName << std::endl;
+    std::cout << "[Init] Initializing hooking...\n";
 
     std::vector<std::string> featureList = {
         "ReadFile",
@@ -66,18 +66,28 @@ void createPipe(wchar_t* pipeName)
         {"Sleep", "Sleep"}
     };
 
-    //connect to the python server
-    HANDLE pythonPipe = CreateFileW(
-        L"\\\\.\\pipe\\pythonPipe",
-        GENERIC_WRITE,
-        0,
-        NULL,
-        OPEN_EXISTING,
-        0,
-        NULL
+
+    //connect to the isolationFirest server
+    HANDLE pythonPipe;
+    do
+    {
+        pythonPipe = CreateFileW(
+            L"\\\\.\\pipe\\isolationForest",
+            GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL
 
 
-    );
+        );
+        if (pythonPipe == INVALID_HANDLE_VALUE)
+            Sleep(500);
+        else
+            break;
+    } while (true);
+    
 
     while (true)
     {
@@ -96,8 +106,8 @@ void createPipe(wchar_t* pipeName)
         //check for errors
         if (hPipe == INVALID_HANDLE_VALUE)
         {
-            std::wcerr << L"[-] CreateNamedPipe failed. Error: "
-                << GetLastError() << std::endl;
+            //std::wcerr << L"[-] CreateNamedPipe failed. Error: "
+                //<< GetLastError() << std::endl;
             return;
         }
 
@@ -109,7 +119,7 @@ void createPipe(wchar_t* pipeName)
             CloseHandle(hPipe);
             continue;
         }
-        std::cout << "[+] Client connected\n";
+        //std::cout << "[+] Client connected\n";
 
         //create counters for each feature
         std::map<std::string, int> counters;
@@ -152,7 +162,7 @@ void createPipe(wchar_t* pipeName)
         while ((pos = streamBuffer.find_first_of("\r\n")) != std::string::npos)
         {
             std::string line = streamBuffer.substr(0, pos);
-            std::cout << "[DEBUG] Received line: " << line << std::endl;
+            //std::cout << "[DEBUG] Received line: " << line << std::endl;
             if (!line.empty() && line.back() == '\r')
                 line.pop_back();
 
@@ -217,8 +227,7 @@ void createPipe(wchar_t* pipeName)
                         }
                         msg.pop_back();
 
-                        //add the process name
-						std::cout << "[DEBUG] Sending to Python server: " << msg << std::endl;
+						//send the data to isolationForest server
                         WriteFile(pythonPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
                     }
                 }
@@ -238,7 +247,7 @@ void createPipe(wchar_t* pipeName)
             }
         }
 
-        std::cout << "[*] Client disconnected\n";
+        //std::cout << "[*] Client disconnected\n";
         DisconnectNamedPipe(hPipe);
         CloseHandle(hPipe);
     }

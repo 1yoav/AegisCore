@@ -7,7 +7,6 @@ from events import InvestigationContext
 from static_analyzer import StaticAnalyzer
 from yara_analyzer import YaraAnalyzer
 from behavioral_analyzer import BehavioralAnalyzer
-sys.path.append(r'C:\Users\Cyber_User\Desktop\magshimim\aegiscore-av')
 import packingCheck
 import iatAnalyze
 
@@ -82,7 +81,7 @@ class Analyzer:
         dynamic_score_normalized = min(dynamic_raw_score, 100.0)
 
         # --- PART C: packing check and iat check
-        entropy_val = metadata.get('entropy', {}).get('whole_file', 0.0)
+        entropy_val = metadata_.get('entropy', {}).get('whole_file', 0.0)
         packingResult = 0
         if entropy_val > 7.2:
             packingResult = packingCheck.scan(ctx.process_path)

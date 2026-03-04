@@ -169,7 +169,9 @@ int CalculateProcessRisk(DWORD pid)
 // Final decision: SHOULD WE EVEN CONSIDER HOOKING?
 bool ShouldConsiderHooking(DWORD pid)
 {
+
     int risk = CalculateProcessRisk(pid);
+
 
     // Tunable threshold
     return (risk >= 30);

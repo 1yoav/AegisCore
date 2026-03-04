@@ -4,6 +4,7 @@ Updated: Removed C2 Emulator interactions
 """
 import threading
 import json
+import psutil
 import win32pipe
 import win32file
 import pywintypes
@@ -33,66 +34,74 @@ class DriverContext:
         self.logger = ThreatLogger(DATABASE_PATH)
 
 
-        print("[*] Driver Context initialized (Static Analysis Enabled)")
-
-    def get_pids_by_filename(filename):
+    def get_pids_by_filename(self,filename):
         pids = []
-        # מעבר על כל התהליכים הרצים במערכת
         for proc in psutil.process_iter(['pid', 'name']):
             try:
-                # בדיקה אם שם התהליך תואם לשם שחיפשנו
-                if proc.info['name'].lower() == filename.lower():
+                if proc.info['name'] and proc.info['name'].lower() == filename.lower():
                     pids.append(proc.info['pid'])
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                # טיפול במקרים שבהם התהליך נסגר או שאין הרשאות גישה אליו
                 continue
-        return pids
+        # maybe for later return more then one pid for deeper invistigate
+        if pids:
+            return pids[0]
+        return 0
 
     def start_listening(self):
         """Start the pipe server thread"""
         self.running = True
-        t = threading.Thread(target=self._server_loop, daemon=True)
-        t.start()
-        print(f"[*] IPC Pipe Server listening on {self.pipe_name}")
+        self._server_loop()
 
     def _server_loop(self):
-        """Main pipe server loop - waits for C++ alerts"""
+        """Main pipe server loop - spawns threads for each client"""
         while self.running:
             try:
-                # Create named pipe
+                # 1. Create the pipe instance
                 pipe = win32pipe.CreateNamedPipe(
                     self.pipe_name,
                     win32pipe.PIPE_ACCESS_INBOUND,
                     win32pipe.PIPE_TYPE_MESSAGE | win32pipe.PIPE_READMODE_MESSAGE | win32pipe.PIPE_WAIT,
-                    1, 65536, 65536,
-                    0, None
+                    win32pipe.PIPE_UNLIMITED_INSTANCES, # Support multiple concurrent clients
+                    65536, 65536, 0, None
                 )
 
-                # Wait for C++ to connect
-                try:
-                    win32pipe.ConnectNamedPipe(pipe, None)
-                except pywintypes.error as e:
-                    if e.args[0] == 109:  # ERROR_BROKEN_PIPE
-                        pass
+                # 2. Wait for a client to connect
+                win32pipe.ConnectNamedPipe(pipe, None)
 
-                # Read data from C++
-                result, data = win32file.ReadFile(pipe, 4096)
-
-                if result == 0:
-                    message = data.decode("utf-8")
-                    try:
-                        # metadata = json.loads(message)
-                        self.handle_alert(message) # for now not parsing just send the msg
-                    except json.JSONDecodeError:
-                        print(f"[!] Invalid JSON: {message}")
+                # 3. Start a new thread to handle this specific client
+                # This allows the loop to immediately return to CreateNamedPipe for the next client
+                client_thread = threading.Thread(
+                    target=self._handle_client_connection,
+                    args=(pipe,)
+                )
+                client_thread.daemon = True
+                client_thread.start()
 
             except Exception as e:
-                print(f"[!] Pipe Error: {e}")
-            finally:
-                try:
-                    win32file.CloseHandle(pipe)
-                except:
-                    pass
+                if self.running:
+                    print(f"[!] Pipe Server Error: {e}")
+
+    def _handle_client_connection(self, pipe):
+        """Worker thread to read data from a single client"""
+        try:
+            full_data = b""
+            while True:
+                # Read chunks until the message is complete
+                hr, data = win32file.ReadFile(pipe, 4096)
+                full_data += data
+                if hr == 0:  # Success: full message received
+                    break
+
+        except Exception as e:
+            win32file.CloseHandle(pipe)
+            print(f"[!] Error handling client: {e}")
+
+        if full_data:              # if the data isnt NULL, activate the investigation
+            message = full_data.decode("utf-8")
+            self.handle_alert(message)
+            win32file.CloseHandle(pipe)
+
+
 
     def handle_alert(self, msg):
         """
@@ -106,11 +115,9 @@ class DriverContext:
         # # Get or create investigation context
 
         # else:
-        path = msg.split('!')[1]
-        pid = 0
-        pids = self.get_pids_by_filename()[0]
-        if pids:
-            pid = pids[0]
+        msg = msg.split("!")
+        path = msg[1]
+        pid = self.get_pids_by_filename(path) # maybe in the future active analyze about all the pids
 
         ctx = InvestigationContext(pid, path)
 
@@ -136,13 +143,15 @@ class DriverContext:
         # # ctx.dest_port = orig_port
         #
         # # Run full analysis (Static + Dynamic)
-
         # check who send the msg
         if msg[0] == "tlsCert":
             ctx.tlsCheck = True
+            print("the deep analyze got tlsCert!\n")
         if msg[0] == "signatureScanner":
+            print("the deep analyze got signature scan!\n")
             ctx.signatureScan = True
         if msg[0] == "isolationForest":
+            print("the deep analyze got isolationForest!\n")
             ctx.isolationForest = True
 
         confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze

@@ -30,10 +30,10 @@ class YaraAnalyzer:
                     filepaths[namespace] = os.path.join(self.rules_dir, filename)
 
             if filepaths:
-                print(f"[YARA] Compiling {len(filepaths)} rule files...")
+                # print(f"[YARA] Compiling {len(filepaths)} rule files...")
                 self.rules = yara.compile(filepaths=filepaths)
                 self.compiled = True
-                print("[YARA] Rules compiled successfully.")
+                # print("[YARA] Rules compiled successfully.")
             else:
                 print("[YARA] No rules found in directory.")
 
