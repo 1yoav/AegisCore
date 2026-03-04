@@ -4,6 +4,13 @@ from pathlib import Path
 
 def analyze(path):
     if Path(path).is_file():
+
+        # check if its executable
+        with open(path, 'rb') as f:
+            magic = f.read(2)
+            if magic != b'MZ':
+                return 0
+
         pe = pefile.PE(path, fast_load=True)
         pe.parse_data_directories()
 
