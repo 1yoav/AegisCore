@@ -518,7 +518,7 @@
         // ═══════════════════════════════════════════════════════════
 
         const GEMINI_API_KEY = 'AIzaSyCxkwQ5Nw05tmrw2brmWWHZjLJaU3Labwg';
-        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent';
 
         function toggleChat() {
             const chatContainer = document.getElementById('chatContainer');
@@ -601,10 +601,12 @@
                 sendBtn.disabled = false;
             }
         }
-
+        
         function buildPromptWithCodebase(userMessage) {
+            // we will add the codebase (https://gitlab.com/yoavischmidt/aegiscore-av) after we open source the project
             return `You are a security advisor for AegisCore Antivirus (open-source Windows AV). Answer technical questions while staying clear and concise (at most approx. 100 words per answer). All replies should be strictly in plaintext.
-                User: ${userMessage}`; }
+            
+            User: ${userMessage}`; }
 
         function addMessageToChat(message, sender) {
             const messagesContainer = document.getElementById('chatMessages');
