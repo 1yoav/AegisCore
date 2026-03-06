@@ -1,0 +1,18 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.aegiscore.gui
+productName: AegisCore
+win:
+  target: nsis
+  icon: assets/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+files:
+  - filter:
+      - '*.html'
+      - main.js
+      - preload.js
+      - assets/**
+electronVersion: 28.3.3

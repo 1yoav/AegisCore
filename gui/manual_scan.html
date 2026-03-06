@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AegisCore - Manual Scanning</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&display=swap');
+        
+        /* Transition Styles (Reuse from index) */
+        #transition-layer { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; visibility: hidden; }
+        #transition-layer.active { visibility: visible; }
+        .sweep-block { position: absolute; width: 200%; height: 200%; background: #0a0a0a; border: 2px solid #7c3aed; transform: translate(100%, -100%) rotate(-15deg); transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1); }
+        #transition-layer.covering .sweep-block { transform: translate(-10%, -10%) rotate(-15deg); }
+        #transition-layer.exiting .sweep-block { transform: translate(-120%, 120%) rotate(-15deg); }
+        .loader-content { position: relative; z-index: 10000; text-align: center; opacity: 0; }
+        #transition-layer.covering .loader-content { opacity: 1; }
+        .loader { --color: #7c3aed; --size: 40px; width: var(--size); height: var(--size); display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .loader span { background-color: var(--color); animation: keyframes-blink 0.6s alternate infinite linear; }
+        @keyframes keyframes-blink { 0% { opacity: 0.3; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }
+
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; overflow: hidden; height: 100vh; }
+        
+        /* Titlebar */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+            -webkit-app-region: drag;
+        }
+        .titlebar-title { 
+            font-size: 0.7rem; 
+            font-family: 'JetBrains Mono'; 
+            color: rgba(255, 255, 255, 0.4);
+            flex: 1;
+        }
+        .window-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+        .window-button {
+            width: 46px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .window-button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #ffffff;
+        }
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+        
+        .header { height: 100px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .back-btn-wrapper { position: absolute; top: 20px; left: 30px; width: 60px; height: 60px; cursor: pointer; }
+        #liquid-back-btn { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .back-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+        .scan-container { display: flex; gap: 2rem; padding: 4rem; justify-content: center; align-items: center; }
+        .scan-card {
+            width: 400px; height: 300px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .scan-card:hover { background: rgba(124, 58, 237, 0.1); border-color: #7c3aed; }
+        .scan-card h2 { font-size: 1.5rem; margin-bottom: 10px; }
+        .scan-card p { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #7c3aed; }
+
+        .status-footer {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+            background: #000; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; padding: 0 2rem; font-family: 'JetBrains Mono'; font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body onload="revealPage()">
+
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE™</span>
+        <div class="window-controls">
+            <button class="window-button minimize" onclick="minimizeApp()" title="Minimize">
+                <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+                    <rect width="12" height="2"/>
+                </svg>
+            </button>
+            <button class="window-button maximize" onclick="maximizeApp()" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="0.5" y="0.5" width="11" height="11"/>
+                </svg>
+            </button>
+            <button class="window-button close" onclick="closeApp()" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M1 1L11 11M11 1L1 11"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="transition-layer" class="active covering">
+        <div class="sweep-block"></div>
+        <div class="loader-content"><div class="loader"><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    </div>
+
+    <div class="header">
+        <div class="back-btn-wrapper" onclick="goBack()">
+            <div id="liquid-back-btn"></div>
+            <div class="back-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></div>
+        </div>
+        <h1 style="font-family:'JetBrains Mono'; font-size:0.9rem; letter-spacing:0.2em; color:rgba(255,255,255,0.5);">MANUAL_SCAN_OPERATIONS</h1>
+    </div>
+
+    <div class="scan-container">
+        <div class="scan-card">
+            <h2>File Scan</h2>
+            <p>[DRAG_AND_DROP_OR_CLICK]</p>
+        </div>
+        <div class="scan-card">
+            <h2>System Scan</h2>
+            <p>[FULL_SECTOR_ANALYSIS]</p>
+        </div>
+    </div>
+
+    <div class="status-footer">
+        <span style="color:#7c3aed">></span>&nbsp;STATUS: READY // ENGINE_V2.4.1_STABLE
+    </div>
+
+    <script>
+        const layer = document.getElementById('transition-layer');
+        function revealPage() { setTimeout(() => { layer.classList.add('exiting'); setTimeout(() => { layer.classList.remove('active', 'covering', 'exiting'); }, 600); }, 500); }
+        function goBack() { layer.classList.add('active'); layer.offsetHeight; layer.classList.add('covering'); setTimeout(() => { window.location.href = 'index.html'; }, 700); }
+        
+        // Window controls
+        function minimizeApp() { window.aegis.minimize(); }
+        function maximizeApp() { window.aegis.maximize(); }
+        function closeApp()    { window.aegis.close(); }
+    </script>
+    <script type="module">
+        import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";
+        new ShaderMount(document.getElementById("liquid-back-btn"), liquidMetalFragmentShader, { u_shiftBlue: 0.9, u_repetition: 1.0, u_softness: 0.2 }, undefined, 0.5);
+    </script>
+</body>
+</html>

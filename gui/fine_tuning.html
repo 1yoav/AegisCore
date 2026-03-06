@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AegisCore - Fine Tuning</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap');
+        
+        /* Transition Styles (Reuse) */
+        #transition-layer { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; visibility: hidden; }
+        #transition-layer.active { visibility: visible; }
+        .sweep-block { position: absolute; width: 200%; height: 200%; background: #0a0a0a; border: 2px solid #7c3aed; transform: translate(100%, -100%) rotate(-15deg); transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1); }
+        #transition-layer.covering .sweep-block { transform: translate(-10%, -10%) rotate(-15deg); }
+        #transition-layer.exiting .sweep-block { transform: translate(-120%, 120%) rotate(-15deg); }
+        .loader-content { position: relative; z-index: 10000; text-align: center; opacity: 0; }
+        #transition-layer.covering .loader-content { opacity: 1; }
+
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; height: 100vh; overflow-y: auto; }
+        
+        /* Titlebar */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+            -webkit-app-region: drag; position: sticky; top: 0; z-index: 100;
+        }
+        .titlebar-title { 
+            font-size: 0.7rem; 
+            font-family: 'JetBrains Mono'; 
+            color: rgba(255, 255, 255, 0.4);
+            flex: 1;
+        }
+        .window-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+        .window-button {
+            width: 46px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .window-button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #ffffff;
+        }
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+        
+        .header { height: 100px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 40px; background: #050505; z-index: 50; }
+        .back-btn-wrapper { position: absolute; top: 20px; left: 30px; width: 60px; height: 60px; cursor: pointer; }
+        #liquid-back-btn { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .back-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+        .settings-container { max-width: 800px; margin: 3rem auto; padding: 0 2rem; }
+        
+        /* Deactivate Section */
+        .danger-zone { 
+            background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); 
+            padding: 2rem; border-radius: 12px; margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .danger-zone h2 { color: #ef4444; font-size: 1rem; letter-spacing: 1px; }
+
+        /* Feature Row */
+        .feature-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature-info h3 { font-size: 0.95rem; font-weight: 600; }
+        .feature-info p { font-size: 0.75rem; color: #666; font-family: 'JetBrains Mono'; margin-top: 4px; }
+
+        /* Custom Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 45px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #222; transition: .4s; border-radius: 34px; border: 1px solid rgba(255,255,255,0.1); }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #7c3aed; }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body onload="revealPage()">
+
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE™</span>
+        <div class="window-controls">
+            <button class="window-button minimize" onclick="minimizeApp()" title="Minimize">
+                <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+                    <rect width="12" height="2"/>
+                </svg>
+            </button>
+            <button class="window-button maximize" onclick="maximizeApp()" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="0.5" y="0.5" width="11" height="11"/>
+                </svg>
+            </button>
+            <button class="window-button close" onclick="closeApp()" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M1 1L11 11M11 1L1 11"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="transition-layer" class="active covering">
+        <div class="sweep-block"></div>
+        <div class="loader-content"><div class="loader" style="--color:#7c3aed; --size:40px; display:grid; grid-template-columns:repeat(3,1fr); gap:5px;"><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    </div>
+
+    <div class="header">
+        <div class="back-btn-wrapper" onclick="goBack()">
+            <div id="liquid-back-btn"></div>
+            <div class="back-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg></div>
+        </div>
+        <h1 style="font-family:'JetBrains Mono'; font-size:0.9rem; letter-spacing:0.2em; color:rgba(255,255,255,0.5);">CORE_FINE_TUNING</h1>
+    </div>
+
+    <div class="settings-container">
+        <div class="danger-zone">
+            <div>
+                <h2>SHIELD STATUS</h2>
+                <p style="font-size: 0.7rem; color: #ef4444; opacity: 0.7; font-family: 'JetBrains Mono';">DEACTIVATE_ALL_PROTECTION</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-info">
+                <h3>API Hooking Monitor</h3>
+                <p>INTERCEPT_PROCESS_CALLS</p>
+            </div>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-info">
+                <h3>Network Traffic Scanner</h3>
+                <p>PACKET_INSPECTION_ACTIVE</p>
+            </div>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-info">
+                <h3>Certificate Validator</h3>
+                <p>SSL_TRUST_VERIFICATION</p>
+            </div>
+            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+    </div>
+
+    <script>
+        const layer = document.getElementById('transition-layer');
+        function revealPage() { setTimeout(() => { layer.classList.add('exiting'); setTimeout(() => { layer.classList.remove('active', 'covering', 'exiting'); }, 600); }, 500); }
+        function goBack() { layer.classList.add('active'); layer.offsetHeight; layer.classList.add('covering'); setTimeout(() => { window.location.href = 'index.html'; }, 700); }
+        
+        // Window controls
+        function minimizeApp() { window.aegis.minimize(); }
+        function maximizeApp() { window.aegis.maximize(); }
+        function closeApp()    { window.aegis.close(); }
+    </script>
+    <script type="module">
+        import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";
+        new ShaderMount(document.getElementById("liquid-back-btn"), liquidMetalFragmentShader, { u_shiftBlue: 0.9, u_repetition: 1.0, u_softness: 0.2 }, undefined, 0.5);
+    </script>
+</body>
+</html>
