@@ -28,40 +28,68 @@ struct AnalysisTask {
     fs::path path;
 };
 
-//int main() {
-//    // Data as requested
-//    uint32_t pid = 19860;
-//    std::string processName = "chrome.exe";
-//    std::string destIP = "192.168.1.50"; // Example destination IP
-//    uint16_t destPort = 443;             // Example destination port
-//
-//    std::cout << "[*] Sending alert to Python analysis system..." << std::endl;
-//    std::cout << "[*] Target: " << processName << " (PID: " << pid << ")" << std::endl;
-//
-//    // Call the static function from your PipeClient.h
-//    bool success = PipeClient::SendAlert(pid, processName, destIP, destPort);
-//
-//    if (success) {
-//        std::cout << "[+] Alert sent successfully!" << std::endl;
-//    }
-//    else {
-//        std::cerr << "[-] Failed to send alert. Is the Python driver_ctx listening?" << std::endl;
-//        return 1;
-//    }
-//
-//    return 0;
-//}
+// ???????????????????????????????????????????????????????????
+// PATH HELPER FUNCTIONS - Works for both you and your friend!
+// ???????????????????????????????????????????????????????????
 
+std::wstring GetExecutableDirectory() {
+    wchar_t path[MAX_PATH];
+    GetModuleFileNameW(NULL, path, MAX_PATH);
+    fs::path exePath(path);
+    return exePath.parent_path().wstring();
+}
 
+std::wstring GetProjectRoot() {
+    // From: C:\...\AegisCore\aegiscore (static scans)\x64\Release\MainProcces.exe
+    // Go up 3 levels to get to AegisCore root
+    fs::path exeDir = GetExecutableDirectory();
+    fs::path projectRoot = exeDir.parent_path()  // Remove "Release" or "Debug"
+        .parent_path()  // Remove "x64"
+        .parent_path(); // Remove "aegiscore (static scans)" or "MainProcces"
+    return projectRoot.wstring();
+}
+
+std::string GetDatabasePath() {
+    fs::path root = GetProjectRoot();
+    fs::path dbPath = root / "aegiscore (static scans)" / "dependencies" / "DATABASE";
+    return dbPath.string();
+}
+
+std::string GetPythonScriptPath(const std::string& scriptName) {
+    fs::path root = GetProjectRoot();
+    fs::path scriptPath = root / "deep_analysis" / scriptName;
+    return scriptPath.string();
+}
+
+std::string GetMainProccesPath() {
+    fs::path root = GetProjectRoot();
+
+    // Try Debug first, then Release
+    std::vector<fs::path> possiblePaths = {
+        root / "MainProcces" / "x64" / "Debug" / "MainProcces.exe",
+        root / "MainProcces" / "x64" / "Release" / "MainProcces.exe"
+    };
+
+    for (const auto& path : possiblePaths) {
+        if (fs::exists(path)) {
+            return path.string();
+        }
+    }
+
+    // Fallback - return Debug path (will error later if not found)
+    return possiblePaths[0].string();
+}
+
+// ???????????????????????????????????????????????????????????
 
 void killPipelineProcesses() {
     std::cout << "[*] Cleaning up background processes..." << std::endl;
 
     std::vector<std::string> targets = {
         "MainProcces.exe",
-        "deep_analysis/main.py",
-        "deep_analysis/tlscheck2.py",
-		"deep_analysis/isolationForest.py"
+        "main.py",
+        "tlscheck2.py",
+        "isolationForest.py"
     };
 
     for (const std::string& target : targets) {
@@ -71,7 +99,7 @@ void killPipelineProcesses() {
 
         std::system(command.c_str());
     }
-    return ;
+    return;
 }
 
 BOOL WINAPI ConsoleHandler(DWORD dwType) {
@@ -79,14 +107,12 @@ BOOL WINAPI ConsoleHandler(DWORD dwType) {
     case CTRL_C_EVENT:
     case CTRL_CLOSE_EVENT:
         std::cout << "\n[!] Cleanup triggered by Ctrl+C or Closing window..." << std::endl;
-
         killPipelineProcesses();
         return FALSE;
     }
 }
 
 bool executeTask(const AnalysisTask& task) {
-
     // Construct the full command string
     std::string fullCommand = task.command + " \"" + task.path.string() + "\"";
 
@@ -104,143 +130,70 @@ bool executeTask(const AnalysisTask& task) {
 
 int main()
 {
-
     if (!SetConsoleCtrlHandler(ConsoleHandler, TRUE)) {
         std::cerr << "[-] Could not set control handler" << std::endl;
         return 1;
-    }  
-   /* std::cout << "==================================" << std::endl;
-    std::cout << "  AegisCore upgraded Commander" << std::endl;
-    std::cout << "  WFP + Signature-Based Monitor" << std::endl;
-    std::cout << "==================================" << std::endl;*/
+    }
 
-    #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; // create converter
+#pragma warning(suppress : 4996)
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-    // init db
+    // ???????????????????????????????????????????????????????????
+    // INITIALIZE WITH RELATIVE PATHS
+    // ???????????????????????????????????????????????????????????
+
+    std::cout << "[*] Project Root: " << fs::path(GetProjectRoot()).string() << std::endl;
+
+    // Initialize database with relative path
     sqlite3* database = nullptr;
-    SQLDatabase db(database, "C:/Users/Cyber_User/Documents/AegisCore/aegiscore (static scans)/dependencies/DATABASE");
+    std::string dbPath = GetDatabasePath();
+    std::cout << "[*] Database Path: " << dbPath << std::endl;
+    SQLDatabase db(database, dbPath.c_str());
     db.open();
 
-    // OPEN EXTENSION CHECKCS:
+    // OPEN EXTENSION CHECKS:
     std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
     ExtensionScanner extScanner(&db);
     extScanner.ScanExtensions();
-
-    //std::vector<ChromeExtension> flagged = extScanner.GetFlaggedExtensions();
-    //if (!flagged.empty()) {
-    //    std::cout << "[!] FOUND " << flagged.size() << " MALICIOUS EXTENSIONS!" << std::endl;
-    //    for (const auto& ext : flagged) {
-    //        // Optional: Send to Python backend via PipeClient
-    //        PipeClient::SendAlert(0, "CHROME_EXT_" + ext.name, "0.0.0.0", 0);
-    //    }
-    //}
-    //else {
-    //    std::cout << "[+] Chrome extensions look clean." << std::endl;
-    //}
 
     //OPEN DOWNLOAD SCANNER THREAD
     std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;
     DownloadMonitor monitor(nullptr);
 
-    // 2. Start the monitors of common download destinations in a separate thread
+    // Start monitors of common download destinations
     std::wstring downloads = GetFolder(FOLDERID_Downloads);
     std::wstring desktop = GetFolder(FOLDERID_Desktop);
-    std::wstring temp = L"C:\\Windows\\Temp"; // Or get User Temp
+    std::wstring temp = L"C:\\Windows\\Temp";
 
-    // 1. Start threads (using joinable check)
     std::thread t1([&]() { if (!downloads.empty()) monitor.startMonitor(downloads); });
     std::thread t2([&]() { if (!desktop.empty()) monitor.startMonitor(desktop); });
     std::thread t3([&]() { monitor.startMonitor(temp); });
 
-
-    //auto logger = std::make_shared<PacketLogger>("wfp_monitor.log", true); // init packet logger
-    //WFPEngine wfpEngine(logger);
     CertificateScanner certScanner;
 
-    //*********************************************
-    //*****for now not working because the wfp ****
-    //*********************************************
-
-    //TrafficDiverter diverter(8080); // diverter
-
-    //if (!wfpEngine.Initialize()) {
-    //    logger->LogError("Failed to initialize WFP engine. Run as Administrator!");
-    //    return 1;
-    //}
-
-    //// 3. Load Static & Database Rules
-    //std::vector<FilterRule> rules = {FilterRule(69, FilterType::REDIRECT_PORT, "Block TFTP")}; // temporary test rule
-
-    //std::vector<FilterRule> dbRules = db.getC2Rules();
-    //rules.insert(rules.end(), dbRules.begin(), dbRules.end());
-
-    //for (const auto& rule : rules) {
-    //    wfpEngine.AddFilter(rule);
-    //}
-
-
-
-    //**************************************************************
-    //*****for now not use this because a lot of false positives****
-    //**************************************************************
-
-
-    //std::cout << "\n[*] Active Monitoring Started. Press Ctrl+C to stop." << std::endl;
-    //bool running = true;
-
-    //std::set<uint32_t> scannedPids; // track PIDs weve already checked
-
-    //while (running) {
-    //std::vector<Process> currentProcesses = NetworkUtils::GetRunningProcesses();
-
-    //for (auto& process : currentProcesses) {
-    //    if (process.pid < 100) continue;
-
-    //    if (scannedPids.find(process.pid) == scannedPids.end()) {
-    //        bool isTrusted = certScanner.checkSignature(process);
-
-    //        if (!isTrusted) {
-
-    //            #pragma warning(suppress : 4996) // supress  c++17 or later conversion warning for the following line
-    //            std::string narrowPath = converter.to_bytes(process.exePath);
-    //            std::cout << "[!] ALERT: Unsigned process: " << narrowPath << std::endl;
-    //            PipeClient::SendAlert(process.pid, narrowPath.c_str(), "0.0.0.0", 0);
-    //        }
-
-    //        scannedPids.insert(process.pid);
-    //    }
-    //}
-    //    // wait a few seconds before rescanning
-    //    std::this_thread::sleep_for(std::chrono::seconds(2));
-    //}
-
-    //std::cout << "[!] Shutting down..." << std::endl;
-    //wfpEngine.Shutdown();
-    // monitor.stopMonitor(); // Make sure this sets an atomic 'keepRunning = false'
-    const fs::path baseDir = "C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av";
+    // ???????????????????????????????????????????????????????????
+    // START PIPELINE WITH RELATIVE PATHS
+    // ???????????????????????????????????????????????????????????
 
     std::vector<std::string> pipeline = {
-         "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/isolationForest.py\"" ,
-        "\"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/MainProcces/x64/Debug/MainProcces.exe\"",
-        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/main.py\"",
-        "python \"C:/Users/Cyber_User/Desktop/magshimim/aegiscore-av/deep_analysis/tlscheck2.py\"",
+        "python \"" + GetPythonScriptPath("isolationForest.py") + "\"",
+        "\"" + GetMainProccesPath() + "\"",
+        "python \"" + GetPythonScriptPath("main.py") + "\"",
+        "python \"" + GetPythonScriptPath("tlscheck2.py") + "\""
     };
 
+    std::cout << "\n[*] Starting analysis pipeline..." << std::endl;
     for (const std::string& task : pipeline)
     {
+        std::cout << "[*] Launching: " << task << std::endl;
         std::string command = "start /b \"\" " + task;
         std::system(command.c_str());
     }
 
-    
-    
-
-    
-
-	//wait for sigScan threads to finish before exiting
+    // Wait for download monitor threads to finish
     if (t1.joinable()) t1.join();
     if (t2.joinable()) t2.join();
     if (t3.joinable()) t3.join();
+
     return 0;
 }
