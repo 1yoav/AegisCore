@@ -17,7 +17,40 @@
 
         body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; height: 100vh; overflow-y: auto; }
         
-        .header { height: 100px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: #050505; z-index: 50; }
+        /* Titlebar */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+            -webkit-app-region: drag; position: sticky; top: 0; z-index: 100;
+        }
+        .titlebar-title { 
+            font-size: 0.7rem; 
+            font-family: 'JetBrains Mono'; 
+            color: rgba(255, 255, 255, 0.4);
+            flex: 1;
+        }
+        .window-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+        .window-button {
+            width: 46px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .window-button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #ffffff;
+        }
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+        
+        .header { height: 100px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 40px; background: #050505; z-index: 50; }
         .back-btn-wrapper { position: absolute; top: 20px; left: 30px; width: 60px; height: 60px; cursor: pointer; }
         #liquid-back-btn { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .back-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
@@ -49,6 +82,27 @@
     </style>
 </head>
 <body onload="revealPage()">
+
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE™</span>
+        <div class="window-controls">
+            <button class="window-button minimize" onclick="minimizeApp()" title="Minimize">
+                <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+                    <rect width="12" height="2"/>
+                </svg>
+            </button>
+            <button class="window-button maximize" onclick="maximizeApp()" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="0.5" y="0.5" width="11" height="11"/>
+                </svg>
+            </button>
+            <button class="window-button close" onclick="closeApp()" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M1 1L11 11M11 1L1 11"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 
     <div id="transition-layer" class="active covering">
         <div class="sweep-block"></div>
@@ -104,6 +158,11 @@
         const layer = document.getElementById('transition-layer');
         function revealPage() { setTimeout(() => { layer.classList.add('exiting'); setTimeout(() => { layer.classList.remove('active', 'covering', 'exiting'); }, 600); }, 500); }
         function goBack() { layer.classList.add('active'); layer.offsetHeight; layer.classList.add('covering'); setTimeout(() => { window.location.href = 'index.html'; }, 700); }
+        
+        // Window controls
+        function minimizeApp() { window.aegis.minimize(); }
+        function maximizeApp() { window.aegis.maximize(); }
+        function closeApp()    { window.aegis.close(); }
     </script>
     <script type="module">
         import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";

@@ -16,7 +16,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif; /* Clean, not goofy */
+            font-family: 'Inter', system-ui, sans-serif;
             background: var(--bg-color);
             color: #fff;
             height: 100vh;
@@ -25,12 +25,45 @@
             flex-direction: column;
         }
 
+        /* Titlebar */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+            -webkit-app-region: drag;
+        }
+        .titlebar-title { 
+            font-size: 0.7rem; 
+            font-family: 'JetBrains Mono'; 
+            color: rgba(255, 255, 255, 0.4);
+            flex: 1;
+        }
+        .window-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+        .window-button {
+            width: 46px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .window-button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #ffffff;
+        }
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+
         /* Header Area */
         .header-container {
-            height: 100px; /* Space for the button */
+            height: 100px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center the title */
+            justify-content: center;
             border-bottom: 1px solid var(--border-color);
             position: relative;
         }
@@ -153,6 +186,27 @@
 </head>
 <body>
 
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE™</span>
+        <div class="window-controls">
+            <button class="window-button minimize" onclick="minimizeApp()" title="Minimize">
+                <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor">
+                    <rect width="12" height="2"/>
+                </svg>
+            </button>
+            <button class="window-button maximize" onclick="maximizeApp()" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1">
+                    <rect x="0.5" y="0.5" width="11" height="11"/>
+                </svg>
+            </button>
+            <button class="window-button close" onclick="closeApp()" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M1 1L11 11M11 1L1 11"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <div class="header-container">
         <div class="back-btn-wrapper" onclick="goBack()">
             <div id="liquid-back-btn">
@@ -171,9 +225,13 @@
         </div>
 
     <script>
+        // Window controls
+        function minimizeApp() { window.aegis.minimize(); }
+        function maximizeApp() { window.aegis.maximize(); }
+        function closeApp()    { window.aegis.close(); }
+        
         // 1. Navigation Logic
         function goBack() {
-            // Assumes main menu is named index.html
             window.location.href = 'index.html';
         }
 
