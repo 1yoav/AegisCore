@@ -31,7 +31,7 @@ void DownloadMonitor::startMonitor(std::wstring dir_path)
     std::vector<BYTE> buffer(BUFFER_SIZE);
     DWORD bytesReturned;
 
-    while (true)
+    while (keepMonitoring)
     {
         // 2. This function BLOCKS until an event happens (no CPU usage while waiting)
         BOOL success = ReadDirectoryChangesW(

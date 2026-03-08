@@ -1,4 +1,3 @@
-
 #include "UiCom.h"
 
 
@@ -81,7 +80,7 @@ int main()
     // ???????????????????????????????????????????????????????????
 
     std::cout << "[*] Project Root: " << fs::path(GetProjectRoot()).string() << std::endl;
-
+    
     // Initialize database with relative path
     sqlite3* database = nullptr;
     std::string dbPath = GetDatabasePath();
@@ -89,28 +88,16 @@ int main()
     SQLDatabase db(database, dbPath.c_str());
     db.open();
 
-    // OPEN EXTENSION CHECKS:
-    std::cout << "Scanning Chrome extensions for trojans..." << std::endl;
-    ExtensionScanner extScanner(&db);
-    extScanner.ScanExtensions();
+    UiCom uiCom(&db); //activate the communiciation with the ui
 
-    //OPEN DOWNLOAD SCANNER THREAD
-    std::cout << "[Init] Initializing DownloadMonitor..." << std::endl;
-    DownloadMonitor monitor(nullptr);
+	// signature scanner
+	uiCom.monitor.startMonitor(uiCom.monitor.downloads);
+	uiCom.monitor.startMonitor(uiCom.monitor.desktop);
+    uiCom.monitor.startMonitor(uiCom.monitor.temp);
 
-    // Start monitors of common download destinations
-    std::wstring downloads = GetFolder(FOLDERID_Downloads);
-    std::wstring desktop = GetFolder(FOLDERID_Desktop);
-    std::wstring temp = L"C:\\Windows\\Temp";
+	//extension scanner
+    //uiCom.extScanner.ScanExtensions();
 
-	UiCom uiCom; //activate the communiciation with the ui
-
-    //activate the signature scans
-    std::thread t1([&]() { if (!downloads.empty()) monitor.startMonitor(downloads); });
-    std::thread t2([&]() { if (!desktop.empty()) monitor.startMonitor(desktop); });
-    std::thread t3([&]() { monitor.startMonitor(temp); });
-
-    CertificateScanner certScanner;
 
     // ???????????????????????????????????????????????????????????
     // START PIPELINE WITH RELATIVE PATHS
@@ -132,9 +119,7 @@ int main()
     }
 
     // Wait for download monitor threads to finish
-    if (t1.joinable()) t1.join();
-    if (t2.joinable()) t2.join();
-    if (t3.joinable()) t3.join();
+
 
     return 0;
 }

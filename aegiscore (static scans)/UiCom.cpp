@@ -1,10 +1,5 @@
 #include "UiCom.h"
 
-UiCom::UiCom()
-{
-    //activate the communication too the ui
-	std::thread(&UiCom::start, this).detach();
-}
 
 void UiCom::processMessage(std::string rawMessage)
 {
@@ -32,6 +27,13 @@ void UiCom::activateScan(std::string& procces)
     {
           command = "start /b \"\" \"" + GetMainProccesPath() + "\"";
     }
+    else if (procces == "signatureScanner")
+    {
+        monitor.keepMonitoring = true; 
+		monitor.startMonitor(monitor.downloads);
+        monitor.startMonitor(monitor.desktop);
+		monitor.startMonitor(monitor.temp);
+    }
     else
     {
         command = "start /b \"\" python \"" + GetPythonScriptPath(procces);
@@ -39,13 +41,21 @@ void UiCom::activateScan(std::string& procces)
     std::system(command.c_str());
 }
 
+
+
 void UiCom::killScan(std::string& procces)
 {
-    std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
-        "Where-Object { $_.CommandLine -like '*" + procces + "*' } | "
-        "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
+    if(procces == "signatureScanner")
+		monitor.keepMonitoring = false; // Signal the DownloadMonitor to stop its monitoring loop
+    else
+    {
+        std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
+            "Where-Object { $_.CommandLine -like '*" + procces + "*' } | "
+            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
 
-    std::system(command.c_str());
+        std::system(command.c_str());
+    }
+   
 }
 
 void UiCom::start()
@@ -93,4 +103,57 @@ void UiCom::start()
         CloseHandle(hPipe);
 
     }
+}
+
+
+
+
+
+std::wstring GetExecutableDirectory() {
+    wchar_t path[MAX_PATH];
+    GetModuleFileNameW(NULL, path, MAX_PATH);
+    fs::path exePath(path);
+    return exePath.parent_path().wstring();
+}
+
+std::wstring GetProjectRoot() {
+    // From: C:\...\AegisCore\aegiscore (static scans)\x64\Release\MainProcces.exe
+    // Go up 3 levels to get to AegisCore root
+    fs::path exeDir = GetExecutableDirectory();
+    fs::path projectRoot = exeDir.parent_path()  // Remove "Release" or "Debug"
+        .parent_path()  // Remove "x64"
+        .parent_path(); // Remove "aegiscore (static scans)" or "MainProcces"
+    return projectRoot.wstring();
+}
+
+std::string GetDatabasePath() {
+    fs::path root = GetProjectRoot();
+    fs::path dbPath = root / "aegiscore (static scans)" / "dependencies" / "DATABASE";
+    return dbPath.string();
+}
+
+std::string GetPythonScriptPath(const std::string& scriptName) {
+    fs::path root = GetProjectRoot();
+    fs::path scriptPath = root / "deep_analysis" / scriptName;
+    return scriptPath.string();
+}
+
+
+std::string GetMainProccesPath() {
+    fs::path root = GetProjectRoot();
+
+    // Try Debug first, then Release
+    std::vector<fs::path> possiblePaths = {
+        root / "MainProcces" / "x64" / "Debug" / "MainProcces.exe",
+        root / "MainProcces" / "x64" / "Release" / "MainProcces.exe"
+    };
+
+    for (const auto& path : possiblePaths) {
+        if (fs::exists(path)) {
+            return path.string();
+        }
+    }
+
+    // Fallback - return Debug path (will error later if not found)
+    return possiblePaths[0].string();
 }
