@@ -12,8 +12,10 @@ void UiCom::processMessage(std::string rawMessage)
     switch (commandId) {
     case '1': // START_SCAN
         activateScan(data);
+        break;
     case '2': // STOP_SCAN
         killScan(data);
+        break;
     case '3': // UPDATE_SETTINGS
         break;
     default:
@@ -26,9 +28,12 @@ void UiCom::activateScan(std::string& procces)
     std::string command = "";
     std::cout << "Activating scan for: " << procces << std::endl;
 
-    if (procces == "MainProcces")
+    if (procces == "MainProcces.exe")
     {
-        command = "start /b \"\" \"" + GetMainProccesPath() + "\"";
+        command = "start /b \"\" \"" + GetMainProccesPath() + "\""; //kill the hooking
+        std::system(command.c_str());
+
+        command = "start /b \"\" python \"" + GetPythonScriptPath("isolationForest.py") + "\"";//active the isolationForest
         std::system(command.c_str());
     }
     else if (procces == "signatureScanner")
@@ -42,11 +47,15 @@ void UiCom::activateScan(std::string& procces)
 
         std::cout << "Signature monitors started in background threads." << std::endl;
     }
-    else
+    else if(procces == "tlsCheck2.py")
     {
         // Fix: Added the closing quote \" at the end
         command = "start /b \"\" python \"" + GetPythonScriptPath(procces) + "\"";
         std::system(command.c_str());
+    }
+    else
+    {
+        std::cout << "the call not recognised! \n";
     }
 }
 
@@ -62,9 +71,20 @@ void UiCom::killScan(std::string& procces)
     {
         std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
             "Where-Object { $_.CommandLine -like '*" + procces + "*' } | "
-            "Stop-Process -Force\"";
+            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
 
         std::system(command.c_str());
+
+        //if its call for killing hooking
+        if (procces == "MainProcces.exe")
+        {
+            //kill also the isolationForest
+            command = "powershell -Command \"Get-CimInstance Win32_Process | "
+                "Where-Object { $_.CommandLine -like '*isolationForest.py*' } | "
+                "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }\"";
+
+			std::system(command.c_str());
+        }
     }
    
 }
