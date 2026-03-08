@@ -34,8 +34,7 @@ void SigScanner::connectToDeepAnalyze(std::string msg)
 
     //wait until the connection is Stable
     HANDLE hPipe = NULL;
-    do
-    {
+    do  {
         hPipe = CreateFileA(
             pipeName.c_str(),
             GENERIC_WRITE,

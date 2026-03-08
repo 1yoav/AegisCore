@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const net = require('net');
+
 
 let mainWindow;
 
@@ -27,6 +29,27 @@ function createWindow() {
     // mainWindow.webContents.openDevTools();
 }
 
+function sendToCppPipe(message, pipeName = 'UiPipe') {
+    const pipePath = `\\\\.\\pipe\\${pipeName}`;
+
+    const client = net.connect(pipePath, () => {
+        console.log('Connected to C++ Pipe');
+        // Sending the message with a newline (standard for C++ getline)
+        client.write(message + '\n');
+    });
+
+    client.on('error', (err) => {
+        console.error('Pipe Connection Error:', err.message);
+    });
+
+    client.on('end', () => {
+        console.log('Disconnected from Pipe');
+    });
+
+    // Optional: Close connection after sending
+    client.end();
+}
+
 app.whenReady().then(() => {
     createWindow();
     watchThreatLog();
@@ -37,6 +60,8 @@ app.on('window-all-closed', () => {
 });
 
 
+
+
 // ─── Window Controls ──────────────────────────────────────────────────────────
 // These receive signals from your existing HTML titlebar buttons
 
@@ -45,6 +70,11 @@ ipcMain.on('window-maximize', () => {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
 ipcMain.on('window-close', () => mainWindow.close());
+
+// ─── C++ Communication ──────────────────────────────────────────────────────
+ipcMain.on('trigger-action', (event, data) => {
+    sendToCppPipe(data); 
+});
 
 
 // ─── File / Folder Picker (for Manual Scan page) ─────────────────────────────
