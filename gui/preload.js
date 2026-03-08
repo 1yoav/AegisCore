@@ -9,7 +9,9 @@ contextBridge.exposeInMainWorld('aegis', {
     // Call these from your existing titlebar buttons in HTML
     minimize: () => ipcRenderer.send('window-minimize'),
     maximize: () => ipcRenderer.send('window-maximize'),
-    close:    () => ipcRenderer.send('window-close'),
+    close: () => ipcRenderer.send('window-close'),
+    communication: (message) => ipcRenderer.send('communication', message),
+
 
     // ── File Picker ──────────────────────────────────────────────────────────
     // Opens native Windows file picker - use in manual_scan.html

@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const net = require('net');
+
 
 let mainWindow;
 
@@ -27,6 +29,30 @@ function createWindow() {
     // mainWindow.webContents.openDevTools();
 }
 
+function sendToCppPipe(message) {
+    const pipePath = `\\\\.\\pipe\\UiPipe`;
+    console.log("The msg is: " + message);
+
+    const client = net.connect(pipePath, () => {
+        console.log('Connected to C++ Pipe');
+
+        // Use a callback inside .write to ensure it finished
+        client.write(message, () => {
+            console.log('Message sent, closing connection...');
+            client.end(); // Move it HERE
+        });
+    });
+
+    client.on('error', (err) => {
+        console.error('Pipe Connection Error:', err.message);
+    });
+
+    client.on('end', () => {
+        console.log('Disconnected from Pipe');
+    });
+}
+
+
 app.whenReady().then(() => {
     createWindow();
     watchThreatLog();
@@ -35,6 +61,8 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
+
+
 
 
 // ─── Window Controls ──────────────────────────────────────────────────────────
@@ -46,6 +74,11 @@ ipcMain.on('window-maximize', () => {
 });
 ipcMain.on('window-close', () => mainWindow.close());
 
+// ─── C++ Communication ──────────────────────────────────────────────────────
+ipcMain.on('communication', (event, data) => {
+    console.log(`[IPC] Forwarding to C++: ${data}`);
+    sendToCppPipe(data);
+});
 
 // ─── File / Folder Picker (for Manual Scan page) ─────────────────────────────
 

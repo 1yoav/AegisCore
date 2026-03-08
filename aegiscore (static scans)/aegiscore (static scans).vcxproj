@@ -107,7 +107,7 @@
 ;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Cyber_User\Documents\Pcap++\pcap\include;C:\OpenSSL-Win64\include;C:\OpenSSL-Win64\lib\VC\x64\MD\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +153,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="TrafficDiverter.cpp" />
+    <ClCompile Include="UiCom.cpp" />
     <ClCompile Include="WFPEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,7 @@
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="TrafficDiverter.h" />
+    <ClInclude Include="UiCom.h" />
     <ClInclude Include="WFPEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
