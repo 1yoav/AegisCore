@@ -21,6 +21,8 @@
 #include "ExtensionScanner.h"
 
 namespace fs = std::filesystem;
+
+//---------functions for absulute paths----------------//
 static std::string GetMainProccesPath();
 std::wstring GetExecutableDirectory();
 std::string GetDatabasePath();
@@ -39,8 +41,8 @@ public:
 	~UiCom() = default;
 	void start();
 	void processMessage(std::string rawMessage);
-	void active(std::string&);
-	void kill(std::string&);
+	void activateScan(std::string&);
+	void killScan(std::string&);
 
 };
 

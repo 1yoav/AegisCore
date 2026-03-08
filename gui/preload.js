@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('aegis', {
     minimize: () => ipcRenderer.send('window-minimize'),
     maximize: () => ipcRenderer.send('window-maximize'),
     close: () => ipcRenderer.send('window-close'),
+    communication: (message) => ipcRenderer.send('communication', message),
 
 
     // ── File Picker ──────────────────────────────────────────────────────────

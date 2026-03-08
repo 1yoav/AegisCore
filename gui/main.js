@@ -72,7 +72,7 @@ ipcMain.on('window-maximize', () => {
 ipcMain.on('window-close', () => mainWindow.close());
 
 // ─── C++ Communication ──────────────────────────────────────────────────────
-ipcMain.on('trigger-action', (event, data) => {
+ipcMain.on('communication', (data) => {
     sendToCppPipe(data); 
 });
 

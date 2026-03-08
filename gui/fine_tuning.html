@@ -158,11 +158,29 @@
         const layer = document.getElementById('transition-layer');
         function revealPage() { setTimeout(() => { layer.classList.add('exiting'); setTimeout(() => { layer.classList.remove('active', 'covering', 'exiting'); }, 600); }, 500); }
         function goBack() { layer.classList.add('active'); layer.offsetHeight; layer.classList.add('covering'); setTimeout(() => { window.location.href = 'index.html'; }, 700); }
-        
+
+        // Wait for the DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Select all checkboxes inside labels with class 'switch'
+            const allToggles = document.querySelectorAll('.switch input[type="checkbox"]');
+
+            allToggles.forEach(toggle => {
+                toggle.addEventListener('change', (event) => {
+                    const isChecked = event.target.checked;
+                    const commandId = event.target.getAttribute('data-id');
+                    const status = isChecked ? "1" : "2";
+                        
+                    // Send to C++ Pipe via the Electron bridge
+                    window.aegis.communication(status + commandId);
+                });
+            });
+        });
         // Window controls
         function minimizeApp() { window.aegis.minimize(); }
         function maximizeApp() { window.aegis.maximize(); }
-        function closeApp()    { window.aegis.close(); }
+        function closeApp() { window.aegis.close(); }
+
     </script>
     <script type="module">
         import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";
