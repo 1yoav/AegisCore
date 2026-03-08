@@ -7,6 +7,7 @@ void UiCom::processMessage(std::string rawMessage)
 
     char commandId = rawMessage[0]; 
     std::string data = rawMessage.substr(1); 
+    std::cout << "UI COM got msg! : " << rawMessage << "\n";
 
     switch (commandId) {
     case '1': // START_SCAN
@@ -22,36 +23,46 @@ void UiCom::processMessage(std::string rawMessage)
 
 void UiCom::activateScan(std::string& procces)
 {
-	std::string command;
+    std::string command = "";
+    std::cout << "Activating scan for: " << procces << std::endl;
+
     if (procces == "MainProcces")
     {
-          command = "start /b \"\" \"" + GetMainProccesPath() + "\"";
+        command = "start /b \"\" \"" + GetMainProccesPath() + "\"";
+        std::system(command.c_str());
     }
     else if (procces == "signatureScanner")
     {
-        monitor.keepMonitoring = true; 
-		monitor.startMonitor(monitor.downloads);
-        monitor.startMonitor(monitor.desktop);
-		monitor.startMonitor(monitor.temp);
+        monitor.keepMonitoring = true;
+
+        // Use threads so the UI doesn't freeze!
+        std::thread([this]() { monitor.startMonitor(monitor.downloads); }).detach();
+        std::thread([this]() { monitor.startMonitor(monitor.desktop); }).detach();
+        std::thread([this]() { monitor.startMonitor(monitor.temp); }).detach();
+
+        std::cout << "Signature monitors started in background threads." << std::endl;
     }
     else
     {
-        command = "start /b \"\" python \"" + GetPythonScriptPath(procces);
+        // Fix: Added the closing quote \" at the end
+        command = "start /b \"\" python \"" + GetPythonScriptPath(procces) + "\"";
+        std::system(command.c_str());
     }
-    std::system(command.c_str());
 }
+
 
 
 
 void UiCom::killScan(std::string& procces)
 {
+	std::cout << "Killing scan for: " << procces << std::endl;
     if(procces == "signatureScanner")
 		monitor.keepMonitoring = false; // Signal the DownloadMonitor to stop its monitoring loop
     else
     {
         std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
             "Where-Object { $_.CommandLine -like '*" + procces + "*' } | "
-            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
+            "Stop-Process -Force\"";
 
         std::system(command.c_str());
     }
@@ -60,9 +71,9 @@ void UiCom::killScan(std::string& procces)
 
 void UiCom::start()
 {
-    LPCWSTR pipeName = L"\\\\.\\pipe\\AegisPipe";
+    LPCWSTR pipeName = L"\\\\.\\pipe\\UiPipe";
 
-    std::cout << "Waiting for Electron connection..." << std::endl;
+    std::cout << "[INIT] UI ENGINE Initilaize...\n" << std::endl;
 
 	// This loop will keep the pipe server running indefinitely, allowing multiple connections from Electron over time.
     while (true) {

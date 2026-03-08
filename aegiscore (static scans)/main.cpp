@@ -89,11 +89,15 @@ int main()
     db.open();
 
     UiCom uiCom(&db); //activate the communiciation with the ui
+	std::thread uiThread(&UiCom::start, &uiCom);
+    
 
-	// signature scanner
-	uiCom.monitor.startMonitor(uiCom.monitor.downloads);
-	uiCom.monitor.startMonitor(uiCom.monitor.desktop);
-    uiCom.monitor.startMonitor(uiCom.monitor.temp);
+	//// signature scanner
+ //   std::cout << "[INIT] initilize signature scanner...\n";
+ //   std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.downloads);}).detach() ;
+ //   std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
+ //   std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
+
 
 	//extension scanner
     //uiCom.extScanner.ScanExtensions();
@@ -103,22 +107,21 @@ int main()
     // START PIPELINE WITH RELATIVE PATHS
     // ???????????????????????????????????????????????????????????
 
-    std::vector<std::string> pipeline = {
+    /*std::vector<std::string> pipeline = {
         "python \"" + GetPythonScriptPath("isolationForest.py") + "\"",
         "\"" + GetMainProccesPath() + "\"",
         "python \"" + GetPythonScriptPath("main.py") + "\"",
         "python \"" + GetPythonScriptPath("tlscheck2.py") + "\""
-    };
+    };*/
 
-    std::cout << "\n[*] Starting analysis pipeline..." << std::endl;
-    for (const std::string& task : pipeline)
+    /*for (const std::string& task : pipeline)
     {
-        std::cout << "[*] Launching: " << task << std::endl;
         std::string command = "start /b \"\" " + task;
         std::system(command.c_str());
-    }
+    }*/
 
-    // Wait for download monitor threads to finish
+    // Wait for the ui thread to finish
+	uiThread.join();
 
 
     return 0;

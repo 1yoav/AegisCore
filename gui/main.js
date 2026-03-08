@@ -29,13 +29,18 @@ function createWindow() {
     // mainWindow.webContents.openDevTools();
 }
 
-function sendToCppPipe(message, pipeName = 'UiPipe') {
-    const pipePath = `\\\\.\\pipe\\${pipeName}`;
+function sendToCppPipe(message) {
+    const pipePath = `\\\\.\\pipe\\UiPipe`;
+    console.log("The msg is: " + message);
 
     const client = net.connect(pipePath, () => {
         console.log('Connected to C++ Pipe');
-        // Sending the message with a newline (standard for C++ getline)
-        client.write(message + '\n');
+
+        // Use a callback inside .write to ensure it finished
+        client.write(message, () => {
+            console.log('Message sent, closing connection...');
+            client.end(); // Move it HERE
+        });
     });
 
     client.on('error', (err) => {
@@ -45,10 +50,8 @@ function sendToCppPipe(message, pipeName = 'UiPipe') {
     client.on('end', () => {
         console.log('Disconnected from Pipe');
     });
-
-    // Optional: Close connection after sending
-    client.end();
 }
+
 
 app.whenReady().then(() => {
     createWindow();
@@ -72,10 +75,10 @@ ipcMain.on('window-maximize', () => {
 ipcMain.on('window-close', () => mainWindow.close());
 
 // ─── C++ Communication ──────────────────────────────────────────────────────
-ipcMain.on('communication', (data) => {
-    sendToCppPipe(data); 
+ipcMain.on('communication', (event, data) => {
+    console.log(`[IPC] Forwarding to C++: ${data}`);
+    sendToCppPipe(data);
 });
-
 
 // ─── File / Folder Picker (for Manual Scan page) ─────────────────────────────
 
