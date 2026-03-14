@@ -6,7 +6,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&display=swap');
         
-        /* Transition Styles (Reuse from index) */
+        /* Transition Styles */
         #transition-layer { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; visibility: hidden; }
         #transition-layer.active { visibility: visible; }
         .sweep-block { position: absolute; width: 200%; height: 200%; background: #0a0a0a; border: 2px solid #7c3aed; transform: translate(100%, -100%) rotate(-15deg); transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1); }
@@ -18,7 +18,7 @@
         .loader span { background-color: var(--color); animation: keyframes-blink 0.6s alternate infinite linear; }
         @keyframes keyframes-blink { 0% { opacity: 0.3; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }
 
-        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; overflow: hidden; height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; overflow: hidden; height: 100vh; margin: 0; }
         
         /* Titlebar */
         .titlebar {
@@ -59,13 +59,221 @@
         .back-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
 
         .scan-container { display: flex; gap: 2rem; padding: 4rem; justify-content: center; align-items: center; }
+        
         .scan-card {
             width: 400px; height: 300px; background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .scan-card:hover { background: rgba(124, 58, 237, 0.1); border-color: #7c3aed; }
+        .scan-card.drag-over {
+            background: rgba(124, 58, 237, 0.2);
+            border-color: #7c3aed;
+            border-width: 2px;
+            transform: scale(1.02);
+        }
+        .scan-card.scanning {
+            pointer-events: none;
+        }
+        
+        /* Card States */
+        .card-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .card-content.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .loading-container.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+        
+        /* Animated Loader */
+        .scan-loader {
+            width: 80px;
+            height: 50px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .loader-text {
+            position: absolute;
+            top: 0;
+            padding: 0;
+            margin: 0;
+            color: #C8B6FF;
+            animation: text_713 3.5s ease both infinite;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .load {
+            background-color: #9A79FF;
+            border-radius: 50px;
+            display: block;
+            height: 16px;
+            width: 16px;
+            bottom: 0;
+            position: absolute;
+            transform: translateX(64px);
+            animation: loading_713 3.5s ease both infinite;
+        }
+        .load::before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: #D1C2FF;
+            border-radius: inherit;
+            animation: loading2_713 3.5s ease both infinite;
+        }
+        @keyframes text_713 {
+            0% { letter-spacing: 1px; transform: translateX(0px); }
+            40% { letter-spacing: 2px; transform: translateX(26px); }
+            80% { letter-spacing: 1px; transform: translateX(32px); }
+            90% { letter-spacing: 2px; transform: translateX(0px); }
+            100% { letter-spacing: 1px; transform: translateX(0px); }
+        }
+        @keyframes loading_713 {
+            0% { width: 16px; transform: translateX(0px); }
+            40% { width: 100%; transform: translateX(0px); }
+            80% { width: 16px; transform: translateX(64px); }
+            90% { width: 100%; transform: translateX(0px); }
+            100% { width: 16px; transform: translateX(0px); }
+        }
+        @keyframes loading2_713 {
+            0% { transform: translateX(0px); width: 16px; }
+            40% { transform: translateX(0%); width: 80%; }
+            80% { width: 100%; transform: translateX(0px); }
+            90% { width: 80%; transform: translateX(15px); }
+            100% { transform: translateX(0px); width: 16px; }
+        }
+        
+        .loading-status {
+            font-family: 'JetBrains Mono';
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+        
+        /* Results State */
+        .results-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .results-container.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+        
+        .close-results {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .close-results:hover {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .result-verdict {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .result-verdict.clean { color: #2ecc71; }
+        .result-verdict.suspicious { color: #f39c12; }
+        .result-verdict.malicious { color: #e74c3c; }
+        
+        .result-score {
+            font-family: 'JetBrains Mono';
+            font-size: 2rem;
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-filename {
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 1rem;
+            word-break: break-all;
+        }
+        
+        .result-details {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+        }
+        
+        .result-details::-webkit-scrollbar {
+            width: 4px;
+        }
+        .result-details::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .result-details::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 2px;
+        }
+        
+        .finding-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid #7c3aed;
+            border-radius: 4px;
+        }
+        .finding-item:last-child {
+            margin-bottom: 0;
+        }
+        
         .scan-card h2 { font-size: 1.5rem; margin-bottom: 10px; }
         .scan-card p { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #7c3aed; }
 
@@ -113,11 +321,54 @@
     </div>
 
     <div class="scan-container">
-        <div class="scan-card">
-            <h2>File Scan</h2>
-            <p>[DRAG_AND_DROP_OR_CLICK]</p>
+        <div class="scan-card" id="fileScanCard" onclick="selectFile()">
+            <!-- Idle State -->
+            <div class="card-content" id="idleContent">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                    <polyline points="13 2 13 9 20 9"></polyline>
+                </svg>
+                <h2>File Scan</h2>
+                <p id="fileScanStatus">[DRAG_AND_DROP_OR_CLICK]</p>
+            </div>
+            
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContent">
+                <div class="scan-loader">
+                    <span class="loader-text">loading</span>
+                    <span class="load"></span>
+                </div>
+                <div class="loading-status" id="loadingStatus">
+                    Analyzing file...
+                </div>
+            </div>
+            
+            <!-- Results State -->
+            <div class="results-container" id="resultsContent">
+                <button class="close-results" onclick="resetFileScan(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+                
+                <div class="result-header">
+                    <div class="result-verdict" id="resultVerdict">CLEAN</div>
+                    <div class="result-score" id="resultScore">0/100</div>
+                    <div class="result-filename" id="resultFilename">filename.exe</div>
+                </div>
+                
+                <div class="result-details" id="resultDetails">
+                    <div class="finding-item">No threats detected</div>
+                </div>
+            </div>
         </div>
-        <div class="scan-card">
+        
+        <div class="scan-card" onclick="startSystemScan()">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
             <h2>System Scan</h2>
             <p>[FULL_SECTOR_ANALYSIS]</p>
         </div>
@@ -133,9 +384,188 @@
         function goBack() { layer.classList.add('active'); layer.offsetHeight; layer.classList.add('covering'); setTimeout(() => { window.location.href = 'index.html'; }, 700); }
         
         // Window controls
-        function minimizeApp() { window.aegis.minimize(); }
-        function maximizeApp() { window.aegis.maximize(); }
-        function closeApp()    { window.aegis.close(); }
+        function minimizeApp() { window.aegis?.minimize(); }
+        function maximizeApp() { window.aegis?.maximize(); }
+        function closeApp()    { window.aegis?.close(); }
+
+        // ═══════════════════════════════════════════════════════════
+        // FILE SCANNING FUNCTIONALITY
+        // ═══════════════════════════════════════════════════════════
+
+        const fileScanCard = document.getElementById('fileScanCard');
+        const idleContent = document.getElementById('idleContent');
+        const loadingContent = document.getElementById('loadingContent');
+        const resultsContent = document.getElementById('resultsContent');
+        const loadingStatus = document.getElementById('loadingStatus');
+
+        let currentFile = null;
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Drag & drop visual feedback
+        fileScanCard.addEventListener('dragenter', () => {
+            if (!fileScanCard.classList.contains('scanning')) {
+                fileScanCard.classList.add('drag-over');
+            }
+        });
+
+        fileScanCard.addEventListener('dragleave', (e) => {
+            if (e.target === fileScanCard) {
+                fileScanCard.classList.remove('drag-over');
+            }
+        });
+
+        fileScanCard.addEventListener('dragover', () => {
+            if (!fileScanCard.classList.contains('scanning')) {
+                fileScanCard.classList.add('drag-over');
+            }
+        });
+
+        // Handle dropped files
+        fileScanCard.addEventListener('drop', (e) => {
+            fileScanCard.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            
+            if (files.length > 0) {
+                handleFileSelection(files[0]);
+            }
+        });
+
+        // Handle click to select file
+        async function selectFile() {
+            if (fileScanCard.classList.contains('scanning')) return;
+            
+            if (!window.aegis?.pickFile) {
+                alert('File picker not available. Make sure you\'re running in Electron.');
+                return;
+            }
+
+            const filePath = await window.aegis.pickFile();
+            if (filePath) {
+                handleFileSelection({ path: filePath, name: filePath.split('\\').pop() });
+            }
+        }
+
+        // Process the selected file
+        async function handleFileSelection(file) {
+            const filePath = file.path || file;
+            const fileName = file.name || filePath.split('\\').pop();
+            
+            currentFile = { path: filePath, name: fileName };
+
+            console.log('[*] File selected:', filePath);
+            
+            // Transition to loading state
+            showLoadingState();
+
+            try {
+                // Call Flask API to scan file
+                const result = await scanFileViaFlask(filePath, fileName);
+                
+                // Show results
+                showResultsState(result);
+
+            } catch (error) {
+                console.error('[!] Scan error:', error);
+                showResultsState({
+                    score: 0,
+                    verdict: 'ERROR',
+                    fileName: fileName,
+                    findings: ['Scan failed: ' + error.message]
+                });
+            }
+        }
+
+        // State transition functions
+        function showLoadingState() {
+            fileScanCard.classList.add('scanning');
+            fileScanCard.onclick = null;
+            
+            idleContent.classList.add('hidden');
+            setTimeout(() => {
+                loadingContent.classList.add('active');
+            }, 300);
+            
+            loadingStatus.textContent = 'Analyzing file...';
+        }
+
+        function showResultsState(result) {
+            // Update result data
+            document.getElementById('resultScore').textContent = result.score + '/100';
+            document.getElementById('resultVerdict').textContent = result.verdict;
+            document.getElementById('resultFilename').textContent = result.fileName;
+            
+            // Set verdict color
+            const verdictEl = document.getElementById('resultVerdict');
+            verdictEl.className = 'result-verdict ' + 
+                (result.score < 30 ? 'clean' : 
+                 result.score < 85 ? 'suspicious' : 'malicious');
+            
+            // Display findings
+            const detailsEl = document.getElementById('resultDetails');
+            if (result.findings && result.findings.length > 0) {
+                detailsEl.innerHTML = result.findings
+                    .map(f => `<div class="finding-item">${f}</div>`)
+                    .join('');
+            } else {
+                detailsEl.innerHTML = '<div class="finding-item">No threats detected</div>';
+            }
+            
+            // Transition to results
+            loadingContent.classList.remove('active');
+            setTimeout(() => {
+                resultsContent.classList.add('active');
+            }, 300);
+        }
+
+        function resetFileScan(event) {
+            event.stopPropagation();
+            
+            // Transition back to idle
+            resultsContent.classList.remove('active');
+            setTimeout(() => {
+                idleContent.classList.remove('hidden');
+                fileScanCard.classList.remove('scanning');
+                fileScanCard.onclick = selectFile;
+            }, 300);
+            
+            currentFile = null;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // FLASK API INTEGRATION
+        // ═══════════════════════════════════════════════════════════
+
+        async function scanFileViaFlask(filePath, fileName) {
+            try {
+                // Call C++ via Electron IPC (which uses pipes internally)
+                const data = await window.aegis.scanFile(filePath);
+                
+                return {
+                    score: data.score || 0,
+                    verdict: data.verdict || 'UNKNOWN',
+                    fileName: fileName,
+                    findings: data.findings || []
+                };
+
+            } catch (error) {
+                console.error('[!] Scan error:', error);
+                throw new Error('Scan failed: ' + error.message);
+            }
+        }
+
+        // System scan handler
+        async function startSystemScan() {
+            alert('System scan will be implemented - this will scan all critical directories.');
+        }
     </script>
     <script type="module">
         import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";

@@ -99,6 +99,29 @@ ipcMain.handle('pick-folder', async () => {
     return result.canceled ? null : result.filePaths[0];
 });
 
+ipcMain.handle('scan-file', async (event, filePath) => {
+    console.log('[*] Scanning file:', filePath);
+    
+    // Send to C++ via pipe with command ID '3'
+    sendToCppPipe('3' + filePath);
+    
+    // Wait for C++ to finish (poll for result file)
+    const resultPath = path.join(process.env.TEMP, 'aegis_scan_result.json');
+    
+    // Poll for result (max 10 seconds)
+    for (let i = 0; i < 20; i++) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (fs.existsSync(resultPath)) {
+            const result = JSON.parse(fs.readFileSync(resultPath, 'utf8'));
+            fs.unlinkSync(resultPath); // Clean up
+            return result;
+        }
+    }
+    
+    throw new Error('Scan timeout');
+});
+
 
 // ─── Threat History ───────────────────────────────────────────────────────────
 // Reads from the same JSON file your C++ service writes to

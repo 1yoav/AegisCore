@@ -16,12 +16,40 @@ void UiCom::processMessage(std::string rawMessage)
     case '2': // STOP_SCAN
         killScan(data);
         break;
-    case '3': // UPDATE_SETTINGS
+    case '3':
+        scanFile(data); // SCAN FILE (path)
+        break;
+    case '4': // UPDATE_SETTINGS
         break;
     default:
         std::cout << "Unknown command ID: " << commandId << std::endl;
     }
 }
+
+void UiCom::scanFile(std::string& filePath) {
+    std::cout << "[*] Scanning file: " << filePath << std::endl;
+
+    // TODO: Call your actual scanner here
+    // For now, dummy 5-second delay + fake result
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    // Create result JSON and write to a response file
+    std::string resultJson = R"({
+        "score": 0,
+        "verdict": "CLEAN",
+        "findings": [DUMMY RETURN]
+    })";
+
+    // Write result to temp file for Electron to read
+    std::string resultPath = std::string(getenv("TEMP")) + "\\aegis_scan_result.json";
+    std::ofstream outFile(resultPath);
+    outFile << resultJson;
+    outFile.close();
+
+    std::cout << "[+] Scan complete: CLEAN" << std::endl;
+}
+
+
 
 void UiCom::activateScan(std::string& procces)
 {

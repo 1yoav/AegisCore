@@ -24,4 +24,6 @@ contextBridge.exposeInMainWorld('aegis', {
 
     // Listen for real-time threat updates pushed from the C++ service
     onThreatUpdate: (callback) => ipcRenderer.on('threat-update', (_, data) => callback(data)),
+    
+    scanFile: (filePath) => ipcRenderer.invoke('scan-file', filePath),
 });

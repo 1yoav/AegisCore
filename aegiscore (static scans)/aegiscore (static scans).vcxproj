@@ -152,7 +152,6 @@
     <ClCompile Include="SQLDatabase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
-    <ClCompile Include="TrafficDiverter.cpp" />
     <ClCompile Include="UiCom.cpp" />
     <ClCompile Include="WFPEngine.cpp" />
   </ItemGroup>
@@ -168,6 +167,7 @@
     <ClInclude Include="SigScanner.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="UiCom.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
