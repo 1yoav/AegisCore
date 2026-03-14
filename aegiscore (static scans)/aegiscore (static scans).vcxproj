@@ -168,9 +168,6 @@
     <ClInclude Include="SigScanner.h" />
     <ClInclude Include="SQLDatabase.h" />
     <ClInclude Include="sqlite3.h" />
-    <ClInclude Include="TrafficDiverter.h" />
-    <ClInclude Include="UiCom.h" />
-    <ClInclude Include="WFPEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

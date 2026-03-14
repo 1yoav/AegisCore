@@ -51,9 +51,6 @@
     <ClCompile Include="PipeClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TrafficDiverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SigScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PipeClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TrafficDiverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SigScanner.h">

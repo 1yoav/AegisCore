@@ -6,7 +6,7 @@ import joblib
 from sklearn.ensemble import IsolationForest
 import warnings
 import threading
-import  time
+import time
 import pandas as pd
 
 warnings.filterwarnings(

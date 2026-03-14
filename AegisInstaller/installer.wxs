@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+	<Product Id="*"
+			 Name="AegisCore Antivirus"
+			 Language="1033"
+			 Version="1.0.0.0"
+			 Manufacturer="AegisCore Ltd."
+			 UpgradeCode="44d47d66-2e34-4e6b-9ed6-e8bb092a902f">
+
+		<Package InstallerVersion="200"
+				 Compressed="yes"
+				 InstallScope="perMachine"
+				 InstallPrivileges="elevated"
+				 Description="AegisCore Antivirus Installation"
+				 Comments="Advanced threat protection for Windows" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of AegisCore is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- Custom Icon for Add/Remove Programs -->
+		<Icon Id="ProductIcon" SourceFile="C:\Users\Cyber_User\Documents\AegisCore\AegisService\AegisIcon\bin\Debug\Dependencies\AegisCore_Icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+
+		<!-- Desktop Shortcut Property (user can toggle in wizard) -->
+		<Property Id="DESKTOP_SHORTCUT" Value="1" />
+
+		<!-- ═══════════════════════════════════════════════════════ -->
+		<!-- SETUP WIZARD UI                                          -->
+		<!-- ═══════════════════════════════════════════════════════ -->
+
+		<WixVariable Id="WixUILicenseRtf" Value="C:\Users\Cyber_User\Documents\AegisCore\AegisInstaller\bin\Debug\License.rtf" />
+		<WixVariable Id="WixUIBannerBmp" Value="C:\Users\Cyber_User\Documents\AegisCore\AegisInstaller\bin\Debug\banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="C:\Users\Cyber_User\Documents\AegisCore\AegisInstaller\bin\Debug\dialog.bmp" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+
+		<!-- Custom UI Sequence -->
+		<UI>
+			<UIRef Id="WixUI_InstallDir" />
+			
+			<Dialog Id="AegisOptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
+				<Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes">
+					<Text>{\WixUI_Font_Title}Installation Options</Text>
+				</Control>
+				<Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="25" Transparent="yes" NoPrefix="yes">
+					<Text>Choose how AegisCore should be configured on your system.</Text>
+				</Control>
+				<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+				<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+				<Control Id="DesktopShortcutCheckbox" Type="CheckBox" X="20" Y="80" Width="330" Height="18" Property="DESKTOP_SHORTCUT" CheckBoxValue="1">
+					<Text>Create a desktop shortcut for AegisCore GUI</Text>
+				</Control>
+				<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+				<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+					<Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+				</Control>
+				<Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+					<Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+				</Control>
+				<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+					<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+				</Control>
+			</Dialog>
+
+			<!-- Update both Publish wires to use the new name -->
+			<Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="AegisOptionsDlg" Order="4">1</Publish>
+			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="AegisOptionsDlg" Order="1">1</Publish>
+		</UI>
+
+		<!-- Features -->
+		<Feature Id="Complete" Level="1" Title="AegisCore Antivirus" Display="expand" ConfigurableDirectory="INSTALLFOLDER">
+			<Feature Id="MainProgram" Level="1" Title="Core Protection" Description="Main antivirus engine and real-time protection">
+				<ComponentRef Id="MainEngine" />
+				<ComponentRef Id="ServiceComponent" />
+			</Feature>
+
+			<Feature Id="GUI" Level="1" Title="User Interface" Description="Graphical interface and tray icon">
+				<ComponentRef Id="TrayIcon" />
+				<ComponentRef Id="ElectronGUI" />
+				<ComponentRef Id="GUIIcon" />
+				<ComponentRef Id="StartupTrayIcon" />
+				<ComponentRef Id="DesktopShortcutComponent" />
+			</Feature>
+
+			<Feature Id="DeepScan" Level="1" Title="Deep Analysis" Description="Advanced threat detection engine">
+				<ComponentRef Id="DeepAnalysisEngine" />
+			</Feature>
+
+			<Feature Id="DebugFiles" Level="1" Title="Database &amp; Logs" Description="Threat database and log files">
+				<ComponentRef Id="DatabaseFile" />
+				<ComponentRef Id="LogFile" />
+			</Feature>
+		</Feature>
+
+	</Product>
+
+	<!-- ═══════════════════════════════════════════════════════ -->
+	<!-- DIRECTORY STRUCTURE                                      -->
+	<!-- ═══════════════════════════════════════════════════════ -->
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+
+			<!-- Program Files -->
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="AegisCore">
+
+					<!-- GUI Folder -->
+					<Directory Id="GUIFolder" Name="GUI" />
+
+					<!-- Deep Scan Folder -->
+					<Directory Id="DeepScanFolder" Name="deepscan" />
+
+					<!-- Debug Folder -->
+					<Directory Id="DebugFolder" Name="debug" />
+
+				</Directory>
+			</Directory>
+
+			<!-- Startup Folder -->
+			<Directory Id="StartupFolder" />
+
+			<!-- Desktop -->
+			<Directory Id="DesktopFolder" />
+
+		</Directory>
+	</Fragment>
+
+	<!-- ═══════════════════════════════════════════════════════ -->
+	<!-- COMPONENTS                                               -->
+	<!-- ═══════════════════════════════════════════════════════ -->
+
+	<Fragment>
+
+		<!-- Main Engine (root of AegisCore folder) -->
+		<Component Id="MainEngine" Directory="INSTALLFOLDER" Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
+			<File Id="AegisCoreExe"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\aegiscore (static scans)\x64\Debug\aegiscore (static scans).exe"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- Service -->
+		<Component Id="ServiceComponent" Directory="INSTALLFOLDER" Guid="abf5921b-e496-49bc-b451-cd8f4503b17e">
+			<File Id="ServiceFile"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\AegisService\x64\Release\AegisService.exe"
+				  KeyPath="yes" />
+
+			<ServiceInstall Id="AegisServiceInstaller"
+							Type="ownProcess"
+							Name="AegisService"
+							DisplayName="AegisCore Protection Service"
+							Description="Provides real-time malware protection and threat monitoring"
+							Start="auto"
+							Account="LocalSystem"
+							ErrorControl="normal"
+							Interactive="no" />
+
+			<ServiceControl Id="AegisServiceControl"
+							Start="install"
+							Stop="both"
+							Remove="uninstall"
+							Name="AegisService"
+							Wait="yes" />
+		</Component>
+
+		<!-- GUI/aegisicon.exe (Tray Icon) -->
+		<Component Id="TrayIcon" Directory="GUIFolder" Guid="15222f4c-815f-40c4-8b3d-a03809251a5f">
+			<File Id="AegisTrayExe"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\AegisService\AegisIcon\bin\Debug\AegisIcon.exe"
+				  Name="aegisicon.exe"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- GUI/aegiscore.exe (Electron GUI) -->
+		<Component Id="ElectronGUI" Directory="GUIFolder" Guid="7a8d9f23-1c45-4e67-89ab-234567890abc">
+			<File Id="ElectronGUIExe"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\AegisCore.exe"
+				  Name="aegiscore.exe"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- GUI/icon.ico -->
+		<Component Id="GUIIcon" Directory="GUIFolder" Guid="7f5b3815-8431-4224-b877-602c1ef39fd7">
+			<File Id="TrayIconIco"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\AegisService\AegisIcon\bin\Debug\Dependencies\AegisCore_Icon.ico"
+				  Name="icon.ico"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- deepscan/deep_analysis.exe -->
+		<Component Id="DeepAnalysisEngine" Directory="DeepScanFolder" Guid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b">
+			<File Id="DeepAnalysisExe"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\deep_analysis\dist\main.exe"
+				  Name="deep_analysis.exe"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- debug/aegis.db -->
+		<Component Id="DatabaseFile" Directory="DebugFolder" Guid="901a88f8-4eec-4733-b8a1-88f6c8433584">
+			<File Id="AegisDB"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\aegiscore (static scans)\dependencies\DATABASE"
+				  Name="aegis.db"
+				  KeyPath="yes" />
+		</Component>
+
+		<!-- debug/logs.txt (empty file created on install) -->
+		<Component Id="LogFile" Directory="DebugFolder" Guid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e">
+			<CreateFolder />
+			<RemoveFile Id="RemoveLogs" Name="logs.txt" On="uninstall" />
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="logs_created" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+
+		<!-- Startup Shortcut for Tray Icon -->
+		<Component Id="StartupTrayIcon" Directory="StartupFolder" Guid="7a3eb415-96f2-4793-9cf2-ceac098344d2">
+			<Shortcut Id="StartupShortcut"
+					  Name="AegisCore"
+					  Description="AegisCore Antivirus Tray Icon"
+					  Target="[GUIFolder]aegisicon.exe"
+					  WorkingDirectory="GUIFolder" /> 
+			<RemoveFile Id="RemoveStartupShortcut" Name="AegisCore.lnk" On="uninstall"/>
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="tray_installed" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+
+		<!-- Desktop Shortcut (optional, based on checkbox) -->
+		<Component Id="DesktopShortcutComponent" Directory="DesktopFolder" Guid="e14680bf-ae0e-4a08-9d8a-b03b456fc8ef">
+			<Condition>DESKTOP_SHORTCUT = 1</Condition>
+			<Shortcut Id="DesktopShortcut"
+					  Name="AegisCore"
+					  Description="AegisCore Antivirus"
+					  Target="[GUIFolder]aegiscore.exe"
+					  WorkingDirectory="GUIFolder"
+					  Icon="ProductIcon" />
+			<RemoveFile Id="RemoveDesktopShortcut" Name="AegisCore.lnk" On="uninstall"/>
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="desktop_shortcut" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+
+	</Fragment>
+
+</Wix>
