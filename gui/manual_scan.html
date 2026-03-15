@@ -81,6 +81,10 @@
         
         /* Card States */
         .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .card-content.hidden {
@@ -335,7 +339,7 @@
             <!-- Loading State -->
             <div class="loading-container" id="loadingContent">
                 <div class="scan-loader">
-                    <span class="loader-text">loading</span>
+                    <span class="loader-text">scanning...</span>
                     <span class="load"></span>
                 </div>
                 <div class="loading-status" id="loadingStatus">
