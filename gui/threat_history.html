@@ -246,15 +246,21 @@
         }
 
         // 3. Mock Data & Render
-        const data = [
-            { id: 't1', name: "Trojan.Win32.Agent", date: "2026-02-12 14:22", level: "CRITICAL", path: "C:\\Windows\\Temp\\svc_host.exe", status: "critical" },
-            { id: 't2', name: "Adware.BrowserMod", date: "2026-02-10 09:15", level: "WARNING", path: "C:\\Users\\Admin\\Downloads\\toolbar_installer.msi", status: "warning" },
-            { id: 't3', name: "Miner.XMRig.Variant", date: "2026-02-08 23:40", level: "CRITICAL", path: "C:\\ProgramData\\Update\\updater.exe", status: "critical" }
-        ];
+        // 3. Real Data Fetching & Render
+        async function loadThreats()
+        {
+            const list = document.getElementById('listTarget');
 
-        const list = document.getElementById('listTarget');
-        
-        list.innerHTML = data.map(item => `
+            try {
+                // Fetch from the Electron Bridge
+                const data = await window.aegis.getThreats();
+
+                if (data.length === 0) {
+                    list.innerHTML = `<div style="text-align:center; color:#666; padding:2rem;">No threats detected in database.</div>`;
+                    return;
+                }
+
+                list.innerHTML = data.map(item => `
             <div class="threat-row">
                 <div class="threat-summary" onclick="toggleDetails('details-${item.id}')">
                     <div class="status-indicator ${item.status}"></div>
@@ -270,13 +276,21 @@
                             <div>${item.path}</div>
                         </div>
                         <div class="detail-item">
-                            <label>ACTION TAKEN</label>
-                            <div>Quarantined (AES-256 Encrypted)</div>
+                            <label>FINDINGS</label>
+                            <div>${item.findings}</div>
                         </div>
                     </div>
                 </div>
             </div>
         `).join('');
+            } catch (err) {
+                console.log("Failed to load DB:\n\n\n\n\n\n", err);
+                list.innerHTML = `<div style="color:red; padding:2rem;">Error connecting to database.</div>`;
+            }
+        }
+
+        // Run the function when the page loads
+        window.addEventListener('DOMContentLoaded', loadThreats);
 
     </script>
 

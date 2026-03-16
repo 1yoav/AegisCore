@@ -38,7 +38,7 @@ class StaticAnalyzer:
         metadata = {}
 
         if not os.path.exists(file_path):
-            return 0.0, ["[ERROR] File not found"], {}
+            return 0.0, ["[ERROR] File not found\n"], {}
 
         try:
             # PE Analysis
@@ -47,8 +47,6 @@ class StaticAnalyzer:
                 score += pe_score
                 findings.extend(pe_findings)
                 metadata['pe'] = pe_meta
-            else:
-                findings.append("[PE ERROR] pefile library missing - skipping header analysis")
 
             # Entropy
             ent_score, ent_findings, ent_meta = self._analyze_entropy(file_path)
@@ -128,34 +126,32 @@ class StaticAnalyzer:
         findings = []
         metadata = {}
 
-        try:
-            with open(path, 'rb') as f:
-                data = f.read()
+        with open(path, 'rb') as f:
+            data = f.read()
 
-            ent = self._calc_entropy(data)
-            metadata['whole_file'] = round(ent, 2)
+        ent = self._calc_entropy(data)
+        metadata['whole_file'] = round(ent, 2)
 
-            if ent > 7.2: # Adjusted threshold for "High"
-                score += 20
-                findings.append(f"[ENTROPY] High ({ent:.2f}) - compressed/packed")
-            else:
-                findings.append(f"[ENTROPY] Normal ({ent:.2f})")
+        if ent > 7.2: # Adjusted threshold for "High"
+            score += 20
+            findings.append(f"[ENTROPY] High ({ent:.2f}) - compressed/packed\n")
+        else:
+            findings.append(f"[ENTROPY] Normal ({ent:.2f})\n")
 
-            # Per-section entropy
-            if HAS_PEFILE:
-                try:
-                    pe = pefile.PE(path)
-                    for sec in pe.sections:
-                        sent = self._calc_entropy(sec.get_data())
-                        if sent > 7.2:
-                            score += 5
-                            sname = sec.Name.decode('utf-8', errors='ignore').strip('\x00')
-                            findings.append(f"[ENTROPY] Section '{sname}' is packed")
-                    pe.close()
-                except:
-                    pass
-        except Exception as e:
-            findings.append(f"[ENTROPY ERROR] {str(e)}")
+        # Per-section entropy
+        if HAS_PEFILE:
+            try:
+                pe = pefile.PE(path)
+                for sec in pe.sections:
+                    sent = self._calc_entropy(sec.get_data())
+                    if sent > 7.2:
+                        score += 5
+                        sname = sec.Name.decode('utf-8', errors='ignore').strip('\x00')
+                        findings.append(f"[ENTROPY] Section '{sname}' is packed\n")
+                pe.close()
+            except:
+                pass
+
 
         return min(score, 30), findings, metadata
 

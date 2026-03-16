@@ -1,12 +1,36 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const sqlite3 = require('sqlite3').verbose();
 const net = require('net');
-
+const db = new sqlite3.Database(path.join(__dirname, '../aegiscore (static scans)/c2_threats.db'));
 
 let mainWindow;
 
 // ─── Window Creation ──────────────────────────────────────────────────────────
+
+
+ipcMain.handle('get-threats', async () =>
+{
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM scan_results', [], (err, rows) => {
+            if (err) reject(err);
+
+            // Map the DB fields to match your HTML's expected format
+            const formattedData = rows.map((row, index) => ({
+                id: `t${index}`,
+                date: row.date,
+                level: row.confidence > 70 ? "CRITICAL" : "WARNING",
+                path: row.pathname,
+                confidence: row.confidence,
+                findings: row.findings.replace(/\n/g, "<br>"), 
+                status: row.confidence > 70 ? "critical" : "warning"
+            }));
+
+            resolve(formattedData);
+        });
+    });
+});
 
 function createWindow() {
     mainWindow = new BrowserWindow({

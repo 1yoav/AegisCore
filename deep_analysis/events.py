@@ -2,8 +2,9 @@
 Events and Investigation Context
 Tracks the lifecycle of a suspicious process investigation
 """
-import time
 from typing import List
+from datetime import datetime
+import time
 
 class Event:
     """Represents a single event in an investigation"""
@@ -39,8 +40,7 @@ class InvestigationContext:
         self.dest_port = 0
         
         # Timestamps
-        self.first_seen = time.time()
-        self.last_activity = time.time()
+        self.first_seen = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.tlsCheck = False
         self.signatureScan = False
         self.isolationForest = False

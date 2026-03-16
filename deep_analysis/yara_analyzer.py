@@ -57,30 +57,26 @@ class YaraAnalyzer:
             return 0.0, [], {}
 
         if not os.path.exists(file_path):
-            return 0.0, ["[YARA] File error: Not found"], {}
+            return 0.0, [""], {}
 
-        try:
-            matches = self.rules.match(file_path)
+        matches = self.rules.match(file_path)
 
-            if matches:
-                # A YARA match is usually a high-confidence indicator
-                score = 100.0
+        if matches:
+            # A YARA match is usually a high-confidence indicator
+            score = 100.0
 
-                match_names = [m.rule for m in matches]
-                findings.append(f"[YARA] DETECTED: {', '.join(match_names)}")
+            match_names = [m.rule for m in matches]
+            findings.append(f"[YARA] DETECTED: {', '.join(match_names)}\n")
 
-                # Extract metadata from matches
-                for match in matches:
-                    if match.meta:
-                        metadata[match.rule] = match.meta
+            # Extract metadata from matches
+            for match in matches:
+                if match.meta:
+                    metadata[match.rule] = match.meta
 
-                        # Optional: Adjust score based on 'severity' meta field if present
-                        if 'severity' in match.meta:
-                            severity = str(match.meta['severity']).lower()
-                            if severity == 'low':
-                                score = 50.0  # Lower confidence for 'low' severity rules
-
-        except Exception as e:
-            findings.append(f"[YARA] Scan Error: {e}")
+                    # Optional: Adjust score based on 'severity' meta field if present
+                    if 'severity' in match.meta:
+                        severity = str(match.meta['severity']).lower()
+                        if severity == 'low':
+                            score = 50.0  # Lower confidence for 'low' severity rules
 
         return score, findings, metadata

@@ -2,12 +2,14 @@
 Driver Context - Handles C++ alerts and manages investigations
 Updated: Removed C2 Emulator interactions
 """
+import terminateVirus
 import threading
 import json
 import psutil
 import win32pipe
 import win32file
 import pywintypes
+import dataBase
 from typing import Dict
 from datetime import datetime
 
@@ -83,8 +85,9 @@ class DriverContext:
 
     def _handle_client_connection(self, pipe):
         """Worker thread to read data from a single client"""
+        full_data = b""
+
         try:
-            full_data = b""
             while True:
                 # Read chunks until the message is complete
                 hr, data = win32file.ReadFile(pipe, 4096)
@@ -167,9 +170,12 @@ class DriverContext:
         # self._log_threat(ctx, confidence, verdict)
 
         # Check if we should recommend killing the process
-        if confidence >= 85:
+        dataBase.insert_threat(confidence, path, "".join(ctx.findings) , ctx.first_seen)
+        if confidence >= 70:
             print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
             print(f"[!] C++ should call TerminateProcess() for PID {pid}")
+            terminateVirus.show_custom_alert(path)
+
 
         self.investigations[path] = ctx  # update the invistigate
 
