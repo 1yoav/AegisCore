@@ -367,14 +367,45 @@
             </div>
         </div>
         
-        <div class="scan-card" onclick="startSystemScan()">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-            </svg>
-            <h2>System Scan</h2>
-            <p>[FULL_SECTOR_ANALYSIS]</p>
+        <div class="scan-card" id="systemScanCard" onclick="startSystemScan()">
+            <!-- Idle State -->
+            <div class="card-content" id="sysIdleContent">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <h2>System Scan</h2>
+                <p>Last Scan: not yet implimented</p>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-container" id="sysLoadingContent">
+                <div class="scan-loader">
+                    <span class="loader-text">scanning...</span>
+                    <span class="load"></span>
+                </div>
+                <div class="loading-status" id="sysLoadingStatus">
+                    Scanning system...
+                </div>
+            </div>
+
+            <!-- Results State -->
+            <div class="results-container" id="sysResultsContent">
+                <button class="close-results" onclick="resetSystemScan(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+                <div class="result-header">
+                    <div class="result-verdict" id="sysResultVerdict">CLEAN</div>
+                    <div class="result-score" id="sysResultScore">0/100</div>
+                    <div class="result-filename" id="sysResultLabel">SYSTEM</div>
+                </div>
+                <div class="result-details" id="sysResultDetails">
+                    <div class="finding-item">No threats detected</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -566,9 +597,69 @@
             }
         }
 
-        // System scan handler
+        // ═══════════════════════════════════════════════════════════
+        // SYSTEM SCANNING FUNCTIONALITY
+        // ═══════════════════════════════════════════════════════════
+
+        const systemScanCard   = document.getElementById('systemScanCard');
+        const sysIdleContent   = document.getElementById('sysIdleContent');
+        const sysLoadingContent = document.getElementById('sysLoadingContent');
+        const sysResultsContent = document.getElementById('sysResultsContent');
+        const sysLoadingStatus = document.getElementById('sysLoadingStatus');
+
         async function startSystemScan() {
-            alert('System scan will be implemented - this will scan all critical directories.');
+            if (systemScanCard.classList.contains('scanning')) return;
+
+            systemScanCard.classList.add('scanning');
+            systemScanCard.onclick = null;
+
+            sysIdleContent.classList.add('hidden');
+            setTimeout(() => sysLoadingContent.classList.add('active'), 300);
+            sysLoadingStatus.textContent = 'Scanning system directories...\nScans can take up to a miniute';
+
+            try {
+                const data = await window.aegis.scanSystem();
+
+                sysLoadingContent.classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('sysResultScore').textContent   = (data.score ?? 0) + '/100';
+                    document.getElementById('sysResultLabel').textContent   = 'SYSTEM SCAN';
+
+                    const verdictEl = document.getElementById('sysResultVerdict');
+                    verdictEl.textContent  = data.verdict || 'UNKNOWN';
+                    verdictEl.className    = 'result-verdict ' +
+                        ((data.score ?? 0) < 30 ? 'clean' :
+                        (data.score ?? 0) < 85 ? 'suspicious' : 'malicious');
+
+                    const detailsEl = document.getElementById('sysResultDetails');
+                    detailsEl.innerHTML = (data.findings?.length > 0)
+                        ? data.findings.map(f => `<div class="finding-item">${f}</div>`).join('')
+                        : '<div class="finding-item">No threats detected</div>';
+
+                    sysResultsContent.classList.add('active');
+                }, 300);
+
+            } catch (error) {
+                console.error('[!] System scan error:', error);
+                sysLoadingContent.classList.remove('active');
+                setTimeout(() => {
+                    document.getElementById('sysResultVerdict').textContent = 'ERROR';
+                    document.getElementById('sysResultScore').textContent   = '0/100';
+                    document.getElementById('sysResultDetails').innerHTML   =
+                        `<div class="finding-item">Scan failed: ${error.message}</div>`;
+                    sysResultsContent.classList.add('active');
+                }, 300);
+            }
+        }
+
+        function resetSystemScan(event) {
+            event.stopPropagation();
+            sysResultsContent.classList.remove('active');
+            setTimeout(() => {
+                sysIdleContent.classList.remove('hidden');
+                systemScanCard.classList.remove('scanning');
+                systemScanCard.onclick = startSystemScan;
+            }, 300);
         }
     </script>
     <script type="module">

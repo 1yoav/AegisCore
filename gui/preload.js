@@ -26,4 +26,5 @@ contextBridge.exposeInMainWorld('aegis', {
     onThreatUpdate: (callback) => ipcRenderer.on('threat-update', (_, data) => callback(data)),
     
     scanFile: (filePath) => ipcRenderer.invoke('scan-file', filePath),
+    scanSystem: () => ipcRenderer.invoke('scan-system'),
 });

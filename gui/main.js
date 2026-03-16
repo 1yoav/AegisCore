@@ -122,6 +122,24 @@ ipcMain.handle('scan-file', async (event, filePath) => {
     throw new Error('Scan timeout');
 });
 
+ipcMain.handle('scan-system', async () => {
+    console.log('[*] Starting system scan...');
+    sendToCppPipe('5'); // command ID 5 = SCAN_SYSTEM
+
+    const resultPath = path.join(process.env.TEMP, 'aegis_scan_result.json');
+
+    for (let i = 0; i < 40; i++) { // 20s timeout — system scan takes longer
+        await new Promise(resolve => setTimeout(resolve, 500));
+        if (fs.existsSync(resultPath)) {
+            const result = JSON.parse(fs.readFileSync(resultPath, 'utf8'));
+            fs.unlinkSync(resultPath);
+            return result;
+        }
+    }
+
+    throw new Error('System scan timeout');
+});
+
 
 // ─── Threat History ───────────────────────────────────────────────────────────
 // Reads from the same JSON file your C++ service writes to
