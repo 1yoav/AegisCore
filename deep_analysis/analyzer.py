@@ -50,7 +50,7 @@ class Analyzer:
         final_static_score = max(heuristic_score, yara_score)
 
         if yara_score > 0:
-            findings.append(f"[SCORE] YARA detection boosted static score to {final_static_score:.0f}")
+            findings.append(f"[SCORE] YARA detection boosted static score to {final_static_score:.0f}\n")
 
         # --- PART B: Dynamic Analysis (50% Weight) ---
         dynamic_raw_score = 0.0
@@ -84,9 +84,11 @@ class Analyzer:
         entropy_val = metadata_.get('entropy', {}).get('whole_file', 0.0)
         packingResult = 0
         if entropy_val > 7.2:
-            packingResult = packingCheck.scan(ctx.process_path)
+            packingResult , packingFindings = packingCheck.scan(ctx.process_path)
+            findings.extend(packingFindings)
 
-        iatResult = iatAnalyze.analyze(ctx.process_path)
+        iatResult , iatFindings = iatAnalyze.analyze(ctx.process_path)
+        findings.append(iatFindings)
 
 
         # --- PART D: Final Calculation ---
@@ -107,14 +109,14 @@ class Analyzer:
         for suspicious in self.SUSPICIOUS_NAMES:
             if suspicious in path_lower:
                 score += 10.0
-                findings.append(f"[PROCESS] Suspicious name pattern: '{suspicious}'")
+                findings.append(f"[PROCESS] Suspicious name pattern: '{suspicious}'\n")
                 break
 
         suspicious_locations = ['temp', 'downloads', 'appdata\\local\\temp', 'users\\public']
         for location in suspicious_locations:
             if location in path_lower:
                 score += 10.0
-                findings.append(f"[PROCESS] Suspicious location: '{location}'")
+                findings.append(f"[PROCESS] Suspicious location: '{location}'\n")
                 break
 
         return min(score, 20.0), findings
@@ -149,7 +151,7 @@ class Analyzer:
 
         if event_types.count("NETWORK_ACTIVITY_ATTEMPT") > 5:
             score += 10.0
-            findings.append("[NETWORK] Persistent connection attempts")
+            findings.append("[NETWORK] Persistent connection attempts\n")
 
         return score, findings
 

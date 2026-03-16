@@ -50,7 +50,6 @@ def scan(file_path):
         for item in output:
             signature_list.append( hex(item)[2:])
         #this is the part of the comparing signatures
-        print(signature_list)
         for instance in data_list:
             if(instance[2] == False):
                 continue
@@ -64,10 +63,10 @@ def scan(file_path):
                             is_equal = False
                             break
                 if is_equal == True:
-                    return 25
+                    return 25 ,["the program packed by " + instance[0] + "\n"]
 
 
-    return 50
+    return 50 , [""]
 
 
 
@@ -79,14 +78,6 @@ def createSignature(filePath):
         file.write(payload)
 
 
+# run one time for keeping all the packers signature
+extract()
 
-
-def main():
-    file_path = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\Software.c1\\week.8\\q2.exe"
-    extract()
-    scan(file_path)
-
-    return 0
-
-if __name__ == '__main__':
-    main()

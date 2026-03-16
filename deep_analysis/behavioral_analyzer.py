@@ -26,41 +26,38 @@ class BehavioralAnalyzer:
         score = 0.0
         findings = []
 
-        try:
-            proc = psutil.Process(pid)
-            name = proc.name().lower()
-            
-            # --- 1. Heritage Check ---
-            parent_proc = proc.parent()
-            parent_name = parent_proc.name().lower() if parent_proc else "orphaned/none"
-            
-            if name in self.EXPECTED_PARENTS:
-                expected = self.EXPECTED_PARENTS[name]
-                if parent_name != expected:
-                    score += 25.0
-                    findings.append(f"[BEHAVIOR] Heritage Mismatch: {name} spawned by {parent_name} (Expected: {expected})")
-            elif parent_name == "orphaned/none":
-                # Standard for some, suspicious for unsigned user apps
-                score += 5.0
-                findings.append(f"[BEHAVIOR] Process is orphaned (no parent)")
+        proc = psutil.Process(pid)
+        name = proc.name().lower()
 
-            # --- 2. GUI Check ---
-            is_visible, is_hidden = self._get_window_stats(pid)
-            
-            if name in self.EXPECTED_GUI_PROCS and not is_visible:
-                score += 20.0
-                findings.append(f"[BEHAVIOR] Suspicious Headless State: {name} has no visible GUI")
-            
-            if is_hidden and not is_visible:
-                score += 10.0
-                findings.append("[BEHAVIOR] Hidden window handles detected (Potential listener/hook)")
-            
-            if not is_visible and not is_hidden:
-                # Useful context, but not necessarily a penalty unless name mismatch
-                findings.append("[BEHAVIOR] Background process (No window handles)")
+        # --- 1. Heritage Check ---
+        parent_proc = proc.parent()
+        parent_name = parent_proc.name().lower() if parent_proc else "orphaned/none"
 
-        except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
-            findings.append(f"[BEHAVIOR ERROR] Could not access PID {pid}: {str(e)}")
+        if name in self.EXPECTED_PARENTS:
+            expected = self.EXPECTED_PARENTS[name]
+            if parent_name != expected:
+                score += 25.0
+                findings.append(f"[BEHAVIOR] Heritage Mismatch: {name} spawned by {parent_name} (Expected: {expected})\n")
+        elif parent_name == "orphaned/none":
+            # Standard for some, suspicious for unsigned user apps
+            score += 5.0
+            findings.append(f"[BEHAVIOR] Process is orphaned (no parent)\n")
+
+        # --- 2. GUI Check ---
+        is_visible, is_hidden = self._get_window_stats(pid)
+
+        if name in self.EXPECTED_GUI_PROCS and not is_visible:
+            score += 20.0
+            findings.append(f"[BEHAVIOR] Suspicious Headless State: {name} has no visible GUI\n")
+
+        if is_hidden and not is_visible:
+            score += 10.0
+            findings.append("[BEHAVIOR] Hidden window handles detected (Potential listener/hook)\n")
+
+        if not is_visible and not is_hidden:
+            # Useful context, but not necessarily a penalty unless name mismatch
+            findings.append("[BEHAVIOR] Background process (No window handles)\n")
+
 
         return min(score, 45.0), findings
 

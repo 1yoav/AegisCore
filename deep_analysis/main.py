@@ -37,7 +37,7 @@ def main():
         
         # Print summary
         summary = driver_ctx.get_summary()
-        threat_summary = driver_ctx.logger.get_threat_summary(limit=10)
+        # threat_summary = driver_ctx.logger.get_threat_summary(limit=10)
         
         # print("\n" + "="*60)
         # print("SESSION SUMMARY")

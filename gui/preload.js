@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld('aegis', {
     maximize: () => ipcRenderer.send('window-maximize'),
     close: () => ipcRenderer.send('window-close'),
     communication: (message) => ipcRenderer.send('communication', message),
-
+    getThreats: () => ipcRenderer.invoke('get-threats'),
 
     // ── File Picker ──────────────────────────────────────────────────────────
     // Opens native Windows file picker - use in manual_scan.html
