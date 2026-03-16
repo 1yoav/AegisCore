@@ -109,7 +109,7 @@ ipcMain.handle('scan-file', async (event, filePath) => {
     const resultPath = path.join(process.env.TEMP, 'aegis_scan_result.json');
     
     // Poll for result (max 10 seconds)
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 60; i++) {
         await new Promise(resolve => setTimeout(resolve, 500));
         
         if (fs.existsSync(resultPath)) {
