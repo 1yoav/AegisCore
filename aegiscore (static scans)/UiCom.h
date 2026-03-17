@@ -1,5 +1,6 @@
 #pragma once
 #include "DownloadMonitor.h"
+#include "SystemScanner.h"
 #include <fstream>   // ? For std::ofstream
 #include <thread>    // ? For std::this_thread::sleep_for
 #include <chrono> 
@@ -27,10 +28,12 @@ public:
     void activateScan(std::string&);
     void killScan(std::string&);
     void scanFile(std::string& filePath);
+    void scanSystem();
 
     SigScanner scanner;
     CertificateScanner certScanner;
     ExtensionScanner extScanner;
     DownloadMonitor monitor;
+    SystemScanner sysScanner;
 
 };

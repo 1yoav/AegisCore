@@ -24,14 +24,8 @@
     <ClCompile Include="sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkMonitor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkMonitor.h">
       <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WFPEngine.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PacketLogger.cpp">
       <Filter>Source Files</Filter>
@@ -42,25 +36,34 @@
     <ClCompile Include="CertificateScanner.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="CertificateScanner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HelperFunctions.h">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="PipeClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SigScanner.cpp">
+    <ClCompile Include="UiCom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CertificateScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DownloadMonitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SigScanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkMonitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ExtensionScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UiCom.cpp">
+    <ClCompile Include="WFPEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UiCom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

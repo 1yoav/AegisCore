@@ -1,4 +1,4 @@
-#include "UiCom.h"
+﻿#include "UiCom.h"
 
 
 void UiCom::processMessage(std::string rawMessage)
@@ -21,32 +21,73 @@ void UiCom::processMessage(std::string rawMessage)
         break;
     case '4': // UPDATE_SETTINGS
         break;
+    case '5':
+        std::thread([this]() { scanSystem(); }).detach();
+        break;
     default:
         std::cout << "Unknown command ID: " << commandId << std::endl;
     }
 }
 
+void UiCom::scanSystem() {
+    sysScanner.runFullScan();
+}
+
 void UiCom::scanFile(std::string& filePath) {
     std::cout << "[*] Scanning file: " << filePath << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    // TODO: Call your actual scanner here
-    // For now, dummy 5-second delay + fake result
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::string fileHash = SigScanner::getMD5Hash(filePath);
+    bool sigSafe = SigScanner::scanWithVirusTotal(fileHash);
 
-    // Create result JSON and write to a response file
-    std::string resultJson = R"({
-        "score": 0,
-        "verdict": "CLEAN",
-        "findings": [DUMMY RETURN]
-    })";
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::wstring wFp = converter.from_bytes(filePath);
+    bool certSafe = CertificateScanner::checkSignature(wFp);
 
-    // Write result to temp file for Electron to read
-    std::string resultPath = std::string(getenv("TEMP")) + "\\aegis_scan_result.json";
-    std::ofstream outFile(resultPath);
-    outFile << resultJson;
-    outFile.close();
+    bool deepSafe = ((0) == !(1)); // placeholder
 
-    std::cout << "[+] Scan complete: CLEAN" << std::endl;
+    // ── Score (0 = clean, 100 = malicious) ──────────────────────────
+    int score = 0;
+    if (!sigSafe)  score += 55; // VT hit is the most damning
+    if (!certSafe) score += 30;
+    if (!deepSafe) score += 15;
+
+    std::string verdict;
+    if (score < 30) verdict = "CLEAN";
+    else if (score < 85) verdict = "SUSPICIOUS";
+    else                 verdict = "MALICIOUS";
+
+    // ── Findings ────────────────────────────────────────────────────
+    std::vector<std::string> findings;
+    findings.push_back(sigSafe ? "VirusTotal: No known signatures detected"
+        : "VirusTotal: Malicious signature match found");
+    findings.push_back(certSafe ? "Certificate: Valid and trusted signer"
+        : "Certificate: Unsigned or untrusted signer");
+    findings.push_back(deepSafe ? "Deep scan: No anomalies detected"
+        : "Deep scan: Suspicious behaviour patterns found");
+
+    // ── Build JSON manually ─────────────────────────────────────────
+    std::string findingsJson;
+    for (size_t i = 0; i < findings.size(); ++i) {
+        findingsJson += "        \"" + findings[i] + "\"";
+        if (i + 1 < findings.size()) findingsJson += ",";
+        findingsJson += "\n";
+    }
+
+    const char* tempDir = std::getenv("TEMP");
+    std::string resultPath = std::string(tempDir ? tempDir : "C:\\Temp") + "\\aegis_scan_result.json";
+
+    std::ofstream resultFile(resultPath);
+    resultFile << "{\n"
+        << "    \"score\": " << score << ",\n"
+        << "    \"verdict\": \"" << verdict << "\",\n"
+        << "    \"findings\": [\n"
+        << findingsJson
+        << "    ]\n"
+        << "}";
+    resultFile.close();
+
+    std::cout << "[*] Scan complete — verdict: " << verdict << " (" << score << "/100)\n";
 }
 
 

@@ -119,3 +119,47 @@ bool CertificateScanner::checkSignature(Process& proc) {
 
     return isTrusted;
 }
+
+bool CertificateScanner::checkSignature(const std::wstring& filePath) {
+    // 1. Handle Pseudo-processes (Registry, System, etc.)
+    if (filePath.find(L"\\") == std::wstring::npos) {
+        if (filePath == L"Registry" || filePath == L"System" || filePath == L"Memory Compression") {
+            return true;
+        }
+    }
+
+    // 2. Setup WinTrust
+    WINTRUST_FILE_INFO fileInfo = { 0 };
+    fileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
+    fileInfo.pcwszFilePath = filePath.c_str();
+
+    WINTRUST_DATA wtd = { 0 };
+    wtd.cbStruct = sizeof(WINTRUST_DATA);
+    wtd.dwUIChoice = WTD_UI_NONE;
+    wtd.dwUnionChoice = WTD_CHOICE_FILE;
+    wtd.pFile = &fileInfo;
+    wtd.dwStateAction = WTD_STATEACTION_VERIFY;
+    wtd.dwProvFlags = WTD_REVOCATION_CHECK_NONE | WTD_SAFER_FLAG;
+
+    GUID actionGuid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+    LONG lStatus = WinVerifyTrust(NULL, &actionGuid, &wtd);
+    bool isTrusted = (lStatus == ERROR_SUCCESS);
+
+    // 3. Fallback for trusted system locations
+    if (!isTrusted) {
+        std::wstring pathLower = filePath;
+        for (auto& c : pathLower) c = towlower(c);
+
+        if (pathLower.find(L"c:\\windows\\system32\\") == 0 ||
+            pathLower.find(L"c:\\windows\\systemapps\\") == 0 ||
+            pathLower.find(L"c:\\program files\\windowsapps\\") == 0) {
+            isTrusted = true;
+        }
+    }
+
+    // 4. Mandatory Cleanup
+    wtd.dwStateAction = WTD_STATEACTION_CLOSE;
+    WinVerifyTrust(NULL, &actionGuid, &wtd);
+
+    return isTrusted;
+}
