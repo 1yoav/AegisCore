@@ -205,10 +205,6 @@ void UiCom::start()
     }
 }
 
-
-
-
-
 std::wstring GetExecutableDirectory() {
     wchar_t path[MAX_PATH];
     GetModuleFileNameW(NULL, path, MAX_PATH);

@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="GUIFolder">
+            <Component Id="cmpECB360B1F9B829CD67F80D1BB9130459" Guid="{0B68F02C-D1FA-4737-817C-67E2FDC27471}">
+                <File Id="fil61B74294D5C29DC3F743DB811AC421D3" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\AegisCore.exe" />
+            </Component>
+            <Component Id="cmpC728E7FF6800382AF246A18C7BE73709" Guid="{9D9ACC87-7A6F-43F5-BD5A-FBE1BDBDC31C}">
+                <File Id="fil98D62BF1BA9D662B2CB0669F52B88019" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\chrome_100_percent.pak" />
+            </Component>
+            <Component Id="cmp5CB5E6AC7BE5F07C635E75ADE0D5864F" Guid="{5C14A2D2-CD13-4818-97B4-2976C812EE1F}">
+                <File Id="fil106B2700C2E8ECEBBEECE7F5B40DFEA7" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\chrome_200_percent.pak" />
+            </Component>
+            <Component Id="cmp200D1A1A27221C6882B44D1CC4D43DCE" Guid="{A368AA99-28AC-41AD-B4D2-799A142AC972}">
+                <File Id="filD3AE37B50D9D05D76EFD7A27F82ACBDB" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\d3dcompiler_47.dll" />
+            </Component>
+            <Component Id="cmp54BBFFD9028589AF7F4FD7C9E2ED4CF2" Guid="{C363483C-0741-4A2B-A638-150855C927B1}">
+                <File Id="fil09D47969B3FCE9FA67A5B2FDC1D31403" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\ffmpeg.dll" />
+            </Component>
+            <Component Id="cmp9F849CB5FD2A305E595E6AD5ED96C06E" Guid="{44314997-AE51-48A2-88E2-C0002DDACF4B}">
+                <File Id="filC2A365023C9829B0350AF640A08D5C55" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\icudtl.dat" />
+            </Component>
+            <Component Id="cmpF8345686687044D4E3DB19E66BD7ADB2" Guid="{6DE05998-6DE0-4A15-9145-1DA9A83715E3}">
+                <File Id="fil5A4086F50BADE221778C2EBDAFB97FEC" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\libEGL.dll" />
+            </Component>
+            <Component Id="cmp70BC3B84BF23551CBD466CB0BFC613FD" Guid="{714D423E-7880-4AF9-9068-F95190D60862}">
+                <File Id="fil906E9B62396D26FB52E552223FC0B1C8" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\libGLESv2.dll" />
+            </Component>
+            <Component Id="cmp859C0D0C08C5ADBA1ECF7101B6DEE76F" Guid="{28FAA50F-BE01-4207-A4AC-6047DBBF12EC}">
+                <File Id="fil246E86301272B4FC95D5DEE1F6D1EF50" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\LICENSE.electron.txt" />
+            </Component>
+            <Component Id="cmp015254FE68DA7BF5C1D0DAC66473A28F" Guid="{38FBF11A-9FDF-45B6-9409-D386917655A2}">
+                <File Id="fil207DE94F39E3DE03C091576AC3E474B8" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\LICENSES.chromium.html" />
+            </Component>
+            <Component Id="cmpC09FBF0286B479309F9BB623BEBC4975" Guid="{2C5E2339-8788-44C3-B576-3F2CE262F20D}">
+                <File Id="fil2D91EEB95C7F21F8ED9D1D2AEC0E166A" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\resources.pak" />
+            </Component>
+            <Component Id="cmp55E8B589F2EF77DCA7447021E4959F3C" Guid="{7B09517C-F2DF-4BFD-9807-7EB0DF31BA49}">
+                <File Id="fil5E0AB63B3466DF47024A7CE02C6C3E21" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\snapshot_blob.bin" />
+            </Component>
+            <Component Id="cmp45974A461A9938B89ADC8A1C48693FB6" Guid="{FF62D1D5-2EA8-42D7-ACE0-1C360DBBC7A2}">
+                <File Id="fil035120B6CC97A5D4EB2ADDED40581F8A" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\v8_context_snapshot.bin" />
+            </Component>
+            <Component Id="cmp55FA397927781AF7C3A084341EBD285C" Guid="{4FF0AE14-7C64-4A79-BD83-0D333B12C666}">
+                <File Id="filEF6D2F2AFAE39D856AD2842C7E5AD170" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\vk_swiftshader.dll" />
+            </Component>
+            <Component Id="cmp651CE9EA44235BE7B1AF076F9F2207F0" Guid="{E33354F1-3B0A-4AB0-9F96-616F6B21B364}">
+                <File Id="fil5E48A1F17FC64378C105A1E04668560F" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\vk_swiftshader_icd.json" />
+            </Component>
+            <Component Id="cmp0DA086F07E3E8BFC8883ABD1F8A64E36" Guid="{CCDFBD64-FCBD-480C-98B1-E2CC8F227D9A}">
+                <File Id="filFE6E6CA7F267A08C32584B3A4DFFF6EC" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\vulkan-1.dll" />
+            </Component>
+            <Directory Id="dir17EFDFD5AFAA6F0FDDC00591EB3F97B5" Name="locales">
+                <Component Id="cmpB08B122CBA41E8756D483E17B9BCE01E" Guid="{AF3B024A-7846-4647-8F40-A7F7F810737E}">
+                    <File Id="fil8AAE8429D46D462B7A8D8D3C3EA103CF" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\af.pak" />
+                </Component>
+                <Component Id="cmp2F4321854EB5BF8E066689CDEC576B9D" Guid="{5E83E43A-7943-4E7E-B6C0-BE62EDAFD178}">
+                    <File Id="filB65CAF878A8459B10F76806E459E5391" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\am.pak" />
+                </Component>
+                <Component Id="cmp911878965921C718F70DEC22667D7926" Guid="{59CA826F-5BDF-49A0-9E2D-A56E94CF1158}">
+                    <File Id="filE16F48C8CFD49460140517AC3378D196" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ar.pak" />
+                </Component>
+                <Component Id="cmpF7AD5B412F6B3FA4C032785B905309C3" Guid="{774F2A8B-097F-4C6F-9629-190EA88E8E50}">
+                    <File Id="fil1C74DA934E8A71812035F358BC9AFBEB" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\bg.pak" />
+                </Component>
+                <Component Id="cmpD500E209AE1AEA8664A261AF299718F6" Guid="{80983FA6-1B55-4BC2-8E30-5497EBD18416}">
+                    <File Id="filB5EA7DF03EED8C468BAE8E0F21262F63" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\bn.pak" />
+                </Component>
+                <Component Id="cmpBA21030FEDF058927660B43621131930" Guid="{F2878423-34B0-4892-8309-7202F470CE05}">
+                    <File Id="fil1BE679F304F4F2D4D0E052D3F78B81F2" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ca.pak" />
+                </Component>
+                <Component Id="cmp0324846B6A0439A741393007500F40FF" Guid="{905A5555-159A-49BF-B7E9-BDCD27134030}">
+                    <File Id="fil3D694F43D7D79233E343B8067E73E711" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\cs.pak" />
+                </Component>
+                <Component Id="cmpA77E35286AB74CE22B8893810399AF33" Guid="{F5DDAFF7-8D2B-422A-9186-0425F1B759AE}">
+                    <File Id="fil2750575E3A9A65FD87F202ACCC60A5F8" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\da.pak" />
+                </Component>
+                <Component Id="cmpA19189EE29DD134C2D68F13E7FA2B09B" Guid="{DE890D19-B546-4003-BAE7-CD756D454AFC}">
+                    <File Id="fil6E6D124F28CCB16A1BF142BC3DA24899" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\de.pak" />
+                </Component>
+                <Component Id="cmp500BF0043F20FC55E9DC9EE726EFD34B" Guid="{2AAB341D-6E9E-40F9-B809-283DAC19DA0E}">
+                    <File Id="fil19018B2B32029290ECF836D024DEB2EF" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\el.pak" />
+                </Component>
+                <Component Id="cmp0F0AB96E4D413123B9DFCC1266E7C578" Guid="{4D588922-5D66-4EE9-B80D-5AAB245D94AA}">
+                    <File Id="fil00976C106A1C99D6CC5B13D0FB351677" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\en-GB.pak" />
+                </Component>
+                <Component Id="cmpCAE85A0D8E8C53E8DE2CC0948A984578" Guid="{CFB35A15-86E0-4FE3-ADCB-ED5DC32CC030}">
+                    <File Id="fil9E5F1D855B15403075236B448F27596F" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\en-US.pak" />
+                </Component>
+                <Component Id="cmpD231458267FA04567883308343BC6216" Guid="{78C2EEBB-FDBB-4314-A0B7-5456DAC05851}">
+                    <File Id="fil387198145BB5101DEDA02E47D888A720" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\es-419.pak" />
+                </Component>
+                <Component Id="cmp94A406A8CB3B444FD7930846BAA68304" Guid="{1FCCB035-8D66-4B5F-8EC7-B5DF258968AC}">
+                    <File Id="fil6F34A60A0EF76D94E90E78379A8BCC05" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\es.pak" />
+                </Component>
+                <Component Id="cmp48D0B38F664CD5F4530EEF438A0E7446" Guid="{6977E800-6422-44C0-BDB6-97DE7E972612}">
+                    <File Id="fil74493626879564E993495438CF220B68" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\et.pak" />
+                </Component>
+                <Component Id="cmpABB1706DD13D6A65E8A411DE09594BE1" Guid="{4E41F3FB-2A79-4E4A-9E75-BA7FA4D482D4}">
+                    <File Id="filE31EBEF94721DCFA7F7092DD6A712B32" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\fa.pak" />
+                </Component>
+                <Component Id="cmp0FB593D4EEE19CEBEE265FB423735E85" Guid="{700C93C4-0F12-4D57-BB72-F12E43568839}">
+                    <File Id="filDB16EB508BD1CB5E0F0D56193B0E18ED" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\fi.pak" />
+                </Component>
+                <Component Id="cmpC2CECB8A880EDE94D66FD8AF16E5DB4F" Guid="{8CDFC57D-B3B7-4FD3-9397-A48D8AD9E27F}">
+                    <File Id="fil899802DFB719DBAE807CC76D278EF0BD" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\fil.pak" />
+                </Component>
+                <Component Id="cmp4016B66EB2E8CA5F9C4A7A7F42373DB1" Guid="{0BE08AEB-3265-44E5-B76D-CEE165BED7DC}">
+                    <File Id="fil3DEAE257E015B528E5652375DC75896B" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\fr.pak" />
+                </Component>
+                <Component Id="cmp6C1E6930D01D7D0815AA26F809EB192F" Guid="{79B60161-97FE-43FF-A87F-72D880C19ED1}">
+                    <File Id="fil511D587BA2812122F53D2351B440C269" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\gu.pak" />
+                </Component>
+                <Component Id="cmpBE2E6D60A40E65CFF50A5E0F3832E6C9" Guid="{2B562B48-142F-41FA-9E01-5C77DD7F6BFD}">
+                    <File Id="filB909F22D2F849D0B3995F0E49A2AA8E5" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\he.pak" />
+                </Component>
+                <Component Id="cmpCA2BCDAF6586C8BB33A65B03592F028C" Guid="{0EEBC4CA-C8CC-47E5-9E5F-DA9AEBF08954}">
+                    <File Id="filEE87D1983A20F39FAC1E5A65C0733B2C" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\hi.pak" />
+                </Component>
+                <Component Id="cmp37597DBAFF030DBFB63967B10A3797CA" Guid="{300829DD-FE10-4858-841E-5BF7E776DE9F}">
+                    <File Id="filD55DE01B85408712829F49ADAECAA4B1" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\hr.pak" />
+                </Component>
+                <Component Id="cmpF38330DC784D4D3286AFD7F3A7C53C87" Guid="{0B04087E-8EBD-4779-B2AD-6A34ADA665E8}">
+                    <File Id="fil15E1ED7D28C364E59560C6F234E3E0A5" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\hu.pak" />
+                </Component>
+                <Component Id="cmp818B49AEBEDDDA563B6EA041603844D8" Guid="{C20DB663-45E2-49A4-AA81-13AD795E8592}">
+                    <File Id="fil92149A3A5BC6DA9F03073A404347B800" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\id.pak" />
+                </Component>
+                <Component Id="cmpE8E283C907ED2E688B74C17CCAC2E91E" Guid="{FD359E1A-3CB4-48C9-99B1-6A070F145F69}">
+                    <File Id="fil43309A0E0B02B9F2D63BC3DA938B9EC3" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\it.pak" />
+                </Component>
+                <Component Id="cmp4CCE103E262E5C459D584592287357C3" Guid="{E9E701ED-83F4-4232-9DF8-E115B3142958}">
+                    <File Id="filA269F6D1A50A9EC578BF64D91D252B11" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ja.pak" />
+                </Component>
+                <Component Id="cmp25F2DB38723FF1B6E0DB928CF0E7C4F4" Guid="{94EC2427-698F-4AC4-8E7B-1C2483FA109F}">
+                    <File Id="filBA85830BB434A9DF7CCE67D3DFA1A422" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\kn.pak" />
+                </Component>
+                <Component Id="cmpE5706887AE91761C7F4AD4A6CD484EBA" Guid="{D015761C-0D3D-4D46-B0B2-33FDDC53BA6C}">
+                    <File Id="fil2FD56892BA396051746736DAF7185D43" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ko.pak" />
+                </Component>
+                <Component Id="cmp2550C68D376F663A58B046BA628156AE" Guid="{6672619D-635D-42ED-9791-BD37F788415D}">
+                    <File Id="fil35D2F39B6E7FD15063B75391F9D15AD1" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\lt.pak" />
+                </Component>
+                <Component Id="cmp31B8DF9C69ABDD91243AD91B500AF12E" Guid="{0C80E192-9BD1-4C4D-9D32-EB08FEE7DBDD}">
+                    <File Id="fil70E8D72D4B629C8EF16821747B965526" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\lv.pak" />
+                </Component>
+                <Component Id="cmp8DD73A8BBA547FD4454E5625DAE83720" Guid="{BA615C60-0F90-4122-B5D6-EB64E4CE48FE}">
+                    <File Id="fil89D00512174050E929874EFBC016E736" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ml.pak" />
+                </Component>
+                <Component Id="cmp4E7141316A05BCED71F5B4D34F142BFD" Guid="{D10E96D1-A978-41B5-8E61-2D8C2204374F}">
+                    <File Id="fil5123B8DF67E5D8DA1B1D114BFDDF3990" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\mr.pak" />
+                </Component>
+                <Component Id="cmpED6E164695B535404C4C67427353F2FE" Guid="{7E7D6DFF-CEA9-4AB7-BDCC-006FEC3C9190}">
+                    <File Id="filC21EE0671E854ACA88146E89ED1A68BB" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ms.pak" />
+                </Component>
+                <Component Id="cmpC8D8BE1A762591FE8989FFAA11E02180" Guid="{11C1753C-11D1-4632-9C7A-2A5BD8CCEE2B}">
+                    <File Id="fil4902CC0BB4CFAB74A53AE41D4401E8D3" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\nb.pak" />
+                </Component>
+                <Component Id="cmp773F0BD7850F730596926B00F536C57C" Guid="{AB5F631A-607F-4B24-B5D7-525FA6B8AD98}">
+                    <File Id="fil4DFB7D576D8C41769107660EFB8C85E9" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\nl.pak" />
+                </Component>
+                <Component Id="cmpABDB405357367382D28384162D826595" Guid="{F71980AF-1182-4E60-82D3-AE688C186318}">
+                    <File Id="fil274EB5623A8F93B6E39693E627EA0619" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\pl.pak" />
+                </Component>
+                <Component Id="cmp9067E51A279424F3B780837601148C4B" Guid="{6ACFEE28-4E48-4E15-81BB-EE9A0F64EA74}">
+                    <File Id="fil16B33D7AF2D358C9C281AB3456634939" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\pt-BR.pak" />
+                </Component>
+                <Component Id="cmpD2D059311087A24D6450813AC7058890" Guid="{E1ED1E68-2C6B-42C9-B9C4-53830913E3C7}">
+                    <File Id="fil49081F30B7F394433E05498595CCE172" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\pt-PT.pak" />
+                </Component>
+                <Component Id="cmpCC429D8595D4518D7E329BA774492D8F" Guid="{FA25A221-D496-4875-B70B-9DB999071BEE}">
+                    <File Id="filEC76FBC6F9A34B0DC460131A40A7D5B2" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ro.pak" />
+                </Component>
+                <Component Id="cmp9A63CAA61D43FD93AAA24E41A7680953" Guid="{30AAED1D-8602-436B-958A-95EE28479BA9}">
+                    <File Id="fil80E8B4AC1C14B44A2B6060901A17D6CD" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ru.pak" />
+                </Component>
+                <Component Id="cmp924CC130FB28DEE9C36B121C2569060E" Guid="{DAFD5C82-DD58-4B76-8689-C9C0775DCF5F}">
+                    <File Id="fil275C4A947A72572442747AA0362899DB" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\sk.pak" />
+                </Component>
+                <Component Id="cmpB7D1413657B22C06BC8FB5205859474D" Guid="{61CEFE05-3750-4015-89E2-3024AA9396CC}">
+                    <File Id="filB2E741A81D1BD33E573FA01B79CDF0B1" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\sl.pak" />
+                </Component>
+                <Component Id="cmp0C3E6B0B0206A15513E6AC7EBE95B154" Guid="{9DCC3582-1EC3-4C71-8407-EDC994F7D9BC}">
+                    <File Id="filBA71F7A80DE3983D866025ED50EDC8D1" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\sr.pak" />
+                </Component>
+                <Component Id="cmpD9EA7632A77C8C98882D2C4FF5A8DAFE" Guid="{013F81AA-E7C7-45AC-9BDE-DFD536B8009C}">
+                    <File Id="filF5C7098D2E35E154CCC73ED3612E8819" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\sv.pak" />
+                </Component>
+                <Component Id="cmp7C65B51459E2CFA9D223A35D5AA7A260" Guid="{E067FDAA-A1B3-415E-AB52-3EB14DA290F5}">
+                    <File Id="fil63F3A62B68515D27BE163114B5BAC573" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\sw.pak" />
+                </Component>
+                <Component Id="cmpB9621427C81233AF59C287D53269EDF6" Guid="{9856CFAB-3BF0-4E41-9159-D22455197E14}">
+                    <File Id="filB3938CCF6EF0708A70DA9004CCB68699" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ta.pak" />
+                </Component>
+                <Component Id="cmp180F276094D3AC0689132918B3C0E0E7" Guid="{902E7124-19DE-4F4B-97A7-1EC006CBDF85}">
+                    <File Id="fil82689619B0E3CBA45ED9C894C6F05947" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\te.pak" />
+                </Component>
+                <Component Id="cmp9A38DC065F42C667170F2C9FFAE980E0" Guid="{E8D59C97-7E24-4C66-93C6-FBFEEAE2FB0F}">
+                    <File Id="fil493938D15545D67EF3C86986EAB8C684" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\th.pak" />
+                </Component>
+                <Component Id="cmp19CE3698087C5989847124E1F25A43DC" Guid="{50DD0833-93E1-403D-843A-327AE97C2792}">
+                    <File Id="filB54F481678142EDB45D0D556BBB9D3FE" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\tr.pak" />
+                </Component>
+                <Component Id="cmp0261DD0F51608657130D0AE998D1722E" Guid="{004D648B-5ECD-4836-8D18-D0103151C053}">
+                    <File Id="filDA6418BF507728202EB155041290344C" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\uk.pak" />
+                </Component>
+                <Component Id="cmp36B75D28F4B6FF9B1787217B1C4189C0" Guid="{CF65B69E-D078-4DCA-B14F-C841A0B9C19B}">
+                    <File Id="fil619396388ED0F1199B8C44D26FA489BD" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\ur.pak" />
+                </Component>
+                <Component Id="cmp5EC8040B38CE4A0A24ED3ED800622F35" Guid="{CE3A1C8B-57D2-44DA-ABCC-29541F248AAE}">
+                    <File Id="fil423437CD61A5797CC8144429E2BC69F7" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\vi.pak" />
+                </Component>
+                <Component Id="cmp6AB6EEE91094F7D005E040522181B997" Guid="{7E61F97B-6910-4EF3-B47B-70000C671C93}">
+                    <File Id="fil767B69B8AB9F9C88F0AE6AA5F0FC4285" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\zh-CN.pak" />
+                </Component>
+                <Component Id="cmpA2D9DF852A46016D251D7594FACC14B6" Guid="{2338F2E1-17EB-484B-90BE-4EE79DF8186E}">
+                    <File Id="fil266869FF08DA3A493889CCADA38DD66F" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\locales\zh-TW.pak" />
+                </Component>
+            </Directory>
+            <Directory Id="dir25AE124835DDF910BF1F0699878B2886" Name="resources">
+                <Component Id="cmp70F83CF78967DA5EDAEF91B6D4DAF82F" Guid="{C68F5F7D-C0FF-4166-B68C-580A9F3CD1B5}">
+                    <File Id="fil42B3A1AF2B4EC5568B911C3E854819FB" KeyPath="yes" Source="C:\Users\Cyber_User\Documents\AegisCore\gui\dist\win-unpacked\resources\app.asar" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ElectronFiles">
+            <ComponentRef Id="cmpECB360B1F9B829CD67F80D1BB9130459" />
+            <ComponentRef Id="cmpC728E7FF6800382AF246A18C7BE73709" />
+            <ComponentRef Id="cmp5CB5E6AC7BE5F07C635E75ADE0D5864F" />
+            <ComponentRef Id="cmp200D1A1A27221C6882B44D1CC4D43DCE" />
+            <ComponentRef Id="cmp54BBFFD9028589AF7F4FD7C9E2ED4CF2" />
+            <ComponentRef Id="cmp9F849CB5FD2A305E595E6AD5ED96C06E" />
+            <ComponentRef Id="cmpF8345686687044D4E3DB19E66BD7ADB2" />
+            <ComponentRef Id="cmp70BC3B84BF23551CBD466CB0BFC613FD" />
+            <ComponentRef Id="cmp859C0D0C08C5ADBA1ECF7101B6DEE76F" />
+            <ComponentRef Id="cmp015254FE68DA7BF5C1D0DAC66473A28F" />
+            <ComponentRef Id="cmpC09FBF0286B479309F9BB623BEBC4975" />
+            <ComponentRef Id="cmp55E8B589F2EF77DCA7447021E4959F3C" />
+            <ComponentRef Id="cmp45974A461A9938B89ADC8A1C48693FB6" />
+            <ComponentRef Id="cmp55FA397927781AF7C3A084341EBD285C" />
+            <ComponentRef Id="cmp651CE9EA44235BE7B1AF076F9F2207F0" />
+            <ComponentRef Id="cmp0DA086F07E3E8BFC8883ABD1F8A64E36" />
+            <ComponentRef Id="cmpB08B122CBA41E8756D483E17B9BCE01E" />
+            <ComponentRef Id="cmp2F4321854EB5BF8E066689CDEC576B9D" />
+            <ComponentRef Id="cmp911878965921C718F70DEC22667D7926" />
+            <ComponentRef Id="cmpF7AD5B412F6B3FA4C032785B905309C3" />
+            <ComponentRef Id="cmpD500E209AE1AEA8664A261AF299718F6" />
+            <ComponentRef Id="cmpBA21030FEDF058927660B43621131930" />
+            <ComponentRef Id="cmp0324846B6A0439A741393007500F40FF" />
+            <ComponentRef Id="cmpA77E35286AB74CE22B8893810399AF33" />
+            <ComponentRef Id="cmpA19189EE29DD134C2D68F13E7FA2B09B" />
+            <ComponentRef Id="cmp500BF0043F20FC55E9DC9EE726EFD34B" />
+            <ComponentRef Id="cmp0F0AB96E4D413123B9DFCC1266E7C578" />
+            <ComponentRef Id="cmpCAE85A0D8E8C53E8DE2CC0948A984578" />
+            <ComponentRef Id="cmpD231458267FA04567883308343BC6216" />
+            <ComponentRef Id="cmp94A406A8CB3B444FD7930846BAA68304" />
+            <ComponentRef Id="cmp48D0B38F664CD5F4530EEF438A0E7446" />
+            <ComponentRef Id="cmpABB1706DD13D6A65E8A411DE09594BE1" />
+            <ComponentRef Id="cmp0FB593D4EEE19CEBEE265FB423735E85" />
+            <ComponentRef Id="cmpC2CECB8A880EDE94D66FD8AF16E5DB4F" />
+            <ComponentRef Id="cmp4016B66EB2E8CA5F9C4A7A7F42373DB1" />
+            <ComponentRef Id="cmp6C1E6930D01D7D0815AA26F809EB192F" />
+            <ComponentRef Id="cmpBE2E6D60A40E65CFF50A5E0F3832E6C9" />
+            <ComponentRef Id="cmpCA2BCDAF6586C8BB33A65B03592F028C" />
+            <ComponentRef Id="cmp37597DBAFF030DBFB63967B10A3797CA" />
+            <ComponentRef Id="cmpF38330DC784D4D3286AFD7F3A7C53C87" />
+            <ComponentRef Id="cmp818B49AEBEDDDA563B6EA041603844D8" />
+            <ComponentRef Id="cmpE8E283C907ED2E688B74C17CCAC2E91E" />
+            <ComponentRef Id="cmp4CCE103E262E5C459D584592287357C3" />
+            <ComponentRef Id="cmp25F2DB38723FF1B6E0DB928CF0E7C4F4" />
+            <ComponentRef Id="cmpE5706887AE91761C7F4AD4A6CD484EBA" />
+            <ComponentRef Id="cmp2550C68D376F663A58B046BA628156AE" />
+            <ComponentRef Id="cmp31B8DF9C69ABDD91243AD91B500AF12E" />
+            <ComponentRef Id="cmp8DD73A8BBA547FD4454E5625DAE83720" />
+            <ComponentRef Id="cmp4E7141316A05BCED71F5B4D34F142BFD" />
+            <ComponentRef Id="cmpED6E164695B535404C4C67427353F2FE" />
+            <ComponentRef Id="cmpC8D8BE1A762591FE8989FFAA11E02180" />
+            <ComponentRef Id="cmp773F0BD7850F730596926B00F536C57C" />
+            <ComponentRef Id="cmpABDB405357367382D28384162D826595" />
+            <ComponentRef Id="cmp9067E51A279424F3B780837601148C4B" />
+            <ComponentRef Id="cmpD2D059311087A24D6450813AC7058890" />
+            <ComponentRef Id="cmpCC429D8595D4518D7E329BA774492D8F" />
+            <ComponentRef Id="cmp9A63CAA61D43FD93AAA24E41A7680953" />
+            <ComponentRef Id="cmp924CC130FB28DEE9C36B121C2569060E" />
+            <ComponentRef Id="cmpB7D1413657B22C06BC8FB5205859474D" />
+            <ComponentRef Id="cmp0C3E6B0B0206A15513E6AC7EBE95B154" />
+            <ComponentRef Id="cmpD9EA7632A77C8C98882D2C4FF5A8DAFE" />
+            <ComponentRef Id="cmp7C65B51459E2CFA9D223A35D5AA7A260" />
+            <ComponentRef Id="cmpB9621427C81233AF59C287D53269EDF6" />
+            <ComponentRef Id="cmp180F276094D3AC0689132918B3C0E0E7" />
+            <ComponentRef Id="cmp9A38DC065F42C667170F2C9FFAE980E0" />
+            <ComponentRef Id="cmp19CE3698087C5989847124E1F25A43DC" />
+            <ComponentRef Id="cmp0261DD0F51608657130D0AE998D1722E" />
+            <ComponentRef Id="cmp36B75D28F4B6FF9B1787217B1C4189C0" />
+            <ComponentRef Id="cmp5EC8040B38CE4A0A24ED3ED800622F35" />
+            <ComponentRef Id="cmp6AB6EEE91094F7D005E040522181B997" />
+            <ComponentRef Id="cmpA2D9DF852A46016D251D7594FACC14B6" />
+            <ComponentRef Id="cmp70F83CF78967DA5EDAEF91B6D4DAF82F" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

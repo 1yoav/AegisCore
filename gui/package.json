@@ -10,22 +10,21 @@
   "build": {
     "appId": "com.aegiscore.gui",
     "productName": "AegisCore",
+    "npmRebuild": true,
     "win": {
-      "target": "nsis",
+      "target": "dir",
       "icon": "assets/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
     },
     "files": [
       "*.html",
       "main.js",
       "preload.js",
-      "assets/**"
+      "assets/**",
+      "node_modules/**"
     ]
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
     "electron": "^28.0.0",
     "electron-builder": "^24.13.3"
   },

@@ -88,7 +88,7 @@ void SigScanner::checkSignature(std::filesystem::path path)
 bool SigScanner::scanWithVirusTotal(const std::string& fileHash)
 {
     // Create command to run Python script with the HASH as the argument
-    std::string pythonCommand = "python virus_scanner.py " + fileHash;
+    std::string pythonCommand = "virus_scanner.exe " + fileHash;
     
 
     //std::cout << "Executing: " << pythonCommand << std::endl;

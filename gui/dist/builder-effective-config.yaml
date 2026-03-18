@@ -3,16 +3,15 @@ directories:
   buildResources: build
 appId: com.aegiscore.gui
 productName: AegisCore
+npmRebuild: true
 win:
-  target: nsis
+  target: dir
   icon: assets/icon.ico
-nsis:
-  oneClick: false
-  allowToChangeInstallationDirectory: true
 files:
   - filter:
       - '*.html'
       - main.js
       - preload.js
       - assets/**
+      - node_modules/**
 electronVersion: 28.3.3

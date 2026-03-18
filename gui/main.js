@@ -3,8 +3,10 @@ const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const net = require('net');
-const db = new sqlite3.Database(path.join(__dirname, '../aegiscore (static scans)/c2_threats.db'));
-
+const installRoot = path.join(__dirname, '../../../../../');
+const db = new sqlite3.Database(
+    path.join(installRoot, 'deep_analysis', 'c2_threats.db')
+);
 let mainWindow;
 
 // ─── Window Creation ──────────────────────────────────────────────────────────
