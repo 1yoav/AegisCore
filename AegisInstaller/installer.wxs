@@ -11,6 +11,7 @@
 	<?define TrayExeSrc      = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug" ?>
 	<?define MainProcSrc     = "$(var.SourceRoot)\MainProcces\x64\Debug" ?>
 	<?define DeepSrc         = "$(var.SourceRoot)\deep_analysis\dist" ?>
+	<?define DeepAnalysis    = "$(var.SourceRoot)\deep_analysis" ?>
 	<?define DbSrc           = "$(var.SourceRoot)\aegiscore (static scans)\dependencies" ?>
 	<?define InstallerAssets = "$(var.SourceRoot)\AegisInstaller\bin\Debug" ?>
 
@@ -115,6 +116,7 @@
 			<Feature Id="DeepScan" Level="1" Title="Deep Analysis"
                      Description="Advanced threat detection engine">
 				<ComponentRef Id="DeepAnalysisEngine" />
+				<ComponentRef Id="ThreatDatabase" />
 			</Feature>
 
 			<Feature Id="DebugFiles" Level="1" Title="Database &amp; Logs"
@@ -319,13 +321,21 @@
 			<RegistryValue Root="HKCU" Key="Software\AegisCore"
                            Name="tray_installed" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
-
+		
 		<Component Id="OpenSSLCrypto" Directory="StaticScansDebug"
            Guid="6e9c5531-ac2d-4874-b93e-cecc39611768">
 			<File Id="libcrypto"
 				  Source="C:\Users\Cyber_User\Documents\AegisCore\aegiscore (static scans)\x64\Debug\libcrypto-3-x64.dll"
 				  KeyPath="yes" />
 		</Component>
+
+		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder"
+           Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
+			<File Id="db"
+				  Source="C:\Users\Cyber_User\Documents\AegisCore\deep_analysis\c2_threats.db"
+				  KeyPath="yes" />
+		</Component>
+		
 		<!-- ── Desktop shortcut → launches Electron GUI ────────────────── -->
 		<Component Id="DesktopShortcutComponent" Directory="DesktopFolder"
                    Guid="e14680bf-ae0e-4a08-9d8a-b03b456fc8ef">

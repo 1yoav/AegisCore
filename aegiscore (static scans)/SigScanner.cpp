@@ -1,4 +1,5 @@
 #include "SigScanner.h"
+#include "UiCom.h"
 #include <openssl/md5.h>
 #include <iomanip>
 #include <sstream>
@@ -30,28 +31,24 @@ std::string SigScanner::getMD5Hash(const std::filesystem::path& path) {
 //connect to deep analysis pipe and send message
 void SigScanner::connectToDeepAnalyze(std::string msg)
 {
-	std::string pipeName = "\\\\.\\pipe\\AVDeepScanPipe";
+    const char* pipeName = "\\\\.\\pipe\\AVDeepScanPipe";
+    HANDLE hPipe = INVALID_HANDLE_VALUE;
 
-    //wait until the connection is Stable
-    HANDLE hPipe = NULL;
-    do  {
-        hPipe = CreateFileA(
-            pipeName.c_str(),
-            GENERIC_WRITE,
-            0,
-            NULL,
-            OPEN_EXISTING,
-            0,
-            NULL);
-        if (hPipe == INVALID_HANDLE_VALUE)
-            Sleep(500);
-        else
-            break;
-    }while(true);
+    // Try for up to 10 seconds, then give up rather than blocking forever
+    for (int i = 0; i < 20; i++) {
+        hPipe = CreateFileA(pipeName, GENERIC_WRITE, 0, NULL,
+            OPEN_EXISTING, 0, NULL);
+        if (hPipe != INVALID_HANDLE_VALUE) break;
+        Sleep(500);
+    }
 
+    if (hPipe == INVALID_HANDLE_VALUE) {
+        std::cout << "[SigScanner] Deep analysis pipe unavailable, skipping.\n";
+        return;
+    }
 
     WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
-	CloseHandle(hPipe);
+    CloseHandle(hPipe);
 }
 
 void SigScanner::checkSignature(std::filesystem::path path)
@@ -60,8 +57,6 @@ void SigScanner::checkSignature(std::filesystem::path path)
         std::lock_guard<std::mutex> lock(vectorMutex);
         files.push_back(path.wstring());
     }
-
-    files.push_back(path);
 
     // 1. Generate the hash
     std::string fileHash = getMD5Hash(path);
@@ -88,9 +83,11 @@ void SigScanner::checkSignature(std::filesystem::path path)
 bool SigScanner::scanWithVirusTotal(const std::string& fileHash)
 {
     // Create command to run Python script with the HASH as the argument
-    std::string pythonCommand = "virus_scanner.exe " + fileHash;
-    
+    std::filesystem::path scannerPath = std::filesystem::path(GetProjectRoot()) /
+        "aegiscore (static scans)" / "x64" / "Debug" /
+        "virus_scanner.exe";
 
+    std::string pythonCommand = "\"" + scannerPath.string() + "\" " + fileHash;
     //std::cout << "Executing: " << pythonCommand << std::endl;
 
     FILE* pipe = _popen(pythonCommand.c_str(), "r");

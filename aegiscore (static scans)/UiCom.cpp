@@ -161,50 +161,50 @@ void UiCom::killScan(std::string& procces)
 void UiCom::start()
 {
     LPCWSTR pipeName = L"\\\\.\\pipe\\UiPipe";
+    std::cout << "[INIT] UI ENGINE Initialize...\n";
 
-    std::cout << "[INIT] UI ENGINE Initilaize...\n" << std::endl;
+    // Build a security descriptor that allows Everyone to connect
+    // (needed because Electron runs in user session, pipe in Session 0)
+    SECURITY_DESCRIPTOR sd;
+    InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
+    SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE); // NULL DACL = allow all
 
-	// This loop will keep the pipe server running indefinitely, allowing multiple connections from Electron over time.
+    SECURITY_ATTRIBUTES sa;
+    sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+    sa.lpSecurityDescriptor = &sd;
+    sa.bInheritHandle = FALSE;
+
     while (true) {
-        
         HANDLE hPipe = CreateNamedPipe(
             pipeName,
-            PIPE_ACCESS_INBOUND,       
+            PIPE_ACCESS_INBOUND,
             PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
-            1,                         
-            1024,                      
-            1024,                      
-            0,                         
-            NULL                      
+            1, 1024, 1024, 0,
+            &sa          // ← pass security attributes instead of NULL
         );
 
         if (hPipe == INVALID_HANDLE_VALUE) {
-            std::cerr << "Failed to create pipe." << std::endl;
+            std::cerr << "Failed to create pipe: " << GetLastError() << std::endl;
+            Sleep(1000); // wait before retrying instead of spinning
             continue;
         }
 
         if (ConnectNamedPipe(hPipe, NULL) != FALSE) {
-            std::cout << "Electron connected!" << std::endl;
-
             char buffer[1024];
             DWORD bytesRead;
-
-            if (ReadFile(hPipe, buffer, sizeof(buffer) - 1, &bytesRead, NULL))
-            {
-                buffer[bytesRead] = '\0'; 
-                std::thread([this, buffer]() { this->processMessage(buffer); }).detach();          
+            if (ReadFile(hPipe, buffer, sizeof(buffer) - 1, &bytesRead, NULL)) {
+                buffer[bytesRead] = '\0';
+                std::thread([this, buffer]() {
+                    this->processMessage(buffer);
+                    }).detach();
                 std::cout << "Received from Electron: " << buffer << std::endl;
-
             }
         }
 
-        //close teh handle
         DisconnectNamedPipe(hPipe);
         CloseHandle(hPipe);
-
     }
 }
-
 std::wstring GetExecutableDirectory() {
     wchar_t path[MAX_PATH];
     GetModuleFileNameW(NULL, path, MAX_PATH);
