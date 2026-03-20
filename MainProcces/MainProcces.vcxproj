@@ -130,7 +130,7 @@
   <ItemGroup>
     <ClCompile Include="database.cpp" />
     <ClCompile Include="pipe.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <ItemGroup>

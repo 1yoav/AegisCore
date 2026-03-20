@@ -1,9 +1,10 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+ï»¿// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include <winternl.h>
 #include <iostream>
 #include <Windows.h>
 #include <thread>
+#include <psapi.h>
 #include <sstream>
 #include <locale>
 #include <codecvt> // Deprecated in C++17
@@ -20,30 +21,30 @@
 //***********************************
 
 //CreateProcessA
-//• CreateProcessW
-//• CreateProcessInternalW
-//• CreateProcessInternalA
-//• Process32Next
-//• Process32First
-//• CreateToolhelp32Snapshot
-//• OpenProcess
-//• VirtualAllocEx
-//• LookupPrivilegeValue
-//• AdjustTokenPrivileges
-//• OpenProcessToken
-//• VirtualProtect
-//• WriteProcessMemory
-//• NtUnmapViewOfSection
-//• NtCreateSection
-//• NtMapViewOfSection
-//• QueueUserAPCprintf
-//• SuspendThread
-//• ResumeThread
-//• CreateRemoteThread
-//• RtlCreateUserThread
-//• NtCreateThreadEx
-//• GetThreadContext
-//• SetThreadContext
+//â€¢ CreateProcessW
+//â€¢ CreateProcessInternalW
+//â€¢ CreateProcessInternalA
+//â€¢ Process32Next
+//â€¢ Process32First
+//â€¢ CreateToolhelp32Snapshot
+//â€¢ OpenProcess
+//â€¢ VirtualAllocEx
+//â€¢ LookupPrivilegeValue
+//â€¢ AdjustTokenPrivileges
+//â€¢ OpenProcessToken
+//â€¢ VirtualProtect
+//â€¢ WriteProcessMemory
+//â€¢ NtUnmapViewOfSection
+//â€¢ NtCreateSection
+//â€¢ NtMapViewOfSection
+//â€¢ QueueUserAPCprintf
+//â€¢ SuspendThread
+//â€¢ ResumeThread
+//â€¢ CreateRemoteThread
+//â€¢ RtlCreateUserThread
+//â€¢ NtCreateThreadEx
+//â€¢ GetThreadContext
+//â€¢ SetThreadContext
 
 
 typedef MH_STATUS(WINAPI* pMH_Initialize)();
@@ -100,6 +101,14 @@ typedef VOID(WINAPI* pSleep)(
     DWORD dwMilliseconds
     );
 pSleep fpSleep = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtTerminateProcess)(
+    HANDLE ProcessHandle,
+    NTSTATUS ExitStatus
+    );
+pNtTerminateProcess fpNtTerminateProcess = nullptr;
+
+
 
 typedef BOOL(WINAPI* pCloseHandle)(
     HANDLE hObject
@@ -237,6 +246,20 @@ pGetThreadContext fpGetThreadContext = nullptr;
 
 typedef BOOL(WINAPI* pSetThreadContext)(HANDLE, const CONTEXT*);
 pSetThreadContext fpSetThreadContext = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtSetInformationFile)(
+    HANDLE FileHandle,
+    PIO_STATUS_BLOCK IoStatusBlock,
+    PVOID FileInformation,
+    ULONG Length,
+    FILE_INFORMATION_CLASS FileInformationClass
+    );
+pNtSetInformationFile fpNtSetInformationFile = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtDeleteFile)(
+    POBJECT_ATTRIBUTES ObjectAttributes
+    );
+pNtDeleteFile fpNtDeleteFile = nullptr;
 
 
 
@@ -397,6 +420,24 @@ NTSTATUS NTAPI HookNtCreateSection(
     return fpNtCreateSection(a, b, c, d, e, f, g);
 }
 
+NTSTATUS NTAPI HookNtDeleteFile(
+    POBJECT_ATTRIBUTES a    // ObjectAttributes 
+) {
+    if (a && a->ObjectName && a->ObjectName->Buffer) {
+        std::wstring name(a->ObjectName->Buffer, a->ObjectName->Length / sizeof(wchar_t));
+
+        for (auto& c : name) c = towlower(c);
+
+        if (name.find(L"aegiscore-av") != std::wstring::npos) {
+            LogHookedFunction("Blocked Delete on NtDeleteFile: aegiscore-av");
+            return 0xC0000022; // STATUS_ACCESS_DENIED
+        }
+    }
+
+    return fpNtDeleteFile(a);
+}
+
+
 // ================================
 // NtMapViewOfSection
 // ================================
@@ -453,6 +494,46 @@ NTSTATUS NTAPI HookRtlCreateUserThread(
     return fpRtlCreateUserThread(a, b, c, d, e, f, g, h, i, j);
 }
 
+NTSTATUS NTAPI HookNtSetInformationFile(
+    HANDLE a,               // FileHandle
+    PIO_STATUS_BLOCK b,     // IoStatusBlock 
+    PVOID c,                // FileInformation
+    ULONG d,                // Length
+    int e                   // FileInformationClass
+) {
+    // 13 = FileDispositionInformation, 64 = FileDispositionInformationEx
+    if (e == 13 || e == 64 || e == 10) {
+        wchar_t path[MAX_PATH];
+        if (GetFinalPathNameByHandleW(a, path, MAX_PATH, VOLUME_NAME_DOS) > 0) {
+			_wcslwr_s(path, MAX_PATH); // transfer to lowercase for case-insensitive comparison
+            if (wcsstr(path, L"aegiscore-av")) {
+                LogHookedFunction("Blocked Delete on NtSetInformationFile: aegiscore-av");
+                return 0xC0000022; // STATUS_ACCESS_DENIED
+            }
+        }
+    }
+
+    return fpNtSetInformationFile(a, b, c, d, (FILE_INFORMATION_CLASS)e);
+}
+
+NTSTATUS NTAPI HookNtTerminateProcess(
+    HANDLE a,               // ProcessHandle
+    NTSTATUS b              // ExitStatus
+) {
+    if (a != NULL && a != (HANDLE)-1) { 
+        wchar_t procName[MAX_PATH];
+        if (GetModuleFileNameExW(a, NULL, procName, MAX_PATH) > 0) {
+            _wcslwr_s(procName, MAX_PATH);
+            if (wcsstr(procName, L"aegiscore-av")) {
+                LogHookedFunction("Blocked Termination of aegiscore-av");
+                return 0xC0000022; // STATUS_ACCESS_DENIED
+            }
+        }
+    }
+
+    return fpNtTerminateProcess(a, b);
+}
+
 // ================================
 // NtCreateThreadEx
 // ================================
@@ -495,6 +576,18 @@ std::vector<HookInfo> hooks = {
     { L"kernel32.dll", "WriteFile",
     (LPVOID)&HookWriteFile,
     (LPVOID*)&fpWriteFile },
+
+    { L"ntdll.dll", "NtSetInformationFile",
+    (LPVOID)&HookNtSetInformationFile,
+    (LPVOID*)&fpNtSetInformationFile },
+
+    { L"ntdll.dll", "NtTerminateProcess", 
+    (LPVOID)&HookNtTerminateProcess, 
+    (LPVOID*)&fpNtTerminateProcess },
+
+    { L"ntdll.dll", "NtDeleteFile",
+        (LPVOID)&HookNtDeleteFile,
+        (LPVOID*)&fpNtDeleteFile },
 
     { L"kernel32.dll", "CloseHandle",
     (LPVOID)&HookCloseHandle,
