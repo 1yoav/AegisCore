@@ -69,7 +69,18 @@ void createPipe(wchar_t* pipeName)
 
     //connect to the isolationFirest server
     HANDLE pythonPipe;
-    do
+    pythonPipe = CreateFileW(
+        L"\\\\.\\pipe\\isolationForest",
+        GENERIC_WRITE,
+        0,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL
+
+
+    );
+    /*do
     {
         pythonPipe = CreateFileW(
             L"\\\\.\\pipe\\isolationForest",
@@ -86,7 +97,7 @@ void createPipe(wchar_t* pipeName)
             Sleep(500);
         else
             break;
-    } while (true);
+    } while (true);*/
     
 
     while (true)
