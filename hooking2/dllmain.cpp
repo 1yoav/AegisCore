@@ -810,7 +810,19 @@ void LogHookedFunction(std::string functionName)
 
 DWORD WINAPI nitHook(LPVOID)
 {
-    g_hMinHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
+    //all the paragraph for achive absolute path for the minhook dll
+    HMODULE hCurrentModule = NULL;
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        (LPCWSTR)nitHook, &hCurrentModule);
+    WCHAR path[MAX_PATH];
+    GetModuleFileNameW(hCurrentModule, path, MAX_PATH);
+    std::wstring ws(path);
+    std::wstring directory = ws.substr(0, ws.find_last_of(L"\\/"));
+    std::wstring minHookPath = directory + L"\\MinHook.x64.dll";
+
+    g_hMinHook = LoadLibraryW(minHookPath.c_str());
+    //g_hMinHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
     if (!g_hMinHook) {
         OutputDebugStringW(L"LoadLibraryA(MinHook) failed\n");
         return 0;

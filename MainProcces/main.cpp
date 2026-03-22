@@ -120,10 +120,13 @@ bool IsExcluded(const wchar_t* exeName)
         if (_wcsicmp(exeName, excluded.c_str()) == 0) {
             return true;
         }
+        if (_wcsicmp(exeName, L"explorer.exe") == 0) {
+            return false;
+        }
         
     }
 
-    return false;
+    return true;
 }
 
 
@@ -195,7 +198,7 @@ int main()
 
                         if (hProc)
                         {
-                            if (!IsDllLoadedInRemoteProcess(hProc)) //if the dll noy yet loaded
+                            if (!IsDllLoadedInRemoteProcess(hProc) ) //if the dll noy yet loaded
                             {
                                 std::wcout << L"[Allowed] PID: " << pe.th32ProcessID
                                     << L"\t Name: " << pe.szExeFile << std::endl;
