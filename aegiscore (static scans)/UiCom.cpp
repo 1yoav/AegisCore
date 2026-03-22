@@ -1,6 +1,9 @@
 ﻿#include "UiCom.h"
 #include <aclapi.h>
+#include <sddl.h>
+#include <Windows.h>
 #pragma comment(lib, "advapi32.lib")
+
 
 
 void UiCom::processMessage(std::string rawMessage)
@@ -76,8 +79,9 @@ void UiCom::scanFile(std::string& filePath) {
         findingsJson += "\n";
     }
 
-    const char* tempDir = std::getenv("TEMP");
-    std::string resultPath = std::string(tempDir ? tempDir : "C:\\Temp") + "\\aegis_scan_result.json";
+    char tempBuf[MAX_PATH];
+    GetTempPathA(MAX_PATH, tempBuf);
+    std::string resultPath = std::string(tempBuf) + "aegis_scan_result.json";
 
     std::ofstream resultFile(resultPath);
     resultFile << "{\n"
@@ -156,33 +160,34 @@ void UiCom::killScan(std::string& procces)
     }
    
 }
-
 void UiCom::start()
 {
     LPCWSTR pipeName = L"\\\\.\\pipe\\UiPipe";
     std::cout << "[INIT] UI ENGINE Initialize...\n";
 
-    // ── Security descriptor — explicit Everyone ACL ───────────────
-    // NULL DACL works in user sessions but gets blocked at the
-    // Session 0 boundary when launched by the service.
-    EXPLICIT_ACCESSW ea = {};
-    ea.grfAccessPermissions = GENERIC_READ | GENERIC_WRITE;
-    ea.grfAccessMode = SET_ACCESS;
-    ea.grfInheritance = NO_INHERITANCE;
-    ea.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
-    ea.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
-    ea.Trustee.ptstrName = (LPWSTR)L"Everyone";
+    // ── Security descriptor with Low mandatory integrity label ────
+    // aegiscore runs at System integrity (launched by service).
+    // Electron runs at Medium integrity.
+    // Without a Low integrity label on the pipe's SACL, Windows
+    // blocks Medium-integrity processes from connecting to it.
+    // SDDL breakdown:
+    //   S:(ML;;NW;;;LW)  = SACL: mandatory label, No-Write-Up, Low integrity
+    //   D:(A;;0x12019f;;;WD) = DACL: full pipe access to Everyone
+    SECURITY_ATTRIBUTES sa = {};
+    PSECURITY_DESCRIPTOR pSD = NULL;
 
-    PACL pAcl = NULL;
-    SetEntriesInAclW(1, &ea, NULL, &pAcl);
+    const wchar_t* sddl = L"S:(ML;;NW;;;LW)D:(A;;0x12019f;;;WD)";
 
-    SECURITY_DESCRIPTOR sd;
-    InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
-    SetSecurityDescriptorDacl(&sd, TRUE, pAcl, FALSE);
+    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
+        sddl, SDDL_REVISION_1, &pSD, NULL))
+    {
+        std::cerr << "[UiPipe] Failed to create security descriptor, error: "
+            << GetLastError() << std::endl;
+        // Fall through with NULL security — better to try than abort
+    }
 
-    SECURITY_ATTRIBUTES sa;
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-    sa.lpSecurityDescriptor = &sd;
+    sa.lpSecurityDescriptor = pSD;
     sa.bInheritHandle = FALSE;
 
     while (true) {
@@ -197,12 +202,10 @@ void UiCom::start()
         if (hPipe == INVALID_HANDLE_VALUE) {
             DWORD err = GetLastError();
             std::cerr << "[UiPipe] Failed to create pipe, error: " << err << std::endl;
-
             if (err == ERROR_PIPE_BUSY)
-                WaitNamedPipeW(pipeName, 5000); // previous instance still alive
+                WaitNamedPipeW(pipeName, 5000);
             else
                 Sleep(1000);
-
             continue;
         }
 
@@ -222,8 +225,7 @@ void UiCom::start()
         CloseHandle(hPipe);
     }
 
-    // Cleanup ACL (never reached in normal operation but good practice)
-    if (pAcl) LocalFree(pAcl);
+    if (pSD) LocalFree(pSD);
 }
 
 std::wstring GetExecutableDirectory() {

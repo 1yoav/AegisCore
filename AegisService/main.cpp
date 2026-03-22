@@ -4,9 +4,11 @@
 #include <userenv.h>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #pragma comment(lib, "wtsapi32.lib")
 #pragma comment(lib, "userenv.lib")
+#pragma comment(lib, "shell32.lib")
 
 namespace fs = std::filesystem;
 
@@ -17,6 +19,8 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR* argv);
 void WINAPI ServiceCtrlHandler(DWORD ctrl);
 void RunEngine();
 bool LaunchInUserSession(const std::wstring& exePath);
+bool LaunchElevatedInUserSession(const std::wstring& exePath);
+bool LaunchAsSystemInUserSession(const std::wstring& exePath);
 
 int main() {
     SERVICE_TABLE_ENTRY ServiceTable[] = {
@@ -108,17 +112,15 @@ bool LaunchInUserSession(const std::wstring& exePath) {
     return ok;
 }
 
-// ??? Launch engine + tray icon ????????????????????????????????????????????????
+// ??? Launch engine + tray icon
 void RunEngine() {
     wchar_t path[MAX_PATH];
     GetModuleFileNameW(NULL, path, MAX_PATH);
 
-    // Navigate up from AegisService\x64\Release\ to AegisCore root
-    fs::path serviceDir = fs::path(path).parent_path(); // Release
-    fs::path installRoot = serviceDir
-        .parent_path()   // x64
-        .parent_path()   // AegisService
-        .parent_path();  // AegisCore root
+    fs::path serviceDir = fs::path(path).parent_path();
+    fs::path installRoot = serviceDir.parent_path()
+        .parent_path()
+        .parent_path();
 
     std::wstring enginePath = (installRoot /
         L"aegiscore (static scans)" / L"x64" / L"Debug" /
@@ -128,21 +130,115 @@ void RunEngine() {
         L"AegisService" / L"AegisIcon" / L"bin" / L"Debug" /
         L"AegisIcon.exe").wstring();
 
-    // Launch the AV engine — no UI needed, plain CreateProcess is fine
+    // ?? Diagnostic log — remove once working ?????????????????????
+    {
+        std::wofstream log(L"C:\\Windows\\Temp\\aegis_service_log.txt");
+        log << L"Install root:  " << installRoot.wstring() << L"\n";
+        log << L"Engine path:   " << enginePath << L"\n";
+        log << L"Engine exists: " << fs::exists(enginePath) << L"\n";
+        log << L"Icon path:     " << iconPath << L"\n";
+        log << L"Icon exists:   " << fs::exists(iconPath) << L"\n";
+    }
+
+    STARTUPINFOW si{}; PROCESS_INFORMATION pi{};
+    si.cb = sizeof(si);
+    BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
+        FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+    {
+        std::wofstream log(L"C:\\Windows\\Temp\\aegis_service_log.txt",
+            std::ios::app);
+        log << L"CreateProcess ok: " << ok
+            << L"  error: " << GetLastError() << L"\n";
+    }
+
+    if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
+
+    LaunchInUserSession(iconPath);
+    LaunchAsSystemInUserSession(enginePath); // elevated, user session
+}
+
+bool LaunchAsSystemInUserSession(const std::wstring& exePath) {
+    // Get active console session ID
+    DWORD sessionId = WTSGetActiveConsoleSessionId();
+    if (sessionId == 0xFFFFFFFF) return false;
+
+    // Duplicate OUR OWN token (LocalSystem = full admin)
+    // instead of the user's limited token
+    HANDLE hToken = NULL;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
+        return false;
+
+    HANDLE hDupToken = NULL;
+    if (!DuplicateTokenEx(hToken, TOKEN_ALL_ACCESS, NULL,
+        SecurityImpersonation, TokenPrimary, &hDupToken)) {
+        CloseHandle(hToken);
+        return false;
+    }
+    CloseHandle(hToken);
+
+    // Stamp the user's session ID onto the LocalSystem token
+    // This makes it run as SYSTEM but in the interactive session
+    if (!SetTokenInformation(hDupToken, TokenSessionId,
+        &sessionId, sizeof(sessionId))) {
+        CloseHandle(hDupToken);
+        return false;
+    }
+
+    LPVOID pEnv = NULL;
+    CreateEnvironmentBlock(&pEnv, hDupToken, FALSE);
+
+    std::wstring cmdLine = L"\"" + exePath + L"\"";
+    std::vector<wchar_t> cmdBuf(cmdLine.begin(), cmdLine.end());
+    cmdBuf.push_back(0);
+
     STARTUPINFOW si{};
     PROCESS_INFORMATION pi{};
     si.cb = sizeof(si);
-    CreateProcessW(
-        enginePath.c_str(),
-        NULL, NULL, NULL, FALSE,
-        CREATE_NO_WINDOW,
-        NULL, NULL,
-        &si, &pi
-    );
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
+    si.lpDesktop = (LPWSTR)L"winsta0\\default";
 
-    // Launch tray icon in the user's interactive desktop session
-    // (plain CreateProcess would spawn it invisibly in Session 0)
-    LaunchInUserSession(iconPath);
+    BOOL ok = CreateProcessAsUserW(
+        hDupToken, NULL, cmdBuf.data(),
+        NULL, NULL, FALSE,
+        CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
+        pEnv, NULL, &si, &pi
+    );
+
+    if (pEnv) DestroyEnvironmentBlock(pEnv);
+    CloseHandle(hDupToken);
+    if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
+    return ok;
+}
+
+bool LaunchElevatedInUserSession(const std::wstring& exePath) {
+    // ShellExecuteEx with "runas" triggers UAC elevation in the user session
+    // We need to do this via the user's token + ShellExecuteEx
+
+    DWORD sessionId = WTSGetActiveConsoleSessionId();
+    if (sessionId == 0xFFFFFFFF) return false;
+
+    HANDLE hToken = NULL;
+    if (!WTSQueryUserToken(sessionId, &hToken)) return false;
+
+    HANDLE hDupToken = NULL;
+    DuplicateTokenEx(hToken, MAXIMUM_ALLOWED, NULL,
+        SecurityImpersonation, TokenPrimary, &hDupToken);
+    CloseHandle(hToken);
+
+    // Impersonate the user so ShellExecuteEx runs in their context
+    ImpersonateLoggedOnUser(hDupToken);
+
+    SHELLEXECUTEINFOW sei = {};
+    sei.cbSize = sizeof(sei);
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+    sei.lpVerb = L"runas";           // triggers UAC elevation
+    sei.lpFile = exePath.c_str();
+    sei.nShow = SW_HIDE;
+
+    BOOL ok = ShellExecuteExW(&sei);
+
+    RevertToSelf();                  // stop impersonating
+    CloseHandle(hDupToken);
+
+    if (ok && sei.hProcess) CloseHandle(sei.hProcess);
+    return ok;
 }

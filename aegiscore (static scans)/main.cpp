@@ -70,62 +70,77 @@ BOOL WINAPI ConsoleHandler(DWORD dwType) {
 
 int main()
 {
+    // ?? Guarantee TEMP/TMP exist regardless of token context ?????
+    // When launched as SYSTEM via service, these may point to
+    // C:\Windows\Temp or be missing entirely — set them explicitly
+    char tempBuf[MAX_PATH];
+    if (GetTempPathA(MAX_PATH, tempBuf))
+    {
+        _putenv_s("TEMP", tempBuf);
+        _putenv_s("TMP", tempBuf);
+    }
+    else
+    {
+        _putenv_s("TEMP", "C:\\Windows\\Temp");
+        _putenv_s("TMP", "C:\\Windows\\Temp");
+    }
+
     if (!SetConsoleCtrlHandler(ConsoleHandler, TRUE)) {
         std::cerr << "[-] Could not set control handler" << std::endl;
         return 1;
     }
 
-#pragma warning(suppress : 4996)
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
-    // ???????????????????????????????????????????????????????????
-    // INITIALIZE WITH RELATIVE PATHS
-    // ???????????????????????????????????????????????????????????
-
-    std::cout << "[*] Project Root: " << fs::path(GetProjectRoot()).string() << std::endl;
-    
-    // Initialize database with relative path
-    sqlite3* database = nullptr;
-    std::string dbPath = GetDatabasePath();
-    std::cout << "[*] Database Path: " << dbPath << std::endl;
-    SQLDatabase db(database, dbPath.c_str());
-    db.open();
-
-    UiCom uiCom(&db); //activate the communiciation with the ui
-	std::thread uiThread(&UiCom::start, &uiCom);
-    
-
-	//// signature scanner
-    std::cout << "[INIT] initilize signature scanner...\n";
-    std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.downloads);}).detach() ;
-    std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
-    std::thread([&]() {uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
-
-
-	//extension scanner
-    //uiCom.extScanner.ScanExtensions();
-
-
-    // ???????????????????????????????????????????????????????????
-    // START PIPELINE WITH RELATIVE PATHS
-    // ???????????????????????????????????????????????????????????
-
-    std::vector<std::string> pipeline = {
-        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
-        "\"" + GetMainProccesPath() + "\"",
-        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
-        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
-    };
-
-    for (const std::string& task : pipeline)
+    // ?? Wrap entire startup so abort() never fires ????????????????
+    try
     {
-        std::string command = "start /b \"\" " + task;
-        std::system(command.c_str());
+        std::cout << "[*] Project Root: "
+            << fs::path(GetProjectRoot()).string() << std::endl;
+
+        sqlite3* database = nullptr;
+        std::string dbPath = GetDatabasePath();
+        std::cout << "[*] Database Path: " << dbPath << std::endl;
+
+        SQLDatabase db(database, dbPath.c_str());
+
+        if (!db.open()) {
+            std::cerr << "[-] Database failed to open, continuing without it\n";
+            // Don't abort — pipe and scanners can still work
+        }
+
+        UiCom uiCom(&db);
+        std::thread uiThread(&UiCom::start, &uiCom);
+
+        std::cout << "[INIT] Initialize signature scanner...\n";
+        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.downloads); }).detach();
+        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
+        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
+
+        std::vector<std::string> pipeline = {
+            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
+            "\"" + GetMainProccesPath() + "\"",
+            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
+            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
+        };
+
+        for (const std::string& task : pipeline) {
+            std::string command = "start /b \"\" " + task;
+            std::system(command.c_str());
+        }
+
+        uiThread.join();
     }
-
-    // Wait for the ui thread to finish
-	uiThread.join();
-
+    catch (const std::exception& e)
+    {
+        std::ofstream log("C:\\Windows\\Temp\\aegiscore_crash.txt");
+        log << "Exception: " << e.what() << "\n";
+        return 1;
+    }
+    catch (...)
+    {
+        std::ofstream log("C:\\Windows\\Temp\\aegiscore_crash.txt");
+        log << "Unknown exception at startup\n";
+        return 1;
+    }
 
     return 0;
 }
