@@ -1,9 +1,10 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
+ï»¿// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include <winternl.h>
 #include <iostream>
 #include <Windows.h>
 #include <thread>
+#include <psapi.h>
 #include <sstream>
 #include <locale>
 #include <codecvt> // Deprecated in C++17
@@ -20,30 +21,30 @@
 //***********************************
 
 //CreateProcessA
-//• CreateProcessW
-//• CreateProcessInternalW
-//• CreateProcessInternalA
-//• Process32Next
-//• Process32First
-//• CreateToolhelp32Snapshot
-//• OpenProcess
-//• VirtualAllocEx
-//• LookupPrivilegeValue
-//• AdjustTokenPrivileges
-//• OpenProcessToken
-//• VirtualProtect
-//• WriteProcessMemory
-//• NtUnmapViewOfSection
-//• NtCreateSection
-//• NtMapViewOfSection
-//• QueueUserAPCprintf
-//• SuspendThread
-//• ResumeThread
-//• CreateRemoteThread
-//• RtlCreateUserThread
-//• NtCreateThreadEx
-//• GetThreadContext
-//• SetThreadContext
+//â€¢ CreateProcessW
+//â€¢ CreateProcessInternalW
+//â€¢ CreateProcessInternalA
+//â€¢ Process32Next
+//â€¢ Process32First
+//â€¢ CreateToolhelp32Snapshot
+//â€¢ OpenProcess
+//â€¢ VirtualAllocEx
+//â€¢ LookupPrivilegeValue
+//â€¢ AdjustTokenPrivileges
+//â€¢ OpenProcessToken
+//â€¢ VirtualProtect
+//â€¢ WriteProcessMemory
+//â€¢ NtUnmapViewOfSection
+//â€¢ NtCreateSection
+//â€¢ NtMapViewOfSection
+//â€¢ QueueUserAPCprintf
+//â€¢ SuspendThread
+//â€¢ ResumeThread
+//â€¢ CreateRemoteThread
+//â€¢ RtlCreateUserThread
+//â€¢ NtCreateThreadEx
+//â€¢ GetThreadContext
+//â€¢ SetThreadContext
 
 
 typedef MH_STATUS(WINAPI* pMH_Initialize)();
@@ -100,6 +101,14 @@ typedef VOID(WINAPI* pSleep)(
     DWORD dwMilliseconds
     );
 pSleep fpSleep = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtTerminateProcess)(
+    HANDLE ProcessHandle,
+    NTSTATUS ExitStatus
+    );
+pNtTerminateProcess fpNtTerminateProcess = nullptr;
+
+
 
 typedef BOOL(WINAPI* pCloseHandle)(
     HANDLE hObject
@@ -237,6 +246,20 @@ pGetThreadContext fpGetThreadContext = nullptr;
 
 typedef BOOL(WINAPI* pSetThreadContext)(HANDLE, const CONTEXT*);
 pSetThreadContext fpSetThreadContext = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtSetInformationFile)(
+    HANDLE FileHandle,
+    PIO_STATUS_BLOCK IoStatusBlock,
+    PVOID FileInformation,
+    ULONG Length,
+    FILE_INFORMATION_CLASS FileInformationClass
+    );
+pNtSetInformationFile fpNtSetInformationFile = nullptr;
+
+typedef NTSTATUS(NTAPI* pNtDeleteFile)(
+    POBJECT_ATTRIBUTES ObjectAttributes
+    );
+pNtDeleteFile fpNtDeleteFile = nullptr;
 
 
 
@@ -397,6 +420,24 @@ NTSTATUS NTAPI HookNtCreateSection(
     return fpNtCreateSection(a, b, c, d, e, f, g);
 }
 
+NTSTATUS NTAPI HookNtDeleteFile(
+    POBJECT_ATTRIBUTES a    // ObjectAttributes 
+) {
+    if (a && a->ObjectName && a->ObjectName->Buffer) {
+        std::wstring name(a->ObjectName->Buffer, a->ObjectName->Length / sizeof(wchar_t));
+
+        for (auto& c : name) c = towlower(c);
+
+        if (name.find(L"aegiscore-av") != std::wstring::npos) {
+            LogHookedFunction("Blocked Delete on NtDeleteFile: aegiscore-av");
+            return 0xC0000022; // STATUS_ACCESS_DENIED
+        }
+    }
+
+    return fpNtDeleteFile(a);
+}
+
+
 // ================================
 // NtMapViewOfSection
 // ================================
@@ -453,6 +494,46 @@ NTSTATUS NTAPI HookRtlCreateUserThread(
     return fpRtlCreateUserThread(a, b, c, d, e, f, g, h, i, j);
 }
 
+NTSTATUS NTAPI HookNtSetInformationFile(
+    HANDLE a,               // FileHandle
+    PIO_STATUS_BLOCK b,     // IoStatusBlock 
+    PVOID c,                // FileInformation
+    ULONG d,                // Length
+    int e                   // FileInformationClass
+) {
+    // 13 = FileDispositionInformation, 64 = FileDispositionInformationEx
+    if (e == 13 || e == 64 || e == 10) {
+        wchar_t path[MAX_PATH];
+        if (GetFinalPathNameByHandleW(a, path, MAX_PATH, VOLUME_NAME_DOS) > 0) {
+			_wcslwr_s(path, MAX_PATH); // transfer to lowercase for case-insensitive comparison
+            if (wcsstr(path, L"aegiscore-av")) {
+                LogHookedFunction("Blocked Delete on NtSetInformationFile: aegiscore-av");
+                return 0xC0000022; // STATUS_ACCESS_DENIED
+            }
+        }
+    }
+
+    return fpNtSetInformationFile(a, b, c, d, (FILE_INFORMATION_CLASS)e);
+}
+
+NTSTATUS NTAPI HookNtTerminateProcess(
+    HANDLE a,               // ProcessHandle
+    NTSTATUS b              // ExitStatus
+) {
+    if (a != NULL && a != (HANDLE)-1) { 
+        wchar_t procName[MAX_PATH];
+        if (GetModuleFileNameExW(a, NULL, procName, MAX_PATH) > 0) {
+            _wcslwr_s(procName, MAX_PATH);
+            if (wcsstr(procName, L"aegiscore-av")) {
+                LogHookedFunction("Blocked Termination of aegiscore-av");
+                return 0xC0000022; // STATUS_ACCESS_DENIED
+            }
+        }
+    }
+
+    return fpNtTerminateProcess(a, b);
+}
+
 // ================================
 // NtCreateThreadEx
 // ================================
@@ -495,6 +576,18 @@ std::vector<HookInfo> hooks = {
     { L"kernel32.dll", "WriteFile",
     (LPVOID)&HookWriteFile,
     (LPVOID*)&fpWriteFile },
+
+    { L"ntdll.dll", "NtSetInformationFile",
+    (LPVOID)&HookNtSetInformationFile,
+    (LPVOID*)&fpNtSetInformationFile },
+
+    { L"ntdll.dll", "NtTerminateProcess", 
+    (LPVOID)&HookNtTerminateProcess, 
+    (LPVOID*)&fpNtTerminateProcess },
+
+    { L"ntdll.dll", "NtDeleteFile",
+        (LPVOID)&HookNtDeleteFile,
+        (LPVOID*)&fpNtDeleteFile },
 
     { L"kernel32.dll", "CloseHandle",
     (LPVOID)&HookCloseHandle,
@@ -608,76 +701,77 @@ std::vector<HookInfo> hooks = {
 
 };
 
+void unloadHooking()
+{
+	Sleep(1000); // Ensure all operations are completed before unhooking
+    if (g_MH_DisableHook != nullptr) {
+        g_MH_DisableHook(MH_ALL_HOOKS);
+    }
 
+    if (g_MH_Uninitialize != nullptr) {
+        g_MH_Uninitialize();
+    }
+
+    Sleep(100);
+
+    if (g_hMinHook) {
+        FreeLibrary(g_hMinHook);
+    }
+}
 
 ///format: <num of logs><log1><log2>....<log N>
 //send logs to named pipe
-    void sendLogs()
+void sendLogs()
 {
-	int logCount = 0;
     while (true)
     {
-        if(logCount == 0)
+        logMutex.lock();
+        if (loggedApi.empty())
         {
-            logMutex.lock();
-			loggedApi.clear();
-            logCount = 1;
             logMutex.unlock();
-		}
-        else
-        {
-            logMutex.lock();
-            if (loggedApi.empty())
-            {
-                logMutex.unlock();
-                Sleep(10000); // Sleep for 10 seconds if there are no logs
-                continue;
-            }
-
-            //create the msg
-            std::string msg;
-            for (auto item : loggedApi)
-            {
-                msg += item;
-            }
-            msg += "END_WINDOW\n";
-
-            //create whide string for debug output
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-            std::wstring wide_string = converter.from_bytes(msg);
-            OutputDebugStringW(wide_string.c_str());
-            loggedApi.clear();
-            logMutex.unlock();
-
-
-
-            if (!WaitNamedPipeW(pipeName, NMPWAIT_WAIT_FOREVER))
-            {
-                g_MH_DisableHook(MH_ALL_HOOKS);
-                g_MH_Uninitialize();
-                FreeLibrary(g_hMinHook);
-                FreeLibrary((hModulee));
-                return;
-            }
-
-            HANDLE hPipe = CreateFileW(
-                pipeName,
-                GENERIC_WRITE,
-                0,
-                NULL,
-                OPEN_EXISTING,
-                0,
-                NULL
-            );
-
-
-            WriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
-            CloseHandle(hPipe);
+            Sleep(10000); // Sleep for 10 seconds if there are no logs
+            continue;
         }
-		Sleep(10000); // Send logs every 10 seconds
+
+        //create the msg
+        std::string msg;
+        for (auto item : loggedApi)
+        {
+            msg += item;
+        }
+        msg += "END_WINDOW\n";
+
+
+        loggedApi.clear();
+        logMutex.unlock();
+
+
+
+        if (!WaitNamedPipeW(pipeName, 2000))
+        {
+            return;
+        }
+
+        HANDLE hPipe = CreateFileW(
+            pipeName,
+            GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL
+        );
+
+        if (hPipe != INVALID_HANDLE_VALUE)
+        {
+            fpWriteFile(hPipe, msg.c_str(), (DWORD)msg.size(), NULL, NULL);
+            fpCloseHandle(hPipe);
+        }
+        Sleep(10000); // Send logs every 10 seconds
     }
-    
 }
+    
+
 
 
 //create log entry
@@ -697,6 +791,8 @@ void LogHookedFunction(std::string functionName)
     loggedApi.push_back(msg);
     logMutex.unlock();
 }
+
+
 
 
 
@@ -732,6 +828,8 @@ DWORD WINAPI nitHook(LPVOID)
         return 0;
     }
 
+
+
     for (const auto& hook : hooks) {
         if (g_MH_CreateHookApi(hook.dllName, hook.funcName, hook.hookFunc, hook.originalFunc) != MH_OK)
         {
@@ -741,17 +839,13 @@ DWORD WINAPI nitHook(LPVOID)
         }
     }
 
-    if (g_MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
-    {
-        OutputDebugStringW(L"MH_EnableHook failed");
-    }
+    g_MH_EnableHook(MH_ALL_HOOKS); // Enable all hooks
 
-    OutputDebugStringW(L"MH_EnableHook succedd");
 
-	//create thread to send logs
-	std::thread logThread(sendLogs);
-    logThread.detach();
-	return 0;
+	//create thread to send logsjk
+	sendLogs();
+	unloadHooking();
+    FreeLibraryAndExitThread(hModulee, 0);
 }
 
 
@@ -762,16 +856,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
         // Add this function to your dllmain.cpp
-        OutputDebugStringW(L"DLL_PROCESS_ATTACH called\n");
 		hModulee = hModule;
         DisableThreadLibraryCalls(hModule);
-        (QueueUserWorkItem(nitHook, nullptr, WT_EXECUTEDEFAULT));
+        CloseHandle(CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)nitHook, NULL, 0, NULL));
         break;
 
     case DLL_PROCESS_DETACH:
-        g_MH_DisableHook(MH_ALL_HOOKS);
-        g_MH_Uninitialize();
-        FreeLibrary(g_hMinHook);
         break;
     }
 
