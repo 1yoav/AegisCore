@@ -1,4 +1,6 @@
 ﻿#include "UiCom.h"
+#include <aclapi.h>
+#pragma comment(lib, "advapi32.lib")
 
 
 void UiCom::processMessage(std::string rawMessage)
@@ -95,31 +97,29 @@ void UiCom::scanFile(std::string& filePath) {
 void UiCom::activateScan(std::string& procces)
 {
     std::string command = "";
-    std::cout << "Activating scan for: " << procces << std::endl;
+    fs::path root = GetProjectRoot();
 
     if (procces == "MainProcces.exe")
     {
-        command = "start /b \"\" \"" + GetMainProccesPath() + "\""; //kill the hooking
+        command = "start /b \"\" \"" + GetMainProccesPath() + "\"";
         std::system(command.c_str());
 
-        command = "start /b \"\" python \"" + GetPythonScriptPath("isolationForest.py") + "\"";//active the isolationForest
+        // isolationForest is now a compiled exe in deep_analysis\dist
+        std::string isoPath = (root / "deep_analysis" / "dist" / "isolationForest.exe").string();
+        command = "start /b \"\" \"" + isoPath + "\"";
         std::system(command.c_str());
     }
     else if (procces == "signatureScanner")
     {
         monitor.keepMonitoring = true;
-
-        // Use threads so the UI doesn't freeze!
         std::thread([this]() { monitor.startMonitor(monitor.downloads); }).detach();
         std::thread([this]() { monitor.startMonitor(monitor.desktop); }).detach();
         std::thread([this]() { monitor.startMonitor(monitor.temp); }).detach();
-
-        std::cout << "Signature monitors started in background threads." << std::endl;
     }
-    else if(procces == "tlsCheck2.py")
+    else if (procces == "tlsCheck2.py")
     {
-        // Fix: Added the closing quote \" at the end
-        command = "start /b \"\" python \"" + GetPythonScriptPath(procces) + "\"";
+        std::string tlsPath = (root / "deep_analysis" / "dist" / "tlscheck2.exe").string();
+        command = "start /b \"\" \"" + tlsPath + "\"";
         std::system(command.c_str());
     }
     else
@@ -127,7 +127,6 @@ void UiCom::activateScan(std::string& procces)
         std::cout << "the call not recognised! \n";
     }
 }
-
 
 
 
@@ -163,11 +162,23 @@ void UiCom::start()
     LPCWSTR pipeName = L"\\\\.\\pipe\\UiPipe";
     std::cout << "[INIT] UI ENGINE Initialize...\n";
 
-    // Build a security descriptor that allows Everyone to connect
-    // (needed because Electron runs in user session, pipe in Session 0)
+    // ── Security descriptor — explicit Everyone ACL ───────────────
+    // NULL DACL works in user sessions but gets blocked at the
+    // Session 0 boundary when launched by the service.
+    EXPLICIT_ACCESSW ea = {};
+    ea.grfAccessPermissions = GENERIC_READ | GENERIC_WRITE;
+    ea.grfAccessMode = SET_ACCESS;
+    ea.grfInheritance = NO_INHERITANCE;
+    ea.Trustee.TrusteeForm = TRUSTEE_IS_NAME;
+    ea.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
+    ea.Trustee.ptstrName = (LPWSTR)L"Everyone";
+
+    PACL pAcl = NULL;
+    SetEntriesInAclW(1, &ea, NULL, &pAcl);
+
     SECURITY_DESCRIPTOR sd;
     InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
-    SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE); // NULL DACL = allow all
+    SetSecurityDescriptorDacl(&sd, TRUE, pAcl, FALSE);
 
     SECURITY_ATTRIBUTES sa;
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -180,12 +191,18 @@ void UiCom::start()
             PIPE_ACCESS_INBOUND,
             PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
             1, 1024, 1024, 0,
-            &sa          // ← pass security attributes instead of NULL
+            &sa
         );
 
         if (hPipe == INVALID_HANDLE_VALUE) {
-            std::cerr << "Failed to create pipe: " << GetLastError() << std::endl;
-            Sleep(1000); // wait before retrying instead of spinning
+            DWORD err = GetLastError();
+            std::cerr << "[UiPipe] Failed to create pipe, error: " << err << std::endl;
+
+            if (err == ERROR_PIPE_BUSY)
+                WaitNamedPipeW(pipeName, 5000); // previous instance still alive
+            else
+                Sleep(1000);
+
             continue;
         }
 
@@ -204,7 +221,11 @@ void UiCom::start()
         DisconnectNamedPipe(hPipe);
         CloseHandle(hPipe);
     }
+
+    // Cleanup ACL (never reached in normal operation but good practice)
+    if (pAcl) LocalFree(pAcl);
 }
+
 std::wstring GetExecutableDirectory() {
     wchar_t path[MAX_PATH];
     GetModuleFileNameW(NULL, path, MAX_PATH);
@@ -213,12 +234,10 @@ std::wstring GetExecutableDirectory() {
 }
 
 std::wstring GetProjectRoot() {
-    // From: C:\...\AegisCore\aegiscore (static scans)\x64\Release\MainProcces.exe
-    // Go up 3 levels to get to AegisCore root
     fs::path exeDir = GetExecutableDirectory();
-    fs::path projectRoot = exeDir.parent_path()  // Remove "Release" or "Debug"
-        .parent_path()  // Remove "x64"
-        .parent_path(); // Remove "aegiscore (static scans)" or "MainProcces"
+    fs::path projectRoot = exeDir.parent_path()
+        .parent_path()
+        .parent_path();
     return projectRoot.wstring();
 }
 

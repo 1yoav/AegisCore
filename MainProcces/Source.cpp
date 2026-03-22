@@ -5,9 +5,12 @@
 #include "pipe.h"
 #include <thread>
 #include "programsValidation.h"
+#include <filesystem>
 
 size_t pathLen;
 const char* dllPath;
+
+namespace fs = std::filesystem;
 
 void log(const wchar_t* msg)
 {
@@ -78,8 +81,13 @@ int main(int argc , char* arg[])
 
 
 
-    dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
-    pathLen = strlen(dllPath) + 1;
+    wchar_t exePathBuf[MAX_PATH];
+    GetModuleFileNameW(NULL, exePathBuf, MAX_PATH);
+    fs::path exeDir = fs::path(exePathBuf).parent_path();
+    // hooking2.dll sits next to MainProcces.exe in the same Debug folder
+    std::string dllPathStr = (exeDir / "hooking2.dll").string();
+    dllPath = dllPathStr.c_str();
+    pathLen = dllPathStr.size() + 1;
 
 
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

@@ -19,7 +19,7 @@ from analyzer import Analyzer
 from threat_logger import ThreatLogger
 
 DRIVER_PIPE_NAME = r"\\.\pipe\AVDeepScanPipe"
-DATABASE_PATH = "c2_threats.db"
+DATABASE_PATH = os.path.join(INSTALL_ROOT, 'deep_analysis', 'c2_threats.db')
 
 
 class DriverContext:

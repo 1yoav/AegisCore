@@ -10,8 +10,9 @@
 	<?define IconSrc         = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug\Dependencies" ?>
 	<?define TrayExeSrc      = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug" ?>
 	<?define MainProcSrc     = "$(var.SourceRoot)\MainProcces\x64\Debug" ?>
+	<?define HookingSrc      = "$(var.SourceRoot)\hooking2\x64\Debug" ?>
 	<?define DeepSrc         = "$(var.SourceRoot)\deep_analysis\dist" ?>
-	<?define DeepAnalysis    = "$(var.SourceRoot)\deep_analysis" ?>
+	<?define DeepRoot        = "$(var.SourceRoot)\deep_analysis" ?>
 	<?define DbSrc           = "$(var.SourceRoot)\aegiscore (static scans)\dependencies" ?>
 	<?define InstallerAssets = "$(var.SourceRoot)\AegisInstaller\bin\Debug" ?>
 
@@ -32,14 +33,10 @@
 		<MajorUpgrade DowngradeErrorMessage="A newer version of AegisCore is already installed." />
 		<MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
-		<!-- Add/Remove Programs icon -->
 		<Icon Id="ProductIcon" SourceFile="$(var.IconSrc)\AegisCore_Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="ProductIcon" />
-
-		<!-- Desktop shortcut toggle -->
 		<Property Id="DESKTOP_SHORTCUT" Value="1" />
 
-		<!-- UI assets -->
 		<WixVariable Id="WixUILicenseRtf" Value="$(var.InstallerAssets)\License.rtf" />
 		<WixVariable Id="WixUIBannerBmp"  Value="$(var.InstallerAssets)\banner.bmp" />
 		<WixVariable Id="WixUIDialogBmp"  Value="$(var.InstallerAssets)\dialog.bmp" />
@@ -95,13 +92,13 @@
                  Display="expand" ConfigurableDirectory="INSTALLFOLDER">
 
 			<Feature Id="MainProgram" Level="1" Title="Core Protection"
-         Description="Main antivirus engine and real-time protection">
+                     Description="Main antivirus engine and real-time protection">
 				<ComponentRef Id="MainEngine" />
 				<ComponentRef Id="VirusScanner" />
-				<ComponentRef Id="MainProcces" />
-				<ComponentRef Id="ServiceComponent" />
 				<ComponentRef Id="OpenSSLCrypto" />
-				<!-- ← add this line -->
+				<ComponentRef Id="MainProcces" />
+				<ComponentRef Id="HookingDll" />
+				<ComponentRef Id="ServiceComponent" />
 			</Feature>
 
 			<Feature Id="GUI" Level="1" Title="User Interface"
@@ -116,7 +113,10 @@
 			<Feature Id="DeepScan" Level="1" Title="Deep Analysis"
                      Description="Advanced threat detection engine">
 				<ComponentRef Id="DeepAnalysisEngine" />
+				<ComponentRef Id="IsolationForestExe" />
+				<ComponentRef Id="TlsCheckExe" />
 				<ComponentRef Id="ThreatDatabase" />
+				<ComponentRef Id="IsolationForestPkl" />
 			</Feature>
 
 			<Feature Id="DebugFiles" Level="1" Title="Database &amp; Logs"
@@ -134,15 +134,20 @@
 	<!--                                                         -->
 	<!-- AegisCore\                          (INSTALLFOLDER)    -->
 	<!--   aegiscore (static scans)\                            -->
-	<!--     x64\Debug\                      ← aegiscore.exe    -->
-	<!--     dependencies\                   ← DATABASE         -->
-	<!--   MainProcces\x64\Debug\            ← MainProcces.exe  -->
-	<!--   deep_analysis\dist\               ← main.exe         -->
-	<!--   gui\dist\win-unpacked\            ← Electron app     -->
-	<!--   AegisService\                                         -->
-	<!--     x64\Release\                    ← AegisService.exe -->
-	<!--     AegisIcon\bin\Debug\            ← AegisIcon.exe    -->
-	<!--       Dependencies\                 ← icon.ico         -->
+	<!--     x64\Debug\  ← aegiscore.exe, virus_scanner.exe,   -->
+	<!--                    libcrypto-3-x64.dll                 -->
+	<!--     dependencies\ ← DATABASE                           -->
+	<!--   MainProcces\x64\Debug\ ← MainProcces.exe,           -->
+	<!--                             hooking2.dll               -->
+	<!--   deep_analysis\  ← c2_threats.db                     -->
+	<!--     dist\         ← main.exe, isolationForest.exe,    -->
+	<!--                      tlscheck2.exe                     -->
+	<!--       isolationForest_pkl\ ← .pkl ML models           -->
+	<!--   gui\dist\win-unpacked\   ← Electron app             -->
+	<!--   AegisService\                                        -->
+	<!--     x64\Release\  ← AegisService.exe                  -->
+	<!--     AegisIcon\bin\Debug\   ← AegisIcon.exe            -->
+	<!--       Dependencies\ ← AegisCore_Icon.ico              -->
 	<!-- ═══════════════════════════════════════════════════════ -->
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
@@ -166,10 +171,12 @@
 
 					<!-- deep_analysis\ -->
 					<Directory Id="DeepAnalysisFolder" Name="deep_analysis">
-						<Directory Id="DeepAnalysisDist" Name="dist" />
+						<Directory Id="DeepAnalysisDist" Name="dist">
+							<Directory Id="PklFolder" Name="isolationForest_pkl" />
+						</Directory>
 					</Directory>
 
-					<!-- gui\dist\win-unpacked\ (heat points GUIFolder here) -->
+					<!-- gui\dist\win-unpacked\ -->
 					<Directory Id="GuiRoot" Name="gui">
 						<Directory Id="GuiDist" Name="dist">
 							<Directory Id="GUIFolder" Name="win-unpacked" />
@@ -193,9 +200,7 @@
 				</Directory>
 			</Directory>
 
-			<!-- Windows Startup folder -->
 			<Directory Id="StartupFolder" Name="Startup" />
-			<!-- Desktop -->
 			<Directory Id="DesktopFolder" />
 
 		</Directory>
@@ -206,9 +211,7 @@
 	<!-- ═══════════════════════════════════════════════════════ -->
 	<Fragment>
 
-		<!-- ── Core C++ engine → aegiscore (static scans)\x64\Debug\ ── -->
-		<!-- GetProjectRoot() navigates up 3 levels from here            -->
-		<!-- and lands exactly on INSTALLFOLDER — no code changes needed -->
+		<!-- ── Core C++ engine ──────────────────────────────────────── -->
 		<Component Id="MainEngine" Directory="StaticScansDebug"
                    Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
 			<File Id="AegisCoreExe"
@@ -217,8 +220,7 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── virus_scanner.exe → same folder as engine ─────────────── -->
-		<!-- C++ calls it via GetVirusScannerPath() or sibling-exe logic  -->
+		<!-- ── VirusTotal scanner (PyInstaller) ─────────────────────── -->
 		<Component Id="VirusScanner" Directory="StaticScansDebug"
                    Guid="c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f">
 			<File Id="VirusScannerExe"
@@ -227,7 +229,15 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── Hooking engine → MainProcces\x64\Debug\ ────────────────── -->
+		<!-- ── OpenSSL crypto DLL (MD5 hashing dependency) ──────────── -->
+		<Component Id="OpenSSLCrypto" Directory="StaticScansDebug"
+                   Guid="6e9c5531-ac2d-4874-b93e-cecc39611768">
+			<File Id="libcrypto"
+                  Source="$(var.BuildRoot)\libcrypto-3-x64.dll"
+                  KeyPath="yes" />
+		</Component>
+
+		<!-- ── Hooking engine (MainProcces.exe) ─────────────────────── -->
 		<Component Id="MainProcces" Directory="MainProccesDebug"
                    Guid="b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e">
 			<File Id="MainProccesExe"
@@ -236,9 +246,17 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── Windows Service → AegisService\x64\Release\ ───────────── -->
-		<!-- RunEngine() in service main.cpp finds aegiscore.exe          -->
-		<!-- by navigating to its own sibling directory                   -->
+		<!-- ── Hooking DLL — sits next to MainProcces.exe ───────────── -->
+		<!-- Source.cpp resolves its path relative to its own exe dir    -->
+		<Component Id="HookingDll" Directory="MainProccesDebug"
+                   Guid="f1e2d3c4-b5a6-7890-fedc-ba9876543210">
+			<File Id="hooking2dll"
+                  Source="$(var.HookingSrc)\hooking2.dll"
+                  Name="hooking2.dll"
+                  KeyPath="yes" />
+		</Component>
+
+		<!-- ── Windows Service ──────────────────────────────────────── -->
 		<Component Id="ServiceComponent" Directory="AegisServiceRelease"
                    Guid="abf5921b-e496-49bc-b451-cd8f4503b17e">
 			<File Id="ServiceFile"
@@ -264,7 +282,7 @@
                             Wait="yes" />
 		</Component>
 
-		<!-- ── Tray icon exe → AegisService\AegisIcon\bin\Debug\ ──────── -->
+		<!-- ── Tray icon exe ────────────────────────────────────────── -->
 		<Component Id="TrayIcon" Directory="AegisIconDebug"
                    Guid="15222f4c-815f-40c4-8b3d-a03809251a5f">
 			<File Id="AegisTrayExe"
@@ -273,7 +291,7 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── App icon → AegisService\AegisIcon\bin\Debug\Dependencies\ -->
+		<!-- ── App icon ─────────────────────────────────────────────── -->
 		<Component Id="GUIIcon" Directory="AegisIconDeps"
                    Guid="7f5b3815-8431-4224-b877-602c1ef39fd7">
 			<File Id="TrayIconIco"
@@ -282,7 +300,7 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── Deep analysis engine → deep_analysis\dist\ ─────────────── -->
+		<!-- ── Deep analysis main engine (PyInstaller) ──────────────── -->
 		<Component Id="DeepAnalysisEngine" Directory="DeepAnalysisDist"
                    Guid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b">
 			<File Id="DeepAnalysisExe"
@@ -291,7 +309,47 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── Database → aegiscore (static scans)\dependencies\ ──────── -->
+		<!-- ── isolationForest.exe (PyInstaller) ────────────────────── -->
+		<Component Id="IsolationForestExe" Directory="DeepAnalysisDist"
+                   Guid="a1b2c3d4-e5f6-7891-abcd-ef1234567891">
+			<File Id="IsolationForestExeFile"
+                  Source="$(var.DeepSrc)\isolationForest.exe"
+                  Name="isolationForest.exe"
+                  KeyPath="yes" />
+		</Component>
+
+		<!-- ── tlscheck2.exe (PyInstaller) ──────────────────────────── -->
+		<Component Id="TlsCheckExe" Directory="DeepAnalysisDist"
+                   Guid="b2c3d4e5-f6a7-8902-bcde-f12345678902">
+			<File Id="TlsCheckExeFile"
+                  Source="$(var.DeepSrc)\tlscheck2.exe"
+                  Name="tlscheck2.exe"
+                  KeyPath="yes" />
+		</Component>
+
+		<!-- ── c2_threats.db (SQLite threat log) ────────────────────── -->
+		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder"
+                   Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
+			<File Id="ThreatDb"
+                  Source="$(var.DeepRoot)\c2_threats.db"
+                  Name="c2_threats.db"
+                  KeyPath="yes" />
+		</Component>
+
+		<!-- ── isolationForest_pkl\ — trained ML model files ────────── -->
+		<!-- Add one <File> entry per .pkl file in your folder.          -->
+		<!-- Example:                                                     -->
+		<!-- <File Id="model_chrome"                                      -->
+		<!--       Source="$(var.DeepSrc)\isolationForest_pkl\chrome.pkl" -->
+		<!--       KeyPath="yes" />                                       -->
+		<Component Id="IsolationForestPkl" Directory="PklFolder"
+                   Guid="c3d4e5f6-a7b8-9013-cdef-123456789013">
+			<CreateFolder />
+			<RegistryValue Root="HKCU" Key="Software\AegisCore"
+                           Name="pkl_installed" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+
+		<!-- ── Signatures database ──────────────────────────────────── -->
 		<Component Id="DatabaseFile" Directory="DependenciesFolder"
                    Guid="901a88f8-4eec-4733-b8a1-88f6c8433584">
 			<File Id="AegisDB"
@@ -300,7 +358,7 @@
                   KeyPath="yes" />
 		</Component>
 
-		<!-- ── Log folder placeholder ──────────────────────────────────── -->
+		<!-- ── Log folder placeholder ───────────────────────────────── -->
 		<Component Id="LogFile" Directory="StaticScansDebug"
                    Guid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e">
 			<CreateFolder />
@@ -309,7 +367,7 @@
                            Name="logs_created" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
 
-		<!-- ── Startup shortcut → launches tray icon on login ──────────── -->
+		<!-- ── Startup shortcut → tray icon auto-starts on login ────── -->
 		<Component Id="StartupTrayIcon" Directory="StartupFolder"
                    Guid="7a3eb415-96f2-4793-9cf2-ceac098344d2">
 			<Shortcut Id="StartupShortcut"
@@ -321,22 +379,8 @@
 			<RegistryValue Root="HKCU" Key="Software\AegisCore"
                            Name="tray_installed" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
-		
-		<Component Id="OpenSSLCrypto" Directory="StaticScansDebug"
-           Guid="6e9c5531-ac2d-4874-b93e-cecc39611768">
-			<File Id="libcrypto"
-				  Source="C:\Users\Cyber_User\Documents\AegisCore\aegiscore (static scans)\x64\Debug\libcrypto-3-x64.dll"
-				  KeyPath="yes" />
-		</Component>
 
-		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder"
-           Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
-			<File Id="db"
-				  Source="C:\Users\Cyber_User\Documents\AegisCore\deep_analysis\c2_threats.db"
-				  KeyPath="yes" />
-		</Component>
-		
-		<!-- ── Desktop shortcut → launches Electron GUI ────────────────── -->
+		<!-- ── Desktop shortcut → Electron GUI ─────────────────────── -->
 		<Component Id="DesktopShortcutComponent" Directory="DesktopFolder"
                    Guid="e14680bf-ae0e-4a08-9d8a-b03b456fc8ef">
 			<Shortcut Id="DesktopShortcut"

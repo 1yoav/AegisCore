@@ -47,6 +47,7 @@ BOOL WINAPI ConsoleHandler(DWORD dwType) {
         killPipelineProcesses();
         return FALSE;
     }
+    return TRUE;
 }
 
 bool executeTask(const AnalysisTask& task) {
@@ -108,10 +109,10 @@ int main()
     // ???????????????????????????????????????????????????????????
 
     std::vector<std::string> pipeline = {
-        "python \"" + GetPythonScriptPath("isolationForest.py") + "\"",
+        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
         "\"" + GetMainProccesPath() + "\"",
-        "python \"" + GetPythonScriptPath("main.py") + "\"",
-        "python \"" + GetPythonScriptPath("tlscheck2.py") + "\""
+        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
+        "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
     };
 
     for (const std::string& task : pipeline)

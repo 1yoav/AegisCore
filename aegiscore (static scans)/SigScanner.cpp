@@ -19,7 +19,7 @@ std::string SigScanner::getMD5Hash(const std::filesystem::path& path) {
 
     unsigned char result[MD5_DIGEST_LENGTH];
     MD5_Final(result, &md5Context);
-
+    // yo
     std::stringstream ss;
     for (int i = 0; i < MD5_DIGEST_LENGTH; i++) 
     {

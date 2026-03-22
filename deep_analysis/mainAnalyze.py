@@ -11,7 +11,7 @@ def analyze_logic(fileName, report):
     """מבצע את הבדיקות הכבדות ומעדכן את הדו"ח הקיים"""
     print(f"[*] Analyzing: {fileName}")
     # כאן אתה קורא למודולים שלך
-    if()
+
     report["packer_info"] = packingCheck.scan(fileName)
     report["iat_issues"] = iatAnalyze.analyze(fileName)
     # ... עדכון שאר השדות ...

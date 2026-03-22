@@ -14,8 +14,12 @@ warnings.filterwarnings(
     message="X does not have valid feature names"
 )
 
-CSV_ADDRESS = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\MainProcces\\programs_data_csv\\"
-PKL_ADDRESS = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\deep_analysis\\isolationForest_pkl\\"
+import sys, os
+BASE_DIR = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
+# Navigate up from deep_analysis\dist\ to AegisCore root, then to the data folders
+INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..', '..'))
+CSV_ADDRESS = os.path.join(INSTALL_ROOT, 'MainProcces', 'programs_data_csv') + os.sep
+PKL_ADDRESS = os.path.join(BASE_DIR, 'isolationForest_pkl') + os.sep
 
 def training():
     currentDir = Path(
@@ -117,7 +121,7 @@ def predict():
                 if score[0] < -0.3: # value of suspicious
                     msg = "isolationForest!" + fileName
                     # send msg to deepAnalyze
-                    t = threading.Thread(target=send_to_pipe(), args=(msg,))
+                    t = threading.Thread(target=send_to_pipe, args=(msg,))
                     t.start()
 
             # else:

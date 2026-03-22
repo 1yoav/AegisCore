@@ -1,4 +1,9 @@
 import sqlite3
+import sys, os
+BASE_DIR = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
+INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..', '..'))
+DB_PATH = os.path.join(INSTALL_ROOT, 'deep_analysis', 'c2_threats.db')
+
 
 def setup_database():
     connection = sqlite3.connect('c2_threats.db')
@@ -24,7 +29,7 @@ def setup_database():
 
 def display_all_threats():
     # וודא שזה השם המדויק של הקובץ שבו ראית את המידע
-    conn = sqlite3.connect('c2_threats.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     try:
