@@ -14,13 +14,11 @@ warnings.filterwarnings(
     message="X does not have valid feature names"
 )
 
-CSV_ADDRESS = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\MainProcces\\programs_data_csv\\"
-PKL_ADDRESS = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\deep_analysis\\isolationForest_pkl\\"
+CSV_ADDRESS = "\\MainProcess\\programs_data_csv\\"
+PKL_ADDRESS = "..\\deep_analysis\\isolationForest_pkl\\"
 
 def training():
-    currentDir = Path(
-        "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\MainProcces\\programs_data_csv\\"
-    )
+    currentDir = Path(CSV_ADDRESS)
     csv_files = currentDir.rglob("*.csv")
 
     for f in csv_files:
@@ -34,14 +32,7 @@ def training():
         )
 
         model.fit(data)
-        joblib.dump(model,  "isolationForest_pkl/" + f.stem + ".pkl")
-
-
-
-import win32file
-import win32pipe
-import winerror
-import pywintypes
+        joblib.dump(model,  PKL_ADDRESS + f.stem + ".pkl")
 
 def send_to_pipe(msg):
     pipe_name = r"\\.\pipe\AVDeepScanPipe" # Use 'r' for raw string
@@ -77,12 +68,7 @@ def send_to_pipe(msg):
     result = win32file.WriteFile(handle, full_msg)
     win32file.CloseHandle(handle)
 
-
-
-
 def predict():
-
-
     pipe = win32pipe.CreateNamedPipe(
         r'\\.\pipe\isolationForest' ,
         win32pipe.PIPE_ACCESS_DUPLEX,

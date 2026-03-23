@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03d12b45-d206-4a3f-8621-08227605b22d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../hooking2/dllmain.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../hooking2/dllmain.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/pipe.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/pipe.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +78,15 @@
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

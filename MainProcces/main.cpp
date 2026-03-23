@@ -123,7 +123,6 @@ bool IsExcluded(const wchar_t* exeName)
         if (_wcsicmp(exeName, L"explorer.exe") == 0) {
             return false;
         }
-        
     }
 
     return true;
@@ -155,7 +154,9 @@ bool IsDllLoadedInRemoteProcess(HANDLE hProcess)
 
 int main() 
 {
-    dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
+    char fullPath[MAX_PATH];
+    GetFullPathNameA("..\\hooking2\\x64\\Debug\\hooking2.dll", MAX_PATH, fullPath, NULL);
+    dllPath = fullPath;
     pathLen = strlen(dllPath) + 1;
 
     std::vector<int> injectedProcces;
@@ -198,7 +199,7 @@ int main()
 
                         if (hProc)
                         {
-                            if (!IsDllLoadedInRemoteProcess(hProc) ) //if the dll noy yet loaded
+                            if (!IsDllLoadedInRemoteProcess(hProc)) //if the dll noy yet loaded
                             {
                                 std::wcout << L"[Allowed] PID: " << pe.th32ProcessID
                                     << L"\t Name: " << pe.szExeFile << std::endl;
