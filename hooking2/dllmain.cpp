@@ -1,4 +1,4 @@
-﻿// dllmain.cpp : Defines the entry point for the DLL application.
+﻿﻿// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include <winternl.h>
 #include <iostream>
@@ -68,8 +68,8 @@ HMODULE hModulee;
 typedef struct HookInfo {
     const wchar_t* dllName;
     const char* funcName;
-    LPVOID hookFunc;        
-    LPVOID* originalFunc;  
+    LPVOID hookFunc;
+    LPVOID* originalFunc;
 }HookInfo;
 
 std::vector<std::string> loggedApi;
@@ -89,12 +89,12 @@ typedef HANDLE(WINAPI* pCreateRemoteThread)(
 pCreateRemoteThread fpCreateRemoteThread = nullptr;
 
 typedef BOOL(WINAPI* pReadFile)(
-                   HANDLE       hFile,
-                  LPVOID       lpBuffer,
-                DWORD        nNumberOfBytesToRead,
-         LPDWORD      lpNumberOfBytesRead,
-     LPOVERLAPPED lpOverlapped
-);
+    HANDLE       hFile,
+    LPVOID       lpBuffer,
+    DWORD        nNumberOfBytesToRead,
+    LPDWORD      lpNumberOfBytesRead,
+    LPOVERLAPPED lpOverlapped
+    );
 pReadFile fpReadFile = nullptr;
 
 typedef VOID(WINAPI* pSleep)(
@@ -505,7 +505,7 @@ NTSTATUS NTAPI HookNtSetInformationFile(
     if (e == 13 || e == 64 || e == 10) {
         wchar_t path[MAX_PATH];
         if (GetFinalPathNameByHandleW(a, path, MAX_PATH, VOLUME_NAME_DOS) > 0) {
-			_wcslwr_s(path, MAX_PATH); // transfer to lowercase for case-insensitive comparison
+            _wcslwr_s(path, MAX_PATH); // transfer to lowercase for case-insensitive comparison
             if (wcsstr(path, L"aegiscore-av")) {
                 LogHookedFunction("Blocked Delete on NtSetInformationFile: aegiscore-av");
                 return 0xC0000022; // STATUS_ACCESS_DENIED
@@ -520,7 +520,7 @@ NTSTATUS NTAPI HookNtTerminateProcess(
     HANDLE a,               // ProcessHandle
     NTSTATUS b              // ExitStatus
 ) {
-    if (a != NULL && a != (HANDLE)-1) { 
+    if (a != NULL && a != (HANDLE)-1) {
         wchar_t procName[MAX_PATH];
         if (GetModuleFileNameExW(a, NULL, procName, MAX_PATH) > 0) {
             _wcslwr_s(procName, MAX_PATH);
@@ -581,8 +581,8 @@ std::vector<HookInfo> hooks = {
     (LPVOID)&HookNtSetInformationFile,
     (LPVOID*)&fpNtSetInformationFile },
 
-    { L"ntdll.dll", "NtTerminateProcess", 
-    (LPVOID)&HookNtTerminateProcess, 
+    { L"ntdll.dll", "NtTerminateProcess",
+    (LPVOID)&HookNtTerminateProcess,
     (LPVOID*)&fpNtTerminateProcess },
 
     { L"ntdll.dll", "NtDeleteFile",
@@ -703,7 +703,7 @@ std::vector<HookInfo> hooks = {
 
 void unloadHooking()
 {
-	Sleep(1000); // Ensure all operations are completed before unhooking
+    Sleep(1000); // Ensure all operations are completed before unhooking
     if (g_MH_DisableHook != nullptr) {
         g_MH_DisableHook(MH_ALL_HOOKS);
     }
@@ -770,13 +770,13 @@ void sendLogs()
         Sleep(10000); // Send logs every 10 seconds
     }
 }
-    
+
 
 
 
 //create log entry
 void LogHookedFunction(std::string functionName)
-{    
+{
     static DWORD pid = 0;
     if (pid == 0)
         pid = GetCurrentProcessId();
@@ -810,7 +810,19 @@ void LogHookedFunction(std::string functionName)
 
 DWORD WINAPI nitHook(LPVOID)
 {
-    g_hMinHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
+    //all the paragraph for achive absolute path for the minhook dll
+    HMODULE hCurrentModule = NULL;
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        (LPCWSTR)nitHook, &hCurrentModule);
+    WCHAR path[MAX_PATH];
+    GetModuleFileNameW(hCurrentModule, path, MAX_PATH);
+    std::wstring ws(path);
+    std::wstring directory = ws.substr(0, ws.find_last_of(L"\\/"));
+    std::wstring minHookPath = directory + L"\\MinHook.x64.dll";
+
+    g_hMinHook = LoadLibraryW(minHookPath.c_str());
+    //g_hMinHook = LoadLibrary(L"C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\MinHook.x64.dll");
     if (!g_hMinHook) {
         OutputDebugStringW(L"LoadLibraryA(MinHook) failed\n");
         return 0;
@@ -842,9 +854,9 @@ DWORD WINAPI nitHook(LPVOID)
     g_MH_EnableHook(MH_ALL_HOOKS); // Enable all hooks
 
 
-	//create thread to send logsjk
-	sendLogs();
-	unloadHooking();
+    //create thread to send logsjk
+    sendLogs();
+    unloadHooking();
     FreeLibraryAndExitThread(hModulee, 0);
 }
 
@@ -856,7 +868,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     {
     case DLL_PROCESS_ATTACH:
         // Add this function to your dllmain.cpp
-		hModulee = hModule;
+        hModulee = hModule;
         DisableThreadLibraryCalls(hModule);
         CloseHandle(CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)nitHook, NULL, 0, NULL));
         break;

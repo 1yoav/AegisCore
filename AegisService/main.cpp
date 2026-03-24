@@ -1,7 +1,8 @@
-#include <filesystem>
+﻿#include <filesystem>
 #include <Windows.h>
 #include <wtsapi32.h>
 #include <userenv.h>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -11,10 +12,12 @@
 #pragma comment(lib, "shell32.lib")
 
 namespace fs = std::filesystem;
+HANDLE hStopEvent;
 
 SERVICE_STATUS ServiceStatus;
 SERVICE_STATUS_HANDLE hStatus;
 
+void stopEvent();
 void WINAPI ServiceMain(DWORD argc, LPTSTR* argv);
 void WINAPI ServiceCtrlHandler(DWORD ctrl);
 void RunEngine();
@@ -22,39 +25,82 @@ bool LaunchInUserSession(const std::wstring& exePath);
 bool LaunchElevatedInUserSession(const std::wstring& exePath);
 bool LaunchAsSystemInUserSession(const std::wstring& exePath);
 
-int main() {
+int main(int argc, char* argv[]) {
+    // הגדרת טבלת השירות
     SERVICE_TABLE_ENTRY ServiceTable[] = {
         { (LPWSTR)L"AegisSVC", (LPSERVICE_MAIN_FUNCTION)ServiceMain },
         { NULL, NULL }
     };
-    StartServiceCtrlDispatcher(ServiceTable);
+
+    // בדיקה: האם אנחנו מריצים את זה ידנית (דיבוג) או כשירות?
+    // דרך קלה לבדוק היא לבדוק אם StartServiceCtrlDispatcher נכשלה מיד
+    if (!StartServiceCtrlDispatcher(ServiceTable)) {
+        if (GetLastError() == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT) {
+            // אם הגענו כאן, סימן שזה לא רץ כשירות - זה מצב דיבוג!
+            printf("Debug Mode: Running ServiceMain manually...\n");
+
+            // אנחנו קוראים ל-ServiceMain ידנית
+            // (אנחנו שולחים 0 ארגומנטים כי אנחנו בדיבוג)
+            ServiceMain(0, NULL);
+        }
+        else {
+            return GetLastError();
+        }
+    }
     return 0;
 }
 
-void WINAPI ServiceMain(DWORD argc, LPTSTR* argv) {
-    hStatus = RegisterServiceCtrlHandlerA("AegisService", ServiceCtrlHandler);
+void stopEvent()
+{
+    SetEvent(hStopEvent);
+    CloseHandle(hStopEvent);
+}
 
-    ServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
-    ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
-    ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
-    SetServiceStatus(hStatus, &ServiceStatus);
+void WINAPI ServiceMain(DWORD argc, LPTSTR* argv) 
+{
+    hStopEvent = CreateEventW(NULL, TRUE, FALSE, L"Global\\AegisStopEvent"); 
+    hStatus = RegisterServiceCtrlHandlerA("AegisSVC", ServiceCtrlHandler);
+
+    if (hStatus) {
+        ServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
+
+        // השורה הקריטית: כאן אתה אומר לווינדוס "אני מוכן לקבל פקודת עצירה"
+        ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
+
+        ServiceStatus.dwCurrentState = SERVICE_RUNNING; // שנה ל-Running רק אחרי שהגדרת ControlsAccepted
+        ServiceStatus.dwWin32ExitCode = 0;
+        ServiceStatus.dwCheckPoint = 0;
+        ServiceStatus.dwWaitHint = 0;
+
+        SetServiceStatus(hStatus, &ServiceStatus);
+    }
 
     RunEngine();
 
-    ServiceStatus.dwCurrentState = SERVICE_RUNNING;
-    SetServiceStatus(hStatus, &ServiceStatus);
+    
 
-    while (ServiceStatus.dwCurrentState == SERVICE_RUNNING) {
-        Sleep(1000);
-    }
-}
+    WaitForSingleObject(hStopEvent, INFINITE);
 
-void WINAPI ServiceCtrlHandler(DWORD ctrl) {
-    if (ctrl == SERVICE_CONTROL_STOP) {
+    if (hStatus) {
         ServiceStatus.dwCurrentState = SERVICE_STOPPED;
         SetServiceStatus(hStatus, &ServiceStatus);
     }
+
+    CloseHandle(hStopEvent);
 }
+
+
+void WINAPI ServiceCtrlHandler(DWORD ctrl) {
+    if (ctrl == SERVICE_CONTROL_STOP) 
+    {
+        if (hStatus) {
+            ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING; // אנחנו בתהליך
+            SetServiceStatus(hStatus, &ServiceStatus);
+        }
+        stopEvent(); // זה ישחרר את ה-WaitForSingleObject
+    }
+}
+
 
 // ??? Launch an exe in the active user's desktop session ???????????????????????
 // Services run in Session 0 (no desktop). This grabs the logged-in user's
@@ -90,16 +136,20 @@ bool LaunchInUserSession(const std::wstring& exePath) {
     si.cb = sizeof(si);
     si.lpDesktop = (LPWSTR)L"winsta0\\default"; // user's interactive desktop
 
+    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT; 
+
     BOOL ok = CreateProcessAsUserW(
         hDupToken,
         NULL,
         cmdBuf.data(),
-        NULL, NULL,
+        NULL,
+        NULL,
         FALSE,
-        CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
+        dwCreationFlags, 
         pEnv,
         NULL,
-        &si, &pi
+        &si,
+        &pi
     );
 
     if (pEnv)       DestroyEnvironmentBlock(pEnv);
@@ -113,7 +163,8 @@ bool LaunchInUserSession(const std::wstring& exePath) {
 }
 
 // ??? Launch engine + tray icon
-void RunEngine() {
+void RunEngine() 
+{
     wchar_t path[MAX_PATH];
     GetModuleFileNameW(NULL, path, MAX_PATH);
 
@@ -124,13 +175,13 @@ void RunEngine() {
 
     std::wstring enginePath = (installRoot /
         L"aegiscore (static scans)" / L"x64" / L"Debug" /
-        L"aegiscore.exe").wstring();
+        L"aegiscore (static scans).exe").wstring();
 
     std::wstring iconPath = (installRoot /
         L"AegisService" / L"AegisIcon" / L"bin" / L"Debug" /
         L"AegisIcon.exe").wstring();
 
-    // ?? Diagnostic log � remove once working ?????????????????????
+    // ?? Diagnostic log — remove once working ?????????????????????
     {
         std::wofstream log(L"C:\\Windows\\Temp\\aegis_service_log.txt");
         log << L"Install root:  " << installRoot.wstring() << L"\n";
@@ -140,10 +191,14 @@ void RunEngine() {
         log << L"Icon exists:   " << fs::exists(iconPath) << L"\n";
     }
 
-    STARTUPINFOW si{}; PROCESS_INFORMATION pi{};
+
+    STARTUPINFOW si{};
+    PROCESS_INFORMATION pi{};
     si.cb = sizeof(si);
+
     BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
         FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+    DWORD err = GetLastError();
     {
         std::wofstream log(L"C:\\Windows\\Temp\\aegis_service_log.txt",
             std::ios::app);
@@ -154,7 +209,7 @@ void RunEngine() {
     if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
 
     LaunchInUserSession(iconPath);
-    LaunchAsSystemInUserSession(enginePath); // elevated, user session
+    //LaunchAsSystemInUserSession(enginePath); // elevated, user session
 }
 
 bool LaunchAsSystemInUserSession(const std::wstring& exePath) {
