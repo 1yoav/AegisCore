@@ -2,15 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03d12b45-d206-4a3f-8621-08227605b22d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../AegisInstaller/installer.wxs" beforeDir="false" afterPath="$PROJECT_DIR$/../AegisInstaller/installer.wxs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/SigScanner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/SigScanner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/UiCom.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/UiCom.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/AggregatorHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/AggregatorHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/AppHelperCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/AppHelperCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/DiagsCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/DiagsCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/HPCommRecovery.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/HPCommRecovery.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/IntelAudioService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/IntelAudioService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/IntelCpHDCPSvc.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/IntelCpHDCPSvc.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/NetworkCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/NetworkCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/OfficeClickToRun.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/OfficeClickToRun.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/OneApp.IGCC.WinService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/OneApp.IGCC.WinService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/RtkAudUService64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/RtkAudUService64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/SECOMN64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/SECOMN64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/SysInfoCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/SysInfoCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/TouchpointAnalyticsClientService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/TouchpointAnalyticsClientService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/jhi_service.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/jhi_service.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/pipe.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/pipe.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/spoolsv.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/spoolsv.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/svchost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/svchost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/unsecapp.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/unsecapp.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/vmms.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/vmms.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/vmware-usbarbitrator64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/vmware-usbarbitrator64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/winlogon.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/winlogon.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/aegiscore (static scans).vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/aegiscore (static scans).vcxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataBase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/driver_context.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/isolationForest.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/isolationForest.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/isolationForest/warn-isolationForest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/warn-isolationForest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mainAnalyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainAnalyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/HPMediaNetwork.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/HPMediaNetwork.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/Microsoft.ServiceHub.Controller.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/Microsoft.ServiceHub.Controller.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/ServiceHub.Host.dotnet.x64.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/ServiceHub.Host.dotnet.x64.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/chrome.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/chrome.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/msedgewebview2.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/msedgewebview2.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/vshost.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/vshost.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yara_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/yara_analyzer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +53,10 @@
   <component name="ProjectId" id="389COblWxH8U1fuaLYtgZWW6O2T" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -32,7 +64,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.isolationForest">
     <configuration name="behavioral_analyzer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deep_analysis" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -54,7 +86,49 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="isolationForest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Cyber_User\AppData\Local\Programs\Python\Python312\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/isolationForest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Cyber_User\AppData\Local\Programs\Python\Python312\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="yara_analyzer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deep_analysis" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -66,7 +140,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/yara_analyzer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -77,6 +151,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.isolationForest" />
+        <item itemvalue="Python.yara_analyzer" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.behavioral_analyzer" />
       </list>
@@ -93,5 +169,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

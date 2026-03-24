@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['tlscheck2.py'],
+    ['tlsCheck2.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='tlscheck2',
+    name='tlsCheck2',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

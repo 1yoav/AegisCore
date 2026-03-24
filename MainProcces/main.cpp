@@ -152,8 +152,18 @@ bool IsDllLoadedInRemoteProcess(HANDLE hProcess)
 
 int main() 
 {
-    dllPath = "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\hooking2\\x64\\Debug\\hooking2.dll";
+    char exePath[MAX_PATH];
+    GetModuleFileNameA(NULL, exePath, MAX_PATH); 
+    std::string baseDir = std::string(exePath);
+    size_t lastSlash = baseDir.find_last_of("\\/"); 
+    baseDir = baseDir.substr(0, lastSlash);
+    baseDir += "\\..\\..\\..\\";
+    std::string fullDllPath = baseDir + "hooking2\\x64\\Debug\\hooking2.dll";
+
+    dllPath = (fullDllPath).c_str();
     pathLen = strlen(dllPath) + 1;
+    std::cout << dllPath;
+
 
     std::vector<int> injectedProcces;
 
@@ -197,8 +207,6 @@ int main()
                         {
                             if (!IsDllLoadedInRemoteProcess(hProc)) //if the dll noy yet loaded
                             {
-                                std::wcout << L"[Allowed] PID: " << pe.th32ProcessID
-                                    << L"\t Name: " << pe.szExeFile << std::endl;
                                 injectHooking(hProc);
                             }
                             CloseHandle(hProc);

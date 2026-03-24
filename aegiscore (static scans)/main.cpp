@@ -11,24 +11,6 @@ HANDLE hEvent;
 
 
 
-void startEvent() {
-    hEvent = CreateEventA(
-        NULL,               
-        TRUE,               
-        FALSE,              
-        "Global\\hooking" 
-    );
-
-    if (hEvent == NULL) {
-        std::cout << "Error creating event: " << GetLastError() << std::endl;
-    }
-}
-
-void stopEvent() {
-    SetEvent(hEvent);
-    std::cout << "Signal sent!" << std::endl;
-    CloseHandle(hEvent);
-}
 
 
 // ???????????????????????????????????????????????????????????
@@ -38,9 +20,9 @@ void killPipelineProcesses() {
 
     std::vector<std::string> targets = {
         "MainProcces.exe",
-        "main.py",
-        "tlscheck2.py",
-        "isolationForest.py"
+        "main.exe",
+        "tlscheck2.exe",
+        "isolationForest.exe"
     };
 
     for (const std::string& target : targets) {
@@ -53,12 +35,13 @@ void killPipelineProcesses() {
     return;
 }
 
+
+
 BOOL WINAPI ConsoleHandler(DWORD dwType) {
     switch (dwType) {
     case CTRL_C_EVENT:
     case CTRL_CLOSE_EVENT:
         std::cout << "\n[!] Cleanup triggered by Ctrl+C or Closing window..." << std::endl;
-        stopEvent();
         killPipelineProcesses();
         return FALSE;
     }
@@ -89,12 +72,14 @@ int main()
         std::cerr << "[-] Could not set control handler" << std::endl;
         return 1;
     }
-
+    
     // ?? Wrap entire startup so abort() never fires ????????????????
     try
     {
+		std::wstring ProjectRoot = GetProjectRoot();
         std::cout << "[*] Project Root: "
-            << fs::path(GetProjectRoot()).string() << std::endl;
+            << fs::path(ProjectRoot).string() << std::endl;
+        
 
         sqlite3* database = nullptr;
         std::string dbPath = GetDatabasePath();
@@ -126,10 +111,10 @@ int main()
             }).detach();
 
         std::vector<std::string> pipeline = {
-            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
+            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
             "\"" + GetMainProccesPath() + "\"",
-            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
-            "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
+            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
+            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
         };
 
         for (const std::string& task : pipeline) {

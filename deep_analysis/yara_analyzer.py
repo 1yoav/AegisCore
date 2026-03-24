@@ -5,10 +5,18 @@ Dedicated handler for YARA rule compilation and scanning.
 import os
 from typing import Tuple, List, Dict
 import yara
+from pathlib import Path
+import sys
 
 
 class YaraAnalyzer:
     def __init__(self, rules_dir: str = "./yara_rules"):
+        if getattr(sys, 'frozen', False):
+            # אם רץ כ-EXE
+            self.rules_dir = Path(sys.executable).parent.parent / "yara_rules"
+        else:
+            # אם רץ כסקריפט פייתון רגיל
+            self.rules_dir = Path(__file__).resolve().parent / "yara_rules"
         self.rules_dir = rules_dir
         self.rules = None
         self.compiled = False

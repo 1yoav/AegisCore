@@ -2,14 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a563287-59fd-42f3-a8a1-77bdbe6b37fb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/CertificateScanner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/CertificateScanner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/CertificateScanner.h" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/CertificateScanner.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/UiCom.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/UiCom.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/UiCom.h" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/UiCom.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/aegiscore (static scans).vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/aegiscore (static scans).vcxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/aegiscore (static scans).vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/aegiscore (static scans).vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/isolationForest.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/isolationForest.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/warn-isolationForest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/warn-isolationForest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/xref-isolationForest.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/xref-isolationForest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/main.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/main.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/warn-main.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/warn-main.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/xref-main.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/xref-main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/tlscheck2.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/tlscheck2.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/warn-tlscheck2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/warn-tlscheck2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/xref-tlscheck2.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/xref-tlscheck2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/driver_context.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/isolationForest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deep_analysis/tlscheck2.spec" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/tlscheck2.spec" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +60,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/deep_analysis" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.isolationForest (1)">
