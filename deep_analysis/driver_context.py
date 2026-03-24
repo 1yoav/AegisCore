@@ -5,8 +5,11 @@ Updated: Removed C2 Emulator interactions
 import terminateVirus
 import threading
 import json
+import sys
 import psutil
 import win32pipe
+import os
+from pathlib import Path
 import win32file
 import pywintypes
 import dataBase
@@ -18,8 +21,22 @@ from analyzer import Analyzer
 # from c2_emulator import C2Emulator  <-- REMOVED
 from threat_logger import ThreatLogger
 
+
+def get_project_root():
+    # בודק אם הסקריפט רץ כקובץ EXE מקומפל
+    if getattr(sys, 'frozen', False):
+        # מחזיר את הנתיב של התיקייה שבה נמצא ה-EXE (כלומר תיקיית ה-dist/deepanalysis)
+        return Path(sys.executable).parent
+    else:
+        # מחזיר את הנתיב של הסקריפט בזמן פיתוח
+        return Path(__file__).resolve().parent
+
+# הגדרת נתיב הבסיס
+
+
+INSTALL_ROOT = get_project_root()
 DRIVER_PIPE_NAME = r"\\.\pipe\AVDeepScanPipe"
-DATABASE_PATH = os.path.join(INSTALL_ROOT, 'deep_analysis', 'c2_threats.db')
+DATABASE_PATH = os.path.join(INSTALL_ROOT, 'c2_threats.db')
 
 
 class DriverContext:

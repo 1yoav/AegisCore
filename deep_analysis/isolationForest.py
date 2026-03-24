@@ -8,13 +8,14 @@ import warnings
 import threading
 import time
 import pandas as pd
+import sys, os
+
 
 warnings.filterwarnings(
     "ignore",
     message="X does not have valid feature names"
 )
 
-import sys, os
 BASE_DIR = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
 # Navigate up from deep_analysis\dist\ to AegisCore root, then to the data folders
 INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..', '..'))
@@ -108,6 +109,11 @@ def predict():
             msg = res[1].decode("utf-8")
 
             newMsg = msg.split(",")
+            # if its notice for update the database
+            if newMsg[0] == "1":
+                training()
+                continue
+
             fileName = PKL_ADDRESS + newMsg[0]
 
             my_file = Path(fileName)
@@ -132,7 +138,7 @@ def predict():
 
 
 def main():
-    #training()
+    training()
     predict()
 
 
