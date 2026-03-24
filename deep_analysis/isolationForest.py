@@ -16,15 +16,15 @@ warnings.filterwarnings(
     message="X does not have valid feature names"
 )
 
-BASE_DIR = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(Path(sys.executable).parent if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
 # Navigate up from deep_analysis\dist\ to AegisCore root, then to the data folders
-INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..', '..'))
+INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..'))
 CSV_ADDRESS = os.path.join(INSTALL_ROOT, 'MainProcces', 'programs_data_csv') + os.sep
 PKL_ADDRESS = os.path.join(BASE_DIR, 'isolationForest_pkl') + os.sep
 
 def training():
     currentDir = Path(
-        "C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\MainProcces\\programs_data_csv\\"
+        CSV_ADDRESS
     )
     csv_files = currentDir.rglob("*.csv")
 
@@ -39,7 +39,7 @@ def training():
         )
 
         model.fit(data)
-        joblib.dump(model,  "isolationForest_pkl/" + f.stem + ".pkl")
+        joblib.dump(model,  PKL_ADDRESS + f.stem + ".pkl")
 
 
 
@@ -138,7 +138,6 @@ def predict():
 
 
 def main():
-    training()
     predict()
 
 

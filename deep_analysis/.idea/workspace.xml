@@ -2,40 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03d12b45-d206-4a3f-8621-08227605b22d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/AggregatorHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/AggregatorHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/AppHelperCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/AppHelperCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/DiagsCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/DiagsCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/HPCommRecovery.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/HPCommRecovery.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/IntelAudioService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/IntelAudioService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/IntelCpHDCPSvc.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/IntelCpHDCPSvc.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/NetworkCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/NetworkCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/OfficeClickToRun.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/OfficeClickToRun.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/OneApp.IGCC.WinService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/OneApp.IGCC.WinService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/RtkAudUService64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/RtkAudUService64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/SECOMN64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/SECOMN64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/SysInfoCap.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/SysInfoCap.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/TouchpointAnalyticsClientService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/TouchpointAnalyticsClientService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/jhi_service.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/jhi_service.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/pipe.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/pipe.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/spoolsv.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/spoolsv.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/svchost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/svchost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/unsecapp.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/unsecapp.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/vmms.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/vmms.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/vmware-usbarbitrator64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/vmware-usbarbitrator64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MainProcces/winlogon.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../MainProcces/winlogon.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/aegiscore (static scans).vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/aegiscore (static scans).vcxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../aegiscore (static scans)/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/Analysis-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/EXE-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/isolationForest/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/isolationForest/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/PYZ-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/base_library.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/isolationForest.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/isolationForest.pkg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/isolationForest/warn-isolationForest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/warn-isolationForest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/isolationForest/xref-isolationForest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/isolationForest/xref-isolationForest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/Analysis-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PYZ-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/main.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/main.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/warn-main.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/warn-main.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/xref-main.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/xref-main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/Analysis-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/tlscheck2.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/tlscheck2.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/warn-tlscheck2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/warn-tlscheck2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tlscheck2/xref-tlscheck2.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/xref-tlscheck2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/driver_context.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tlscheck2.spec" beforeDir="false" afterPath="$PROJECT_DIR$/tlscheck2.spec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/HPMediaNetwork.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/HPMediaNetwork.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/Microsoft.ServiceHub.Controller.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/Microsoft.ServiceHub.Controller.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/ServiceHub.Host.dotnet.x64.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/ServiceHub.Host.dotnet.x64.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/chrome.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/chrome.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/msedgewebview2.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/msedgewebview2.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/isolationForest_pkl/vshost.exe.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/isolationForest_pkl/vshost.exe.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yara_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/yara_analyzer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +64,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.yara_analyzer">
+  <component name="RunManager" selected="Python.isolationForest">
     <configuration name="behavioral_analyzer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deep_analysis" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,8 +151,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.yara_analyzer" />
         <item itemvalue="Python.isolationForest" />
+        <item itemvalue="Python.yara_analyzer" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.behavioral_analyzer" />
       </list>

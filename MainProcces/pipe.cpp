@@ -23,6 +23,15 @@ void createPipe(wchar_t* pipeName)
 {
     std::cout << "[Init] Initializing hooking...\n";
 
+    //create the base dir
+    char exePath[MAX_PATH];
+    GetModuleFileNameA(NULL, exePath, MAX_PATH);
+    std::string csv_path = std::string(exePath);
+    size_t lastSlash = csv_path.find_last_of("\\/");
+    csv_path = csv_path.substr(0, lastSlash);
+    csv_path += "\\..\\..\\programs_data_csv\\";
+
+
     auto startTime = std::chrono::steady_clock::now();
     const int TRAINING_DURATION_MINUTES = 3;
 
@@ -136,7 +145,7 @@ void createPipe(wchar_t* pipeName)
 
                     if (currentTrainingState == 1)
                     {
-                        std::string csvName = baseName + ".csv";
+                        std::string csvName = csv_path + baseName + ".csv";
                         std::ofstream csv;
                         if (std::filesystem::exists(csvName)) {
                             csv.open(csvName, std::ios::app);

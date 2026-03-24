@@ -35,6 +35,8 @@ void killPipelineProcesses() {
     return;
 }
 
+
+
 BOOL WINAPI ConsoleHandler(DWORD dwType) {
     switch (dwType) {
     case CTRL_C_EVENT:
