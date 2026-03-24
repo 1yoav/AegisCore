@@ -47,7 +47,11 @@ void createPipe(wchar_t* pipeName)
         {"CloseHandle", "CloseHandle"}, {"Sleep", "Sleep"}
     };
     HANDLE pythonPipe;
-    while (TRUE)
+    pythonPipe = CreateFileW(
+        L"\\\\.\\pipe\\isolationForest",
+        GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL
+    );
+    /*while (TRUE)
     {
         pythonPipe = CreateFileW(
             L"\\\\.\\pipe\\isolationForest",
@@ -56,7 +60,7 @@ void createPipe(wchar_t* pipeName)
         if (pythonPipe != INVALID_HANDLE_VALUE) {
             break;
         }
-    }
+    }*/
     
 	int originalState = 1; // 1 for training, 0 for inference
     while (true)

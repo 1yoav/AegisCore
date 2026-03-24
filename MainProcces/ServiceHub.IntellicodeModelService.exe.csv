@@ -10,3 +10,5 @@ CloseHandle,CreateProcess,MemoryManipulation,ProcessSnapshot,ReadFile,Sleep,Thre
 2,0,0,0,0,1,2,0,0
 2,0,0,0,0,1,2,0,0
 2,0,0,0,0,1,2,0,0
+10,0,23,0,0,0,10,0,0
+2,0,0,0,0,1,2,0,0
