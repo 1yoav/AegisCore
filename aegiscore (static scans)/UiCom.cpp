@@ -214,9 +214,12 @@ void UiCom::start()
             DWORD bytesRead;
             if (ReadFile(hPipe, buffer, sizeof(buffer) - 1, &bytesRead, NULL)) {
                 buffer[bytesRead] = '\0';
-                std::thread([this, buffer]() {
-                    this->processMessage(buffer);
+
+                std::string safeMsg(buffer); // Copy stack memory immediately
+                std::thread([this, safeMsg]() { // Capture the copy
+                    this->processMessage(safeMsg);
                     }).detach();
+
                 std::cout << "Received from Electron: " << buffer << std::endl;
             }
         }

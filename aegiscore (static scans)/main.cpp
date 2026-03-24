@@ -111,9 +111,19 @@ int main()
         std::thread uiThread(&UiCom::start, &uiCom);
 
         std::cout << "[INIT] Initialize signature scanner...\n";
-        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.downloads); }).detach();
-        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
-        std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
+
+        std::thread([&]() {
+            try { uiCom.monitor.startMonitor(uiCom.monitor.downloads); }
+            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt"); l << "downloads monitor threw\n"; }
+            }).detach();
+        std::thread([&]() {
+            try { uiCom.monitor.startMonitor(uiCom.monitor.temp); }
+            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt", std::ios::app); l << "temp monitor threw\n"; }
+            }).detach();
+        std::thread([&]() {
+            try { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }
+            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt", std::ios::app); l << "desktop monitor threw\n"; }
+            }).detach();
 
         std::vector<std::string> pipeline = {
             "\"" + (fs::path(GetProjectRoot()) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",

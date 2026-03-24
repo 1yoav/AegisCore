@@ -24,7 +24,7 @@ bool LaunchAsSystemInUserSession(const std::wstring& exePath);
 
 int main() {
     SERVICE_TABLE_ENTRY ServiceTable[] = {
-        { (LPWSTR)L"AegisSVC", (LPSERVICE_MAIN_FUNCTION)ServiceMain },
+        { (LPWSTR)L"AegisService", (LPSERVICE_MAIN_FUNCTION)ServiceMain },
         { NULL, NULL }
     };
     StartServiceCtrlDispatcher(ServiceTable);
@@ -154,38 +154,28 @@ void RunEngine() {
     if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
 
     LaunchInUserSession(iconPath);
-    LaunchAsSystemInUserSession(enginePath); // elevated, user session
+    // LaunchAsSystemInUserSession(enginePath); // elevated, user session
 }
 
 bool LaunchAsSystemInUserSession(const std::wstring& exePath) {
-    // Get active console session ID
     DWORD sessionId = WTSGetActiveConsoleSessionId();
     if (sessionId == 0xFFFFFFFF) return false;
 
-    // Duplicate OUR OWN token (LocalSystem = full admin)
-    // instead of the user's limited token
-    HANDLE hToken = NULL;
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
-        return false;
-
+    // Get SYSTEM token for privileges
+    HANDLE hSystemToken = NULL;
+    OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hSystemToken);
     HANDLE hDupToken = NULL;
-    if (!DuplicateTokenEx(hToken, TOKEN_ALL_ACCESS, NULL,
-        SecurityImpersonation, TokenPrimary, &hDupToken)) {
-        CloseHandle(hToken);
-        return false;
-    }
-    CloseHandle(hToken);
+    DuplicateTokenEx(hSystemToken, TOKEN_ALL_ACCESS, NULL,
+        SecurityImpersonation, TokenPrimary, &hDupToken);
+    CloseHandle(hSystemToken);
+    SetTokenInformation(hDupToken, TokenSessionId, &sessionId, sizeof(sessionId));
 
-    // Stamp the user's session ID onto the LocalSystem token
-    // This makes it run as SYSTEM but in the interactive session
-    if (!SetTokenInformation(hDupToken, TokenSessionId,
-        &sessionId, sizeof(sessionId))) {
-        CloseHandle(hDupToken);
-        return false;
-    }
-
+    // Get USER token just for the environment block
+    HANDLE hUserToken = NULL;
+    WTSQueryUserToken(sessionId, &hUserToken);
     LPVOID pEnv = NULL;
-    CreateEnvironmentBlock(&pEnv, hDupToken, FALSE);
+    CreateEnvironmentBlock(&pEnv, hUserToken, FALSE); // ? user env, not SYSTEM
+    CloseHandle(hUserToken);
 
     std::wstring cmdLine = L"\"" + exePath + L"\"";
     std::vector<wchar_t> cmdBuf(cmdLine.begin(), cmdLine.end());
@@ -196,17 +186,15 @@ bool LaunchAsSystemInUserSession(const std::wstring& exePath) {
     si.cb = sizeof(si);
     si.lpDesktop = (LPWSTR)L"winsta0\\default";
 
-    BOOL ok = CreateProcessAsUserW(
-        hDupToken, NULL, cmdBuf.data(),
+    CreateProcessAsUserW(hDupToken, NULL, cmdBuf.data(),
         NULL, NULL, FALSE,
         CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
-        pEnv, NULL, &si, &pi
-    );
+        pEnv, NULL, &si, &pi);
 
     if (pEnv) DestroyEnvironmentBlock(pEnv);
     CloseHandle(hDupToken);
-    if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
-    return ok;
+    if (pi.hProcess) CloseHandle(pi.hProcess);
+    if (pi.hThread)  CloseHandle(pi.hThread);
 }
 
 bool LaunchElevatedInUserSession(const std::wstring& exePath) {

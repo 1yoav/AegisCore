@@ -2,9 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <io.h>
+#include <filesystem>
+#include <Windows.h>
 
 using std::cout;
 using std::endl;
+namespace fs = std::filesystem;
 
 bool SQLDatabase::open()
 {
@@ -80,12 +83,18 @@ int SQLDatabase::addNewProcess(string username, string password, string email)
 
 void SQLDatabase::addC2Ips()
 {
-    std::string filePath = "C:\\Users\\Cyber_User\\Documents\\AegisCore\\aegiscore (static scans)\\dependencies\\firehol_level1.netset.txt";
-    std::ifstream fireholIps(filePath);
+    // Use GetDatabasePath() logic to find the file relative to the exe
+    wchar_t exeBuf[MAX_PATH];
+    GetModuleFileNameW(NULL, exeBuf, MAX_PATH);
+    fs::path exeDir = fs::path(exeBuf).parent_path();
+    fs::path installRoot = exeDir.parent_path().parent_path().parent_path();
+    fs::path filePath = installRoot / "aegiscore (static scans)" / "dependencies" / "firehol_level1.netset.txt";
 
+    std::ifstream fireholIps(filePath);
     if (!fireholIps.is_open()) {
-        std::cerr << "[ERROR] Could not open blocklist file: " << filePath << std::endl;
-        return;
+        std::cerr << "[ERROR] Could not open blocklist file: "
+            << filePath.string() << std::endl;
+        return; // non-fatal, just skip
     }
 
     std::cout << "[INFO] Importing CIDR ranges to database..." << std::endl;
