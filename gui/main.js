@@ -3,7 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const net = require('net');
+const { log } = require('console');
 const installRoot = path.join(__dirname, '../../../../../');
+log("The install root is: " + installRoot);
 const db = new sqlite3.Database(
     path.join(installRoot, 'deep_analysis', 'c2_threats.db')
 );

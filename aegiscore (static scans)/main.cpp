@@ -151,7 +151,8 @@ int main()
     std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
     std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
 
-    std::vector<std::string> pipeline = {
+    std::vector<std::string> pipeline = 
+    {
         "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
         "\"" + GetMainProccesPath() + "\"",
         "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
@@ -162,13 +163,12 @@ int main()
         std::string command = "start /b \"\" " + task;
         std::system(command.c_str());
     }
-
-
-    /*while (true)
+    
+    while (true)
     {
         Sleep(1000);
-    }*/
 
+    }
     WaitForSingleObject(hStopEvent, INFINITE);
     killPipelineProcesses();
     exit(0);

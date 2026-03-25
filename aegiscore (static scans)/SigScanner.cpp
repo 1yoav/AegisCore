@@ -87,9 +87,7 @@ bool SigScanner::scanWithVirusTotal(const std::string& fileHash)
         "aegiscore (static scans)" / "x64" / "Debug" /
         "virus_scanner.exe";
 
-    std::string pythonCommand = "\"" + scannerPath.string() + "\" " + fileHash;
-    //std::cout << "Executing: " << pythonCommand << std::endl;
-
+    std::string pythonCommand = "\"" + scannerPath.string() + "\" " + fileHash;    //std::cout << "Executing: " << pythonCommand << std::endl;
     FILE* pipe = _popen(pythonCommand.c_str(), "r");
     if (!pipe)
     {

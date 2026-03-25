@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import font as tkfont
+import sys
+from pathlib import Path
 import psutil
 import time
 import os
@@ -56,8 +58,12 @@ def terminate_and_delete(file_path):
 
 
 def show_custom_alert(path):
+    icon_name = ""
+    if getattr(sys, 'frozen', False):
+        icon_name = Path(sys.executable).parent.parent / "AegisCore.ico"
+    else:
+        icon_name = Path(__file__).resolve().parent / "AegisCore.ico"
     root = tk.Tk()
-    icon_name="AegisCore.ico"
     root.title("AegisCore AV - Threat Detected")
     
     # Get the directory of the current script to find the icon

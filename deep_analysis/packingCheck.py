@@ -1,10 +1,15 @@
 import pefile
-import mmap
-import ctypes
+import sys
+from pathlib import Path
 data_list = []
 
 def extract():
-    with open("C:\\Users\\Cyber_User\\Desktop\\magshimim\\aegiscore-av\\userdb.txt" , "r" , encoding="utf-8") as file:
+    signatures_path = ""
+    if getattr(sys, 'frozen', False):
+        signatures_path = Path(sys.executable).parent.parent / "userdb.txt"
+    else:
+        signatures_path = Path(__file__).resolve().parent / "userdb.txt"
+    with open(signatures_path , "r" , encoding="utf-8") as file:
         i = 0
         upxName = ""
         signture = ""

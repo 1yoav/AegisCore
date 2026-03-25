@@ -60,7 +60,7 @@ def insert_threat(confidence, pathname, findings , date):
     התאריך נוצר אוטומטית ברגע ההכנסה.
     """
     print(confidence , pathname , findings , date)
-    connection = sqlite3.connect('c2_threats.db')
+    connection = sqlite3.connect(DB_PATH)
     try:
         cursor = connection.cursor()
 
@@ -85,5 +85,5 @@ def insert_threat(confidence, pathname, findings , date):
 
 
 # 3. עכשיו מדפיסים - וזה יראה 2 שורות
-#setup_database()
+setup_database()
 

@@ -175,6 +175,8 @@ class DriverContext:
             ctx.isolationForest = True
 
         confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze
+        if ctx.signatureScan == True:
+            confidence = 100
         # verdict = self.analyzer.get_verdict(confidence)
 
         # Display results

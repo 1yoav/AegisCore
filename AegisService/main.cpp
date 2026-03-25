@@ -26,21 +26,17 @@ bool LaunchElevatedInUserSession(const std::wstring& exePath);
 bool LaunchAsSystemInUserSession(const std::wstring& exePath);
 
 int main(int argc, char* argv[]) {
-    // הגדרת טבלת השירות
     SERVICE_TABLE_ENTRY ServiceTable[] = {
         { (LPWSTR)L"AegisService", (LPSERVICE_MAIN_FUNCTION)ServiceMain },
         { NULL, NULL }
     };
 
-    // בדיקה: האם אנחנו מריצים את זה ידנית (דיבוג) או כשירות?
-    // דרך קלה לבדוק היא לבדוק אם StartServiceCtrlDispatcher נכשלה מיד
+    
     if (!StartServiceCtrlDispatcher(ServiceTable)) {
         if (GetLastError() == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT) {
-            // אם הגענו כאן, סימן שזה לא רץ כשירות - זה מצב דיבוג!
             printf("Debug Mode: Running ServiceMain manually...\n");
 
-            // אנחנו קוראים ל-ServiceMain ידנית
-            // (אנחנו שולחים 0 ארגומנטים כי אנחנו בדיבוג)
+            
             ServiceMain(0, NULL);
         }
         else {
@@ -97,7 +93,7 @@ void WINAPI ServiceCtrlHandler(DWORD ctrl) {
             ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING; // אנחנו בתהליך
             SetServiceStatus(hStatus, &ServiceStatus);
         }
-        stopEvent(); // זה ישחרר את ה-WaitForSingleObject
+        stopEvent(); 
     }
 }
 
