@@ -175,7 +175,7 @@ void RunEngine()
 
     std::wstring enginePath = (installRoot /
         L"aegiscore (static scans)" / L"x64" / L"Debug" /
-        L"aegiscore (static scans).exe").wstring();
+        L"aegiscore.exe").wstring();
 
     std::wstring iconPath = (installRoot /
         L"AegisService" / L"AegisIcon" / L"bin" / L"Debug" /
