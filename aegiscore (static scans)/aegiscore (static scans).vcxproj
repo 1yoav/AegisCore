@@ -143,8 +143,6 @@
     <ClCompile Include="DownloadMonitor.cpp" />
     <ClCompile Include="ExtensionScanner.cpp" />
     <ClCompile Include="HelperFunctions.h" />
-    <ClCompile Include="NetworkMonitor.cpp" />
-    <ClCompile Include="NetworkMonitor.h" />
     <ClCompile Include="NetworkUtils.cpp" />
     <ClCompile Include="PacketLogger.cpp" />
     <ClCompile Include="CertificateScanner.h" />

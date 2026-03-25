@@ -99,6 +99,7 @@
 				<ComponentRef Id="MainProcces" />
 				<ComponentRef Id="HookingDll" />
 				<ComponentRef Id="ServiceComponent" />
+				<ComponentRef Id="HookingFiles" />
 			</Feature>
 
 			<Feature Id="GUI" Level="1" Title="User Interface"
@@ -196,7 +197,13 @@
 							</Directory>
 						</Directory>
 					</Directory>
-
+				
+					<!-- hooking2\ -->
+					<Directory Id="Hooking2Folder" Name="hooking2">
+						<Directory Id="Hooking2X64" Name="x64">
+							<Directory Id="Hooking2Debug" Name="Debug" />
+						</Directory>
+					</Directory>
 				</Directory>
 			</Directory>
 
@@ -216,7 +223,7 @@
                    Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
 			<File Id="AegisCoreExe"
                   Source="$(var.BuildRoot)\aegiscore (static scans).exe"
-                  Name="aegiscore.exe"
+                  Name="aegiscore (static scans).exe"
                   KeyPath="yes" />
 		</Component>
 
@@ -334,6 +341,17 @@
                   Source="$(var.DeepRoot)\c2_threats.db"
                   Name="c2_threats.db"
                   KeyPath="yes" />
+		</Component>
+		
+		<!-- ── min hook and hooking ────────────────────── -->
+		<Component Id="HookingFiles" Directory="Hooking2Debug" Guid="1c5d591d-a6fe-4131-b18b-68b8062a3a25">
+			<File Id="hooking2dll_new" 
+				  Source="$(var.HookingSrc)\hooking2.dll" 
+				  Name="hooking2.dll" 
+				  KeyPath="yes" />
+			<File Id="MinHookLib" 
+				  Source="$(var.HookingSrc)\MinHook.x64.lib" 
+				  Name="MinHook.x64.lib" />
 		</Component>
 
 		<!-- ── isolationForest_pkl\ — trained ML model files ────────── -->

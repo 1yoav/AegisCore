@@ -23,6 +23,43 @@ namespace AegisTray
         private NotifyIcon _trayIcon;
         private ContextMenuStrip _rightClickMenu;
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr GetTopWindow(IntPtr hWnd);
+
+        private const int SW_RESTORE = 9;
+        private const uint GW_HWNDNEXT = 2;
+
+        // Finds the first visible top-level window belonging to a given PID
+        private static IntPtr FindWindowByPid(int pid)
+        {
+            IntPtr hwnd = GetTopWindow(IntPtr.Zero);
+            while (hwnd != IntPtr.Zero)
+            {
+                GetWindowThreadProcessId(hwnd, out uint winPid);
+                if (winPid == (uint)pid && IsWindowVisible(hwnd))
+                    return hwnd;
+                hwnd = GetWindow(hwnd, GW_HWNDNEXT);
+            }
+            return IntPtr.Zero;
+        }
+
+
+
         // Navigate from AegisIcon\bin\Debug\ up 4 levels to AegisCore install root
         private static readonly string InstallRoot = Path.GetFullPath(
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..")
@@ -81,8 +118,21 @@ namespace AegisTray
         }
 
         // ── Open Electron GUI ─────────────────────────────────────────
+        
         private void OnOpenSettings(object sender, EventArgs e)
         {
+            Process[] existing = Process.GetProcessesByName("AegisCore");
+            if (existing.Length > 0)
+            {
+                IntPtr hwnd = FindWindowByPid(existing[0].Id);
+                if (hwnd != IntPtr.Zero)
+                {
+                    ShowWindow(hwnd, SW_RESTORE);
+                    SetForegroundWindow(hwnd);
+                }
+                return;
+            }
+
             string guiPath = Path.Combine(
                 InstallRoot, "gui", "dist", "win-unpacked", "AegisCore.exe"
             );
