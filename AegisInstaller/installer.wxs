@@ -6,7 +6,7 @@
 	<!-- SOURCE PATH VARIABLES — only change these              -->
 	<!-- ═══════════════════════════════════════════════════════ -->
 	<?define SourceRoot      = "C:\Users\Cyber_User\Documents\AegisCore" ?>
-	<?define BuildRoot       = "$(var.SourceRoot)\aegiscore (static scans)\x64\Debug" ?>
+	<?define BuildRoot       = "$(var.SourceRoot)\aegiscore (static scans)\x64\Release" ?>
 	<?define IconSrc         = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug\Dependencies" ?>
 	<?define TrayExeSrc      = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug" ?>
 	<?define MainProcSrc     = "$(var.SourceRoot)\MainProcces\x64\Debug" ?>

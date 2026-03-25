@@ -56,6 +56,8 @@ int main()
     // ?? Guarantee TEMP/TMP exist regardless of token context ?????
     // When launched as SYSTEM via service, these may point to
     // C:\Windows\Temp or be missing entirely — set them explicitly
+    std::ofstream bootLog("C:\\aegis_boot.txt");
+    bootLog << "Main started" << std::endl;
     char tempBuf[MAX_PATH];
     if (GetTempPathA(MAX_PATH, tempBuf))
     {
@@ -73,6 +75,7 @@ int main()
         return 1;
     }
     
+    bootLog << "entered try and catch" << std::endl;
     // ?? Wrap entire startup so abort() never fires ????????????????
     try
     {
@@ -91,7 +94,7 @@ int main()
             std::cerr << "[-] Database failed to open, continuing without it\n";
             // Don't abort — pipe and scanners can still work
         }
-
+        bootLog << "uicom constructor..." << std::endl;
         UiCom uiCom(&db);
         std::thread uiThread(&UiCom::start, &uiCom);
 
