@@ -136,7 +136,6 @@ void UiCom::activateScan(std::string& procces)
 
 void UiCom::killScan(std::string& procces)
 {
-	std::cout << "Killing scan for: " << procces << std::endl;
     if(procces == "signatureScanner")
 		monitor.keepMonitoring = false; // Signal the DownloadMonitor to stop its monitoring loop
     else
@@ -152,7 +151,7 @@ void UiCom::killScan(std::string& procces)
         {
             //kill also the isolationForest
             command = "powershell -Command \"Get-CimInstance Win32_Process | "
-                "Where-Object { $_.CommandLine -like '*isolationForest.py*' } | "
+                "Where-Object { $_.CommandLine -like '*isolationForest.exe*' } | "
                 "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }\"";
 
 			std::system(command.c_str());

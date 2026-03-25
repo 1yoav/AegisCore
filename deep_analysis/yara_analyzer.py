@@ -17,7 +17,6 @@ class YaraAnalyzer:
         else:
             # אם רץ כסקריפט פייתון רגיל
             self.rules_dir = Path(__file__).resolve().parent / "yara_rules"
-        self.rules_dir = rules_dir
         self.rules = None
         self.compiled = False
         self._compile_rules()

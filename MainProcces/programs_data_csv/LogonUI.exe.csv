@@ -1,0 +1,5 @@
+CloseHandle,CreateProcess,MemoryManipulation,ProcessSnapshot,ReadFile,Sleep,ThreadManipulation,TokenPrivileges,WriteFile
+17,0,23,0,0,0,17,0,0
+41,0,23,0,0,0,41,0,0
+0,0,0,0,0,1,0,1,0
+0,0,0,0,0,1,0,56,0

@@ -1,8 +1,9 @@
-#include "UiCom.h"
+﻿#include "UiCom.h"
 
 
 
 namespace fs = std::filesystem;
+
 HANDLE hEvent;
 
 // ???????????????????????????????????????????????????????????
@@ -15,24 +16,73 @@ HANDLE hEvent;
 
 // ???????????????????????????????????????????????????????????
 
-void killPipelineProcesses() {
-    std::cout << "[*] Cleaning up background processes..." << std::endl;
+void terminateProcessByName(const std::wstring& processName) {
+    // יצירת Snapshot של כל התהליכים במערכת
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnap == INVALID_HANDLE_VALUE) {
+        return;
+    }
 
-    std::vector<std::string> targets = {
-        "MainProcces.exe",
-        "main.exe",
-        "tlscheck2.exe",
-        "isolationForest.exe"
+    PROCESSENTRY32W pe;
+    pe.dwSize = sizeof(PROCESSENTRY32W);
+
+    if (Process32FirstW(hSnap, &pe)) {
+        do {
+            if (_wcsicmp(pe.szExeFile, processName.c_str()) == 0) {
+                HANDLE hProc = OpenProcess(PROCESS_TERMINATE, FALSE, pe.th32ProcessID);
+                if (hProc) {
+                    TerminateProcess(hProc, 0);
+                    CloseHandle(hProc);
+                }
+            }
+        } while (Process32NextW(hSnap, &pe));
+    }
+    CloseHandle(hSnap);
+}
+
+void killPipelineProcesses() {
+    std::cout << "[*] Cleaning up background processes using Win32 API..." << std::endl;
+
+    std::vector<std::wstring> targets = {
+        L"MainProcces.exe",
+        L"main.exe",
+        L"tlscheck2.exe",
+        L"isolationForest.exe",
+        L"AegisIcon.exe"
     };
 
-    for (const std::string& target : targets) {
-        std::string command = "powershell -Command \"Get-CimInstance Win32_Process | "
-            "Where-Object { $_.CommandLine -like '*" + target + "*' } | "
-            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force }\"";
-
-        std::system(command.c_str());
+    for (const std::wstring& target : targets) {
+        terminateProcessByName(target);
     }
-    return;
+}
+
+bool EnableDebugPrivilege() {
+    HANDLE hToken;
+    LUID luid;
+    TOKEN_PRIVILEGES tp;
+
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+        return false;
+    }
+
+    if (!LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &luid)) {
+        CloseHandle(hToken);
+        return false;
+    }
+
+    tp.PrivilegeCount = 1;
+    tp.Privileges[0].Luid = luid;
+    tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL)) {
+        CloseHandle(hToken);
+        return false;
+    }
+
+    bool result = (GetLastError() == ERROR_SUCCESS);
+
+    CloseHandle(hToken);
+    return result;
 }
 
 
@@ -55,9 +105,10 @@ int main()
 {
     // ?? Guarantee TEMP/TMP exist regardless of token context ?????
     // When launched as SYSTEM via service, these may point to
-    // C:\Windows\Temp or be missing entirely � set them explicitly
-    std::ofstream bootLog("C:\\aegis_boot.txt");
-    bootLog << "Main started" << std::endl;
+    // C:\Windows\Temp or be missing entirely — set them explicitly
+    EnableDebugPrivilege();
+    HANDLE hStopEvent = OpenEventW(SYNCHRONIZE | EVENT_MODIFY_STATE, FALSE, L"Global\\AegisStopEvent");
+
     char tempBuf[MAX_PATH];
     if (GetTempPathA(MAX_PATH, tempBuf))
     {
@@ -74,71 +125,51 @@ int main()
         std::cerr << "[-] Could not set control handler" << std::endl;
         return 1;
     }
-    
-    bootLog << "entered try and catch" << std::endl;
+
     // ?? Wrap entire startup so abort() never fires ????????????????
-    try
-    {
-		std::wstring ProjectRoot = GetProjectRoot();
-        std::cout << "[*] Project Root: "
-            << fs::path(ProjectRoot).string() << std::endl;
-        
+    std::wstring ProjectRoot = GetProjectRoot();
+    std::cout << "[*] Project Root: "
+        << fs::path(ProjectRoot).string() << std::endl;
 
-        sqlite3* database = nullptr;
-        std::string dbPath = GetDatabasePath();
-        std::cout << "[*] Database Path: " << dbPath << std::endl;
 
-        SQLDatabase db(database, dbPath.c_str());
+    sqlite3* database = nullptr;
+    std::string dbPath = GetDatabasePath();
+    std::cout << "[*] Database Path: " << dbPath << std::endl;
 
-        if (!db.open()) {
-            std::cerr << "[-] Database failed to open, continuing without it\n";
-            // Don't abort � pipe and scanners can still work
-        }
-        bootLog << "uicom constructor..." << std::endl;
-        UiCom uiCom(&db);
-        std::thread uiThread(&UiCom::start, &uiCom);
+    SQLDatabase db(database, dbPath.c_str());
 
-        std::cout << "[INIT] Initialize signature scanner...\n";
-
-        std::thread([&]() {
-            try { uiCom.monitor.startMonitor(uiCom.monitor.downloads); }
-            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt"); l << "downloads monitor threw\n"; }
-            }).detach();
-        std::thread([&]() {
-            try { uiCom.monitor.startMonitor(uiCom.monitor.temp); }
-            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt", std::ios::app); l << "temp monitor threw\n"; }
-            }).detach();
-        std::thread([&]() {
-            try { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }
-            catch (...) { std::ofstream l("C:\\Windows\\Temp\\aegis_monitor.txt", std::ios::app); l << "desktop monitor threw\n"; }
-            }).detach();
-
-        std::vector<std::string> pipeline = {
-            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
-            "\"" + GetMainProccesPath() + "\"",
-            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
-            "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
-        };
-
-        for (const std::string& task : pipeline) {
-            std::string command = "start /b \"\" " + task;
-            std::system(command.c_str());
-        }
-
-        uiThread.join();
-    }
-    catch (const std::exception& e)
-    {
-        std::ofstream log("C:\\Windows\\Temp\\aegiscore_crash.txt");
-        log << "Exception: " << e.what() << "\n";
-        return 1;
-    }
-    catch (...)
-    {
-        std::ofstream log("C:\\Windows\\Temp\\aegiscore_crash.txt");
-        log << "Unknown exception at startup\n";
-        return 1;
+    if (!db.open()) {
+        std::cerr << "[-] Database failed to open, continuing without it\n";
+        // Don't abort — pipe and scanners can still work
     }
 
-    return 0;
+    UiCom uiCom(&db);
+    std::thread(&UiCom::start, &uiCom).detach();
+
+    std::cout << "[INIT] Initialize signature scanner...\n";
+    std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.downloads); }).detach();
+    std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.temp); }).detach();
+    std::thread([&]() { uiCom.monitor.startMonitor(uiCom.monitor.desktop); }).detach();
+
+    std::vector<std::string> pipeline = {
+        "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
+        "\"" + GetMainProccesPath() + "\"",
+        "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
+        "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
+    };
+
+    for (const std::string& task : pipeline) {
+        std::string command = "start /b \"\" " + task;
+        std::system(command.c_str());
+    }
+
+
+    /*while (true)
+    {
+        Sleep(1000);
+    }*/
+
+    WaitForSingleObject(hStopEvent, INFINITE);
+    killPipelineProcesses();
+    exit(0);
 }

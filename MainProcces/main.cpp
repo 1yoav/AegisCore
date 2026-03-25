@@ -114,6 +114,7 @@ bool IsExcluded(const wchar_t* exeName)
         L"devenv.exe",
         L"aegiscore (static scans).exe",
         L"msmpeng.exe" // 
+        L"msvsmon.exe"
     };
 
     for (const auto& excluded : whiteList) {
@@ -162,7 +163,6 @@ int main()
 
     dllPath = (fullDllPath).c_str();
     pathLen = strlen(dllPath) + 1;
-    std::cout << dllPath;
 
 
     std::vector<int> injectedProcces;
