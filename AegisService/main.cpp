@@ -60,10 +60,9 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR* argv)
     if (hStatus) {
         ServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 
-        // השורה הקריטית: כאן אתה אומר לווינדוס "אני מוכן לקבל פקודת עצירה"
         ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
 
-        ServiceStatus.dwCurrentState = SERVICE_RUNNING; // שנה ל-Running רק אחרי שהגדרת ControlsAccepted
+        ServiceStatus.dwCurrentState = SERVICE_RUNNING; 
         ServiceStatus.dwWin32ExitCode = 0;
         ServiceStatus.dwCheckPoint = 0;
         ServiceStatus.dwWaitHint = 0;
@@ -192,7 +191,7 @@ void RunEngine()
     PROCESS_INFORMATION pi{};
     si.cb = sizeof(si);
 
-    BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
+    /*BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
         FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
     DWORD err = GetLastError();
     {
@@ -200,9 +199,9 @@ void RunEngine()
             std::ios::app);
         log << L"CreateProcess ok: " << ok
             << L"  error: " << GetLastError() << L"\n";
-    }
+    }*/
 
-    if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
+    //if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
 
     LaunchInUserSession(iconPath);
     //LaunchAsSystemInUserSession(enginePath); // elevated, user session
