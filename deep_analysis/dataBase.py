@@ -1,5 +1,6 @@
 import sqlite3
 import sys, os
+import traceback
 BASE_DIR = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else os.path.abspath(__file__))
 INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..', '..'))
 DB_PATH = os.path.join(INSTALL_ROOT, 'deep_analysis', 'c2_threats.db')
@@ -66,11 +67,12 @@ def insert_threat(confidence, pathname, findings, date):
 
     connection = None
     try:
-        connection = sqlite3.connect(DB_PATH)
+        connection = sqlite3.connect(DB_PATH, timeout=30)
         cursor = connection.cursor()
 
 
 
+        print(confidence ,pathname ,findings ,date)
         # 3. ביצוע ההכנסה
         query = '''INSERT INTO scan_results (confidence, pathname, date, findings) 
                    VALUES (?, ?, ?, ?)'''
@@ -82,15 +84,16 @@ def insert_threat(confidence, pathname, findings, date):
         return True
 
     except sqlite3.Error as e:
-        print(f"❌ Database error during insert: {e}")
+        print("❌ Database error occurred!")
+        print(f"Error Type: {type(e).__name__}") # סוג השגיאה (למשל OperationalError)
+        print(f"Error Message: {e}")             # תיאור קצר
+        traceback.print_exc()                    # מדפיס את כל הדרך שהובילה לשגיאה
         return False
 
     finally:
         if connection:
             connection.close()
 
-# שים לב לסדר הפרמטרים: confidence, pathname, findings, date
 
 
-# 3. עכשיו מדפיסים - וזה יראה 2 שורות
 

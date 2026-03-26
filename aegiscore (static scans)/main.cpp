@@ -156,7 +156,9 @@ int main()
         "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "isolationForest.exe").string() + "\"",
         "\"" + GetMainProccesPath() + "\"",
         "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "main.exe").string() + "\"",
-        "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\""
+        "\"" + (fs::path(ProjectRoot) / "deep_analysis" / "dist" / "tlscheck2.exe").string() + "\"",
+        "\"" + (fs::path(ProjectRoot) / "AegisService" / "AegisIcon" / "bin" / "Debug" / "AegisIcon.exe").string() + "\""
+
     };
 
     for (const std::string& task : pipeline) {

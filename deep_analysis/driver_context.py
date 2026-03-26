@@ -27,32 +27,23 @@ from threat_logger import ThreatLogger
 
 
 def trigger_visual_alert_exe(infected_path):
-    base_path = os.path.dirname(os.path.abspath(sys.executable))
+    # מוודא שאנחנו מקבלים נתיב מוחלט (Absolute Path)
+    infected_path = os.path.abspath(infected_path)
+
+    # מציאת הנתיב לתיקיית הריצה
+    if getattr(sys, 'frozen', False):
+        # אם אנחנו בתוך EXE שהומר מ-PyInstaller
+        base_path = os.path.dirname(sys.executable)
+    else:
+        # אם אנחנו מריצים כסקריפט פייתון רגיל
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
     alert_exe_path = os.path.join(base_path, "terminateVirus.exe")
+    subprocess.Popen([alert_exe_path, infected_path])
 
-    task_name = "AegisCore_Alert_Task"
+    # בדיקה שה-EXE של ההתראה באמת קיים שם
 
-    # 2. פקודה ליצירת המשימה - הפעם מריצים ישירות את ה-EXE
-    # שימי לב: ה-TR (Task Run) מקבל רק את הנתיב ל-EXE והארגומנט שלו
-    create_cmd = (
-        f'schtasks /create /f /tn "{task_name}" '
-        f'/tr "\"{alert_exe_path}\" \"{infected_path}\"" '
-        f'/sc once /st 00:00 /it /rl highest'
-    )
 
-    # 3. פקודה להרצת המשימה
-    run_cmd = f'schtasks /run /tn "{task_name}"'
-
-    try:
-        # יצירת המשימה (בלי חלון שחור)
-        subprocess.run(create_cmd, shell=True, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-
-        time.sleep(0.1)
-
-        # הפעלת המשימה - ה-EXE יקפוץ למשתמש בסשן שלו
-        subprocess.run(run_cmd, shell=True, capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-    except Exception as e:
-        print(f"[-] Error: {e}")
 
 def get_project_root():
     # בודק אם הסקריפט רץ כקובץ EXE מקומפל

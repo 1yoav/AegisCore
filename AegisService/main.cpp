@@ -187,11 +187,11 @@ void RunEngine()
     }
 
 
-    STARTUPINFOW si{};
+    /*STARTUPINFOW si{};
     PROCESS_INFORMATION pi{};
     si.cb = sizeof(si);
 
-    /*BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
+    BOOL ok = CreateProcessW(enginePath.c_str(), NULL, NULL, NULL,
         FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
     DWORD err = GetLastError();
     {
@@ -199,54 +199,71 @@ void RunEngine()
             std::ios::app);
         log << L"CreateProcess ok: " << ok
             << L"  error: " << GetLastError() << L"\n";
-    }*/
+    }
 
-    //if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }
+    if (ok) { CloseHandle(pi.hProcess); CloseHandle(pi.hThread); }*/
 
     LaunchInUserSession(iconPath);
-    //LaunchAsSystemInUserSession(enginePath); // elevated, user session
+    LaunchAsSystemInUserSession(enginePath); // elevated, user session
 }
-
 bool LaunchAsSystemInUserSession(const std::wstring& exePath) {
     DWORD sessionId = WTSGetActiveConsoleSessionId();
-    if (sessionId == 0xFFFFFFFF) return false;
+    if (sessionId == 0xFFFFFFFF) return false; // אין משתמש מחובר כרגע
 
-    // Get SYSTEM token for privileges
-    HANDLE hSystemToken = NULL;
-    OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hSystemToken);
-    HANDLE hDupToken = NULL;
-    DuplicateTokenEx(hSystemToken, TOKEN_ALL_ACCESS, NULL,
-        SecurityImpersonation, TokenPrimary, &hDupToken);
-    CloseHandle(hSystemToken);
-    SetTokenInformation(hDupToken, TokenSessionId, &sessionId, sizeof(sessionId));
-
-    // Get USER token just for the environment block
     HANDLE hUserToken = NULL;
-    WTSQueryUserToken(sessionId, &hUserToken);
+    HANDLE hTokenDup = NULL;
     LPVOID pEnv = NULL;
-    CreateEnvironmentBlock(&pEnv, hUserToken, FALSE); // ? user env, not SYSTEM
+    bool success = false;
+
+    // 1. קבלת ה-Token של המשתמש המחובר ב-Session הפעיל
+    if (!WTSQueryUserToken(sessionId, &hUserToken)) {
+        return false;
+    }
+
+    // 2. שכפול ה-Token כדי שנוכל להשתמש בו ליצירת תהליך חדש (Primary Token)
+    if (DuplicateTokenEx(hUserToken, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, TokenPrimary, &hTokenDup)) {
+
+        // 3. הגדרת ה-Session ID בתוך ה-Token המשוכפל
+        SetTokenInformation(hTokenDup, TokenSessionId, &sessionId, sizeof(sessionId));
+
+        // 4. יצירת סביבת עבודה (Environment) שמתאימה למשתמש
+        if (CreateEnvironmentBlock(&pEnv, hTokenDup, FALSE)) {
+
+            std::wstring cmdLine = L"\"" + exePath + L"\"";
+            std::vector<wchar_t> cmdBuf(cmdLine.begin(), cmdLine.end());
+            cmdBuf.push_back(0);
+
+            STARTUPINFOW si = { sizeof(si) };
+            PROCESS_INFORMATION pi = { 0 };
+
+            // הגדרת ה-Desktop כדי שה-GUI יוכל להופיע על מסך המשתמש
+            si.lpDesktop = (LPWSTR)L"winsta0\\default";
+
+            // 5. יצירת התהליך ב-Session של המשתמש
+            // שימוש ב-CREATE_UNICODE_ENVIRONMENT הכרחי כשמשתמשים ב-pEnv
+            if (CreateProcessAsUserW(
+                hTokenDup,           // ה-Token של המשתמש ב-Session 1
+                NULL,                // נתיב ה-Application
+                cmdBuf.data(),       // שורת הפקודה
+                NULL, NULL, FALSE,
+                CREATE_UNICODE_ENVIRONMENT, // דגלים
+                pEnv,                // סביבת המשתמש
+                NULL,                // תיקיית עבודה (NULL = זהה לשירות)
+                &si, &pi))
+            {
+                success = true;
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+            }
+
+            DestroyEnvironmentBlock(pEnv);
+        }
+        CloseHandle(hTokenDup);
+    }
+
     CloseHandle(hUserToken);
-
-    std::wstring cmdLine = L"\"" + exePath + L"\"";
-    std::vector<wchar_t> cmdBuf(cmdLine.begin(), cmdLine.end());
-    cmdBuf.push_back(0);
-
-    STARTUPINFOW si{};
-    PROCESS_INFORMATION pi{};
-    si.cb = sizeof(si);
-    si.lpDesktop = (LPWSTR)L"winsta0\\default";
-
-    CreateProcessAsUserW(hDupToken, NULL, cmdBuf.data(),
-        NULL, NULL, FALSE,
-        CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT,
-        pEnv, NULL, &si, &pi);
-
-    if (pEnv) DestroyEnvironmentBlock(pEnv);
-    CloseHandle(hDupToken);
-    if (pi.hProcess) CloseHandle(pi.hProcess);
-    if (pi.hThread)  CloseHandle(pi.hThread);
+    return success;
 }
-
 bool LaunchElevatedInUserSession(const std::wstring& exePath) {
     // ShellExecuteEx with "runas" triggers UAC elevation in the user session
     // We need to do this via the user's token + ShellExecuteEx

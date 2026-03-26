@@ -35,37 +35,52 @@
 		<Icon Id="ProductIcon" SourceFile="$(var.IconSrc)\AegisCore_Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="ProductIcon" />
 		<Property Id="DESKTOP_SHORTCUT" Value="1" />
+		
 
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<WixVariable Id="WixUIBannerBmp" Value="$(var.InstallerAssets)\banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.InstallerAssets)\dialog.bmp" />
 
 		<UI>
-			<UIRef Id="WixUI_InstallDir" />
-			<Dialog Id="AegisOptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
-				<Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes">
-					<Text>{\WixUI_Font_Title}Installation Options</Text>
-				</Control>
-				<Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="25" Transparent="yes" NoPrefix="yes">
-					<Text>Choose how AegisCore should be configured on your system.</Text>
-				</Control>
-				<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
-				<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
-				<Control Id="DesktopShortcutCheckbox" Type="CheckBox" X="20" Y="80" Width="330" Height="18" Property="DESKTOP_SHORTCUT" CheckBoxValue="1">
-					<Text>Create a desktop shortcut for AegisCore</Text>
-				</Control>
-				<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
-				<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
-					<Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
-				</Control>
-				<Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
-					<Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-				</Control>
-				<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
-					<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
-				</Control>
-			</Dialog>
-			<Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="AegisOptionsDlg" Order="4">1</Publish>
-			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="AegisOptionsDlg" Order="1">1</Publish>
-		</UI>
+    <UIRef Id="WixUI_InstallDir" />
+    
+    
+
+    <Dialog Id="AegisOptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
+    <Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes">
+        <Text>{\WixUI_Font_Title}Installation Options</Text>
+    </Control>
+    
+    <Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="25" Transparent="yes" NoPrefix="yes">
+        <Text>Choose how AegisCore should be configured on your system.</Text>
+    </Control>
+
+    <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+    <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+
+    <Control Id="DesktopShortcutCheckbox" Type="CheckBox" X="20" Y="80" Width="330" Height="18" 
+             Property="DESKTOP_SHORTCUT" CheckBoxValue="1" TabSkip="no">
+        <Text>Create a desktop shortcut for AegisCore</Text>
+    </Control>
+
+    <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+    <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" TabSkip="no">
+        <Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+    </Control>
+    
+    <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" TabSkip="no">
+        <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+    </Control>
+    
+    <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)" TabSkip="no">
+        <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+    </Control>
+</Dialog>
+
+    <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="AegisOptionsDlg" Order="4">1</Publish>
+    <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="AegisOptionsDlg" Order="1">1</Publish>
+</UI>
 
 		<Feature Id="Complete" Level="1" Title="AegisCore Antivirus" Display="expand" ConfigurableDirectory="INSTALLFOLDER">
 			<Feature Id="MainProgram" Level="1" Title="Core Protection">
@@ -89,6 +104,7 @@
 				<ComponentRef Id="DeepAnalysisIcon"/>
 				<ComponentRef Id="UserDatabaseComponent" />
 				<ComponentRef Id="IsolationForestExe" />
+				<ComponentRef Id="terminateVirus" />
 				<ComponentRef Id="TlsCheckExe" />
 				<ComponentRef Id="ThreatDatabase" />
 				<ComponentRef Id="IsolationForestPkl" />
@@ -188,6 +204,10 @@
 		</Component>
 		<Component Id="TlsCheckExe" Directory="DeepAnalysisDist" Guid="b2c3d4e5-f6a7-8902-bcde-f12345678902">
 			<File Id="TlsCheckExeFile" Source="$(var.DeepSrc)\tlscheck2.exe" Name="tlscheck2.exe" KeyPath="yes" />
+		</Component>
+
+		<Component Id="terminateVirus" Directory="DeepAnalysisDist" Guid="d3e4f5a6-b7c8-9013-bcde-f12345678903">
+			<File Id="terminateVirusFile" Source="$(var.DeepSrc)\terminateVirus.exe" Name="terminateVirus.exe" KeyPath="yes" />
 		</Component>
 		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder" Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
 			<File Id="ThreatDb" Source="$(var.DeepRoot)\c2_threats.db" Name="c2_threats.db" KeyPath="yes" />
