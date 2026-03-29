@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AegisCore - Manual Scanning</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&display=swap');
+        
+        /* Transition Styles */
+        #transition-layer { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; visibility: hidden; }
+        #transition-layer.active { visibility: visible; }
+        .sweep-block { position: absolute; width: 200%; height: 200%; background: #0a0a0a; border: 2px solid #7c3aed; transform: translate(100%, -100%) rotate(-15deg); transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1); }
+        #transition-layer.covering .sweep-block { transform: translate(-10%, -10%) rotate(-15deg); }
+        #transition-layer.exiting .sweep-block { transform: translate(-120%, 120%) rotate(-15deg); }
+        .loader-content { position: relative; z-index: 10000; text-align: center; opacity: 0; }
+        #transition-layer.covering .loader-content { opacity: 1; }
+        .loader { --color: #7c3aed; --size: 40px; width: var(--size); height: var(--size); display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .loader span { background-color: var(--color); animation: keyframes-blink 0.6s alternate infinite linear; }
+        @keyframes keyframes-blink { 0% { opacity: 0.3; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }
+
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; overflow: hidden; height: 100vh; margin: 0; }
+        
+        /* Titlebar */
+        .titlebar {
+            height: 40px; background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex; align-items: center; padding-left: 1.5rem;
+            -webkit-app-region: drag;
+        }
+        .titlebar-title { 
+            font-size: 0.7rem; 
+            font-family: 'JetBrains Mono'; 
+            color: rgba(255, 255, 255, 0.4);
+            flex: 1;
+        }
+        .window-controls {
+            display: flex;
+            -webkit-app-region: no-drag;
+        }
+        .window-button {
+            width: 46px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .window-button:hover {
+            background: rgba(124, 58, 237, 0.2);
+            color: #ffffff;
+        }
+        .window-button.close:hover {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+        
+        .header { height: 100px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .back-btn-wrapper { position: absolute; top: 20px; left: 30px; width: 60px; height: 60px; cursor: pointer; }
+        #liquid-back-btn { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .back-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+
+        .scan-container { display: flex; gap: 2rem; padding: 4rem; justify-content: center; align-items: center; }
+        
+        .scan-card {
+            width: 400px; height: 300px; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .scan-card:hover { background: rgba(124, 58, 237, 0.1); border-color: #7c3aed; }
+        .scan-card.drag-over {
+            background: rgba(124, 58, 237, 0.2);
+            border-color: #7c3aed;
+            border-width: 2px;
+            transform: scale(1.02);
+        }
+        .scan-card.scanning {
+            pointer-events: none;
+        }
+        
+        /* Card States */
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .card-content.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .loading-container.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+        
+        /* Animated Loader */
+        .scan-loader {
+            width: 80px;
+            height: 50px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .loader-text {
+            position: absolute;
+            top: 0;
+            padding: 0;
+            margin: 0;
+            color: #C8B6FF;
+            animation: text_713 3.5s ease both infinite;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .load {
+            background-color: #9A79FF;
+            border-radius: 50px;
+            display: block;
+            height: 16px;
+            width: 16px;
+            bottom: 0;
+            position: absolute;
+            transform: translateX(64px);
+            animation: loading_713 3.5s ease both infinite;
+        }
+        .load::before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: #D1C2FF;
+            border-radius: inherit;
+            animation: loading2_713 3.5s ease both infinite;
+        }
+        @keyframes text_713 {
+            0% { letter-spacing: 1px; transform: translateX(0px); }
+            40% { letter-spacing: 2px; transform: translateX(26px); }
+            80% { letter-spacing: 1px; transform: translateX(32px); }
+            90% { letter-spacing: 2px; transform: translateX(0px); }
+            100% { letter-spacing: 1px; transform: translateX(0px); }
+        }
+        @keyframes loading_713 {
+            0% { width: 16px; transform: translateX(0px); }
+            40% { width: 100%; transform: translateX(0px); }
+            80% { width: 16px; transform: translateX(64px); }
+            90% { width: 100%; transform: translateX(0px); }
+            100% { width: 16px; transform: translateX(0px); }
+        }
+        @keyframes loading2_713 {
+            0% { transform: translateX(0px); width: 16px; }
+            40% { transform: translateX(0%); width: 80%; }
+            80% { width: 100%; transform: translateX(0px); }
+            90% { width: 80%; transform: translateX(15px); }
+            100% { transform: translateX(0px); width: 16px; }
+        }
+        
+        .loading-status {
+            font-family: 'JetBrains Mono';
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+        
+        /* Results State */
+        .results-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .results-container.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+        
+        .close-results {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .close-results:hover {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .result-verdict {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .result-verdict.clean      { color: #2ecc71; }
+        .result-verdict.suspicious { color: #f39c12; }
+        .result-verdict.malicious  { color: #e74c3c; }
+        
+        .result-score {
+            font-family: 'JetBrains Mono';
+            font-size: 2rem;
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-filename {
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 1rem;
+            word-break: break-all;
+        }
+        
+        .result-details {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            word-break: break-all;
+        }
+        
+        .result-details::-webkit-scrollbar { width: 4px; }
+        .result-details::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        .result-details::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+        
+        .finding-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid #7c3aed;
+            border-radius: 4px;
+        }
+        .finding-item:last-child { margin-bottom: 0; }
+        
+        .scan-card h2 { font-size: 1.5rem; margin-bottom: 10px; }
+        .scan-card p  { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #7c3aed; }
+
+        .status-footer {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+            background: #000; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; padding: 0 2rem;
+            font-family: 'JetBrains Mono'; font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body onload="revealPage()">
+
+    <div class="titlebar">
+        <span class="titlebar-title">AEGISCORE™</span>
+        <div class="window-controls">
+            <button class="window-button minimize" onclick="minimizeApp()" title="Minimize">
+                <svg width="12" height="2" viewBox="0 0 12 2" fill="currentColor"><rect width="12" height="2"/></svg>
+            </button>
+            <button class="window-button maximize" onclick="maximizeApp()" title="Maximize">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="11" height="11"/></svg>
+            </button>
+            <button class="window-button close" onclick="closeApp()" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1L11 11M11 1L1 11"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="transition-layer" class="active covering">
+        <div class="sweep-block"></div>
+        <div class="loader-content">
+            <div class="loader"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="back-btn-wrapper" onclick="goBack()">
+            <div id="liquid-back-btn"></div>
+            <div class="back-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"/></svg>
+            </div>
+        </div>
+        <h1 style="font-family:'JetBrains Mono'; font-size:0.9rem; letter-spacing:0.2em; color:rgba(255,255,255,0.5);">MANUAL_SCAN_OPERATIONS</h1>
+    </div>
+
+    <div class="scan-container">
+
+        <!-- ── FILE SCAN CARD ── -->
+        <div class="scan-card" id="fileScanCard" onclick="selectFile()">
+
+            <!-- Idle -->
+            <div class="card-content" id="idleContent">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                    <polyline points="13 2 13 9 20 9"></polyline>
+                </svg>
+                <h2>File Scan</h2>
+                <p id="fileScanStatus">[DRAG_AND_DROP_OR_CLICK]</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-container" id="loadingContent">
+                <div class="scan-loader">
+                    <span class="loader-text">scanning...</span>
+                    <span class="load"></span>
+                </div>
+                <div class="loading-status" id="loadingStatus">Analyzing file...</div>
+            </div>
+
+            <!-- Results -->
+            <div class="results-container" id="resultsContent">
+                <button class="close-results" onclick="resetFileScan(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <div class="result-header">
+                    <div class="result-verdict" id="resultVerdict">CLEAN</div>
+                    <div class="result-score"   id="resultScore">0/100</div>
+                    <div class="result-filename" id="resultFilename">filename.exe</div>
+                </div>
+                <div class="result-details" id="resultDetails">
+                    <div class="finding-item">No threats detected</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── SYSTEM SCAN CARD ── -->
+        <div class="scan-card" id="systemScanCard" onclick="startSystemScan()">
+
+            <!-- Idle -->
+            <div class="card-content" id="sysIdleContent">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <h2>System Scan</h2>
+                <p id="lastScanLabel">[NO_PREVIOUS_SCAN]</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-container" id="sysLoadingContent">
+                <div class="scan-loader">
+                    <span class="loader-text">scanning...</span>
+                    <span class="load"></span>
+                </div>
+                <div class="loading-status" id="sysLoadingStatus">Scanning system...</div>
+            </div>
+
+            <!-- Results — no score for system scan -->
+            <div class="results-container" id="sysResultsContent">
+                <button class="close-results" onclick="resetSystemScan(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <div class="result-header">
+                    <div class="result-verdict" id="sysResultVerdict">CLEAN</div>
+                    <div class="result-filename" id="sysResultLabel">SYSTEM SCAN</div>
+                </div>
+                <div class="result-details" id="sysResultDetails">
+                    <div class="finding-item">No threats detected</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="status-footer">
+        <span style="color:#7c3aed">></span>&nbsp;STATUS: READY // ENGINE_V2.4.1_STABLE
+    </div>
+
+    <script>
+        // ── Page transitions ───────────────────────────────────────────
+        const layer = document.getElementById('transition-layer');
+        function revealPage() {
+            setTimeout(() => {
+                layer.classList.add('exiting');
+                setTimeout(() => layer.classList.remove('active', 'covering', 'exiting'), 600);
+            }, 500);
+        }
+        function goBack() {
+            layer.classList.add('active');
+            layer.offsetHeight;
+            layer.classList.add('covering');
+            setTimeout(() => { window.location.href = 'index.html'; }, 700);
+        }
+
+        // ── Window controls ────────────────────────────────────────────
+        function minimizeApp() { window.aegis?.minimize(); }
+        function maximizeApp() { window.aegis?.maximize(); }
+        function closeApp()    { window.aegis?.close(); }
+
+        // ═══════════════════════════════════════════════════════════════
+        // FILE SCANNING
+        // ═══════════════════════════════════════════════════════════════
+
+        const fileScanCard  = document.getElementById('fileScanCard');
+        const idleContent   = document.getElementById('idleContent');
+        const loadingContent = document.getElementById('loadingContent');
+        const resultsContent = document.getElementById('resultsContent');
+        const loadingStatus = document.getElementById('loadingStatus');
+
+        let currentFile = null;
+
+        // Block default drag behaviour on the whole page
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+            document.body.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+
+        // Drag-over visual feedback
+        fileScanCard.addEventListener('dragenter', () => {
+            if (!fileScanCard.classList.contains('scanning'))
+                fileScanCard.classList.add('drag-over');
+        });
+        fileScanCard.addEventListener('dragleave', (e) => {
+            if (e.target === fileScanCard)
+                fileScanCard.classList.remove('drag-over');
+        });
+        fileScanCard.addEventListener('dragover', () => {
+            if (!fileScanCard.classList.contains('scanning'))
+                fileScanCard.classList.add('drag-over');
+        });
+        fileScanCard.addEventListener('drop', (e) => {
+            fileScanCard.classList.remove('drag-over');
+            if (e.dataTransfer.files.length > 0)
+                handleFileSelection(e.dataTransfer.files[0]);
+        });
+
+        // Click to open file picker
+        async function selectFile() {
+            if (fileScanCard.classList.contains('scanning')) return;
+            if (!window.aegis?.pickFile) {
+                alert('File picker not available. Make sure you\'re running in Electron.');
+                return;
+            }
+            const filePath = await window.aegis.pickFile();
+            if (filePath)
+                handleFileSelection({ path: filePath, name: filePath.split('\\').pop() });
+        }
+
+        async function handleFileSelection(file) {
+            const filePath = file.path || file;
+            const fileName = file.name || filePath.split('\\').pop();
+            currentFile = { path: filePath, name: fileName };
+
+            // Show loading state
+            fileScanCard.classList.add('scanning');
+            fileScanCard.onclick = null;
+            idleContent.classList.add('hidden');
+            setTimeout(() => loadingContent.classList.add('active'), 300);
+            loadingStatus.textContent = 'Analyzing file...';
+
+            try {
+                const data = await window.aegis.scanFile(filePath);
+                const result = {
+                    score:    data.score    ?? 0,
+                    verdict:  data.verdict  || 'UNKNOWN',
+                    fileName: fileName,
+                    findings: data.findings || []
+                };
+                showFileResults(result);
+            } catch (error) {
+                console.error('[!] File scan error:', error);
+                showFileResults({
+                    score: 0, verdict: 'ERROR', fileName: fileName,
+                    findings: ['Scan failed: ' + error.message]
+                });
+            }
+        }
+
+        function showFileResults(result) {
+            document.getElementById('resultScore').textContent   = result.score + '/100';
+            document.getElementById('resultVerdict').textContent = result.verdict;
+            document.getElementById('resultFilename').textContent = result.fileName;
+
+            const verdictEl = document.getElementById('resultVerdict');
+            verdictEl.className = 'result-verdict ' +
+                (result.score < 30 ? 'clean' : result.score < 85 ? 'suspicious' : 'malicious');
+
+            const detailsEl = document.getElementById('resultDetails');
+            detailsEl.innerHTML = (result.findings?.length > 0)
+                ? result.findings.map(f => `<div class="finding-item">${f}</div>`).join('')
+                : '<div class="finding-item">No threats detected</div>';
+
+            loadingContent.classList.remove('active');
+            setTimeout(() => resultsContent.classList.add('active'), 300);
+        }
+
+        function resetFileScan(event) {
+            event.stopPropagation();
+            resultsContent.classList.remove('active');
+            setTimeout(() => {
+                idleContent.classList.remove('hidden');
+                fileScanCard.classList.remove('scanning');
+                fileScanCard.onclick = selectFile;
+            }, 300);
+            currentFile = null;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // SYSTEM SCANNING
+        // ═══════════════════════════════════════════════════════════════
+
+        const systemScanCard    = document.getElementById('systemScanCard');
+        const sysIdleContent    = document.getElementById('sysIdleContent');
+        const sysLoadingContent = document.getElementById('sysLoadingContent');
+        const sysResultsContent = document.getElementById('sysResultsContent');
+        const sysLoadingStatus  = document.getElementById('sysLoadingStatus');
+
+        // ── Last scan persistence ──────────────────────────────────────
+        function loadLastScanLabel() {
+            const raw = localStorage.getItem('aegis_last_system_scan');
+            const el  = document.getElementById('lastScanLabel');
+            if (!raw || !el) return;
+
+            const { timestamp, verdict } = JSON.parse(raw);
+            const formatted = new Date(timestamp).toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+            const color = verdict === 'CLEAN'            ? '#2ecc71'
+                        : verdict === 'THREATS_DETECTED' ? '#e74c3c'
+                        : '#f39c12';
+
+            el.innerHTML = `LAST: <span style="color:${color}">${verdict}</span> — ${formatted}`;
+        }
+
+        function saveLastScan(verdict) {
+            localStorage.setItem('aegis_last_system_scan', JSON.stringify({
+                timestamp: Date.now(), verdict
+            }));
+            loadLastScanLabel();
+        }
+
+        // Restore label immediately on page load
+        loadLastScanLabel();
+
+        // ── Scan flow ──────────────────────────────────────────────────
+        async function startSystemScan() {
+            if (systemScanCard.classList.contains('scanning')) return;
+
+            systemScanCard.classList.add('scanning');
+            systemScanCard.onclick = null;
+            sysIdleContent.classList.add('hidden');
+            setTimeout(() => sysLoadingContent.classList.add('active'), 300);
+            sysLoadingStatus.textContent = 'Scanning system... (may take up to a minute)';
+
+            try {
+                const data = await window.aegis.scanSystem();
+
+                sysLoadingContent.classList.remove('active');
+                setTimeout(() => {
+                    const verdict   = data.verdict || 'UNKNOWN';
+                    const verdictEl = document.getElementById('sysResultVerdict');
+                    verdictEl.textContent = verdict;
+                    verdictEl.className   = 'result-verdict ' +
+                        (verdict === 'CLEAN' ? 'clean' : 'malicious');
+
+                    document.getElementById('sysResultLabel').textContent = 'SYSTEM SCAN';
+
+                    const detailsEl = document.getElementById('sysResultDetails');
+                    detailsEl.innerHTML = (data.findings?.length > 0)
+                        ? data.findings.map(f => `<div class="finding-item">${f}</div>`).join('')
+                        : '<div class="finding-item">No threats detected</div>';
+
+                    sysResultsContent.classList.add('active');
+                    saveLastScan(verdict); // ← always called on success
+                }, 300);
+
+            } catch (error) {
+                console.error('[!] System scan error:', error);
+                sysLoadingContent.classList.remove('active');
+                setTimeout(() => {
+                    const verdictEl = document.getElementById('sysResultVerdict');
+                    verdictEl.textContent = 'ERROR';
+                    verdictEl.className   = 'result-verdict malicious';
+                    document.getElementById('sysResultDetails').innerHTML =
+                        `<div class="finding-item">Scan failed: ${error.message}</div>`;
+                    sysResultsContent.classList.add('active');
+                    saveLastScan('ERROR'); // ← called on failure too
+                }, 300);
+            }
+        }
+
+        function resetSystemScan(event) {
+            event.stopPropagation();
+            sysResultsContent.classList.remove('active');
+            setTimeout(() => {
+                sysIdleContent.classList.remove('hidden');
+                systemScanCard.classList.remove('scanning');
+                systemScanCard.onclick = startSystemScan;
+            }, 300);
+        }
+    </script>
+
+    <script type="module">
+        import { liquidMetalFragmentShader, ShaderMount } from "https://esm.sh/@paper-design/shaders";
+        new ShaderMount(document.getElementById("liquid-back-btn"), liquidMetalFragmentShader, { u_shiftBlue: 0.9, u_repetition: 1.0, u_softness: 0.2 }, undefined, 0.5);
+    </script>
+</body>
+</html>

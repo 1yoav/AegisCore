@@ -2,11 +2,12 @@
 
 
 
-**AegisCore** is a full-fledged antimalware system developed by **Iftach Rabinowitz** and **Yoav Schmidt** as the final-year project for the Magshimim Cyber Education Program.
+\*\*AegisCore\*\* is a full-fledged antimalware system developed by \*\*Iftach Rabinowitz\*\* and \*\*Yoav Schmidt\*\* as the final-year project for the Magshimim Cyber Education Program.
 
 
 
-> \\\\\\\\\\\\\\\*\\\\\\\\\\\\\\\*Status:\\\\\\\\\\\\\\\*\\\\\\\\\\\\\\\* Proof of Concept (PoC) in active development.
+> \\\*\\\*Status:\\\*\\\* Proof of Concept (PoC) in active development.
+
 
 
 
@@ -20,27 +21,31 @@ The system (will) consists of four main components:
 
 1\. \*\*Pre-Download Scanner\*\*
 
- Checks new downloads on a remote server \*before\* they finish downloading to the local machine.
+   Checks new downloads on a remote server \*before\* they finish downloading to the local machine.
 
- This allows early detection and blocking of malicious files before execution.
+   This allows early detection and blocking of malicious files before execution.
+
 
 
 
 2\. \*\*Signature Checker\*\*
 
- Scans files and processes using a database of known malware signatures (hash-based or pattern-based). (Maybe add checks to file metadata too?)
+   Scans files and processes using a database of known malware signatures (hash-based or pattern-based). (Maybe add checks to file metadata too?)
+
 
 
 
 3\. \*\*Sandbox\*\*
 
- Executes suspicious files in an isolated environment to monitor their behavior safely.
+   Executes suspicious files in an isolated environment to monitor their behavior safely.
+
 
 
 
 4\. \*\*Tranquilization Engine\*\*
 
- Terminates malicious processes, removes infected files, and cleans up applications or artifacts created by the malware.
+   Terminates malicious processes, removes infected files, and cleans up applications or artifacts created by the malware.
+
 
 
 
@@ -66,11 +71,12 @@ The system (will) consists of four main components:
 
 \- \*\*Security Tools \& Libraries:\*\*
 
-\- Hashing (SHA256/MD5)
+  - Hashing (SHA256/MD5)
 
-\- MinHook / Microsoft Detours (for API hooking in sandbox)
+  - MinHook / Microsoft Detours (for API hooking in sandbox)
 
-\- Sysinternals Suite (testing \& analysis)
+  - Sysinternals Suite (testing \& analysis)
+
 
 \- \*\*Test Environment:\*\* VirtualBox VM snapshots
 
@@ -109,6 +115,5 @@ This repository currently focuses on building a \*\*Proof of Concept\*\* that de
 
 
 The final product will integrate these modules into a cohesive antivirus framework.
-
 
 

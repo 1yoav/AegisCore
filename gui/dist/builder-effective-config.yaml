@@ -1,0 +1,17 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.aegiscore.gui
+productName: AegisCore
+npmRebuild: true
+win:
+  target: dir
+  icon: assets/icon.ico
+files:
+  - filter:
+      - '*.html'
+      - main.js
+      - preload.js
+      - assets/**
+      - node_modules/**
+electronVersion: 28.3.3
