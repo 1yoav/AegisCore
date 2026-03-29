@@ -5,6 +5,9 @@ Updated: Removed C2 Emulator interactions
 import terminateVirus
 import threading
 import json
+import subprocess
+import time
+import os
 import sys
 import psutil
 import win32pipe
@@ -20,6 +23,26 @@ from events import Event, InvestigationContext
 from analyzer import Analyzer
 # from c2_emulator import C2Emulator  <-- REMOVED
 from threat_logger import ThreatLogger
+
+
+
+def trigger_visual_alert_exe(infected_path):
+    # מוודא שאנחנו מקבלים נתיב מוחלט (Absolute Path)
+    infected_path = os.path.abspath(infected_path)
+
+    # מציאת הנתיב לתיקיית הריצה
+    if getattr(sys, 'frozen', False):
+        # אם אנחנו בתוך EXE שהומר מ-PyInstaller
+        base_path = os.path.dirname(sys.executable)
+    else:
+        # אם אנחנו מריצים כסקריפט פייתון רגיל
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    alert_exe_path = os.path.join(base_path, "terminateVirus.exe")
+    subprocess.Popen([alert_exe_path, infected_path])
+
+    # בדיקה שה-EXE של ההתראה באמת קיים שם
+
 
 
 def get_project_root():
@@ -175,6 +198,8 @@ class DriverContext:
             ctx.isolationForest = True
 
         confidence = self.analyzer.analyze_context(ctx)  # make the deepAnalyze
+        if ctx.signatureScan == True:
+            confidence = 100
         # verdict = self.analyzer.get_verdict(confidence)
 
         # Display results
@@ -191,7 +216,7 @@ class DriverContext:
         if confidence >= 70:
             print(f"\n[!] RECOMMENDATION: Terminate PID {pid} (High threat)")
             print(f"[!] C++ should call TerminateProcess() for PID {pid}")
-            terminateVirus.show_custom_alert(path)
+            trigger_visual_alert_exe(path)
 
 
         self.investigations[path] = ctx  # update the invistigate

@@ -3,6 +3,7 @@ import win32pipe
 import win32file
 from pathlib import Path
 import joblib
+import psutil
 from sklearn.ensemble import IsolationForest
 import warnings
 import threading
@@ -21,6 +22,24 @@ BASE_DIR = os.path.dirname(Path(sys.executable).parent if getattr(sys, 'frozen',
 INSTALL_ROOT = os.path.normpath(os.path.join(BASE_DIR, '..'))
 CSV_ADDRESS = os.path.join(INSTALL_ROOT, 'MainProcces', 'programs_data_csv') + os.sep
 PKL_ADDRESS = os.path.join(BASE_DIR, 'isolationForest_pkl') + os.sep
+
+
+def get_path_by_pid(pid):
+    try:
+        # יצירת אובייקט תהליך לפי ה-PID
+        process = psutil.Process(pid)
+
+        # שליפת הנתיב המלא של ה-EXE
+        exe_path = process.exe()
+
+        return exe_path
+
+    except psutil.NoSuchProcess:
+        return "Error: Process ID does not exist."
+    except psutil.AccessDenied:
+        return "Error: Access denied (try running as Admin)."
+    except Exception as e:
+        return f"Error: {e}"
 
 def training():
     currentDir = Path(
@@ -115,17 +134,23 @@ def predict():
                 continue
 
             fileName = PKL_ADDRESS + newMsg[0]
-
+            pid = int(newMsg[1])
             my_file = Path(fileName)
+
             if(my_file.exists()):
                 model = joblib.load(fileName)
                 newMsg.remove(newMsg[0])
+                newMsg.remove(newMsg[0])
+
+
+
+
 
 
                 data = list(map(int, newMsg))
                 score = model.decision_function([data])
                 if score[0] < -0.3: # value of suspicious
-                    msg = "isolationForest!" + fileName
+                    msg = "isolationForest!" + get_path_by_pid(pid)
                     # send msg to deepAnalyze
                     t = threading.Thread(target=send_to_pipe, args=(msg,))
                     t.start()

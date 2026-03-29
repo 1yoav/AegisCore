@@ -2,39 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a563287-59fd-42f3-a8a1-77bdbe6b37fb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/AegisInstaller/installer.wxs" beforeDir="false" afterPath="$PROJECT_DIR$/AegisInstaller/installer.wxs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AegisService/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/AegisService/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/AegisService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/AegisService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/MSBuild.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/MSBuild.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/Microsoft.ServiceHub.Controller.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/Microsoft.ServiceHub.Controller.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/PerfWatson2.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/PerfWatson2.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/SecurityHealthHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/SecurityHealthHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.DataWarehouseHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.DataWarehouseHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.Host.dotnet.x64.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.Host.dotnet.x64.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IdentityHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IdentityHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IndexingService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IndexingService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IntellicodeModelService.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.IntellicodeModelService.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.TestWindowStoreHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.TestWindowStoreHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.ThreadedWaitDialog.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.ThreadedWaitDialog.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.VSDetouredHost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/ServiceHub.VSDetouredHost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/StandardCollector.Service.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/StandardCollector.Service.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/cmd.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/cmd.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/conhost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/conhost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/copilot-language-server.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/copilot-language-server.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/isolationForest.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/isolationForest.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/main.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/main.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/svchost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/svchost.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/tlsCheck2.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/tlsCheck2.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/unsecapp.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/unsecapp.exe.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainProcces/programs_data_csv/vshost.exe.csv" beforeDir="false" afterPath="$PROJECT_DIR$/MainProcces/programs_data_csv/vshost.exe.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/aegiscore (static scans)/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/Analysis-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/PYZ-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/isolationForest.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/isolationForest.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/warn-isolationForest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/warn-isolationForest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/isolationForest/xref-isolationForest.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/isolationForest/xref-isolationForest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/Analysis-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/PYZ-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/main.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/main.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/warn-main.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/warn-main.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/main/xref-main.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/main/xref-main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/Analysis-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PKG-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.pyz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/PYZ-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/tlscheck2.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/tlscheck2.pkg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/warn-tlscheck2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/warn-tlscheck2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/xref-tlscheck2.html" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/build/tlscheck2/xref-tlscheck2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/driver_context.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/isolationForest.py" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/isolationForest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deep_analysis/tlscheck2.spec" beforeDir="false" afterPath="$PROJECT_DIR$/deep_analysis/tlscheck2.spec" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

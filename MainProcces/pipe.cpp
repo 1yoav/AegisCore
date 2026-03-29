@@ -67,6 +67,10 @@ void createPipe(wchar_t* pipeName)
         }
     }
     
+    /*pythonPipe = CreateFileW(
+        L"\\\\.\\pipe\\isolationForest",
+        GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL
+    );*/
 	int originalState = 1; // 1 for training, 0 for inference
     while (true)
     {
@@ -132,7 +136,7 @@ void createPipe(wchar_t* pipeName)
                     std::string msgForPython;
                     std::string msgForCsv;
 
-                    std::string pythonMsg = baseName + ".pkl,";
+                    std::string pythonMsg = baseName + ".pkl," + (pid) + ",";
                     for (auto& f : counters) {
                         pythonMsg += std::to_string(f.second) + ",";
                     }

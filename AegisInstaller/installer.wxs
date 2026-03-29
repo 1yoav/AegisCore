@@ -2,15 +2,14 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
-	<!-- ═══════════════════════════════════════════════════════ -->
-	<!-- SOURCE PATH VARIABLES — only change these              -->
-	<!-- ═══════════════════════════════════════════════════════ -->
-	<?define SourceRoot      = "C:\Users\Cyber_User\Documents\AegisCore" ?>
-	<?define BuildRoot       = "$(var.SourceRoot)\aegiscore (static scans)\x64\Release" ?>
-	<?define IconSrc         = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug\Dependencies" ?>
+	<?define SourceRoot      = "C:\Users\Cyber_User\Desktop\magshimim\aegiscore-av" ?>
+	<?define BuildRoot       = "$(var.SourceRoot)\aegiscore (static scans)\x64\Debug" ?>
+	<?define YaraRulesSrc = "$(var.SourceRoot)\deep_analysis\yara_rules" ?>
+	<?define IconSrc         = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug" ?>
 	<?define TrayExeSrc      = "$(var.SourceRoot)\AegisService\AegisIcon\bin\Debug" ?>
+	<?define DeepIconSrc = "C:\Users\Cyber_User\Desktop\magshimim\aegiscore-av\deep_analysis" ?>
 	<?define MainProcSrc     = "$(var.SourceRoot)\MainProcces\x64\Debug" ?>
-	<?define HookingSrc      = "$(var.SourceRoot)\hooking2\x64\Debug" ?>
+	<?define HookingSrc      = "$(var.SourceRoot)\hooking2\x64\Debug" ?> 
 	<?define DeepSrc         = "$(var.SourceRoot)\deep_analysis\dist" ?>
 	<?define DeepRoot        = "$(var.SourceRoot)\deep_analysis" ?>
 	<?define DbSrc           = "$(var.SourceRoot)\aegiscore (static scans)\dependencies" ?>
@@ -36,155 +35,113 @@
 		<Icon Id="ProductIcon" SourceFile="$(var.IconSrc)\AegisCore_Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="ProductIcon" />
 		<Property Id="DESKTOP_SHORTCUT" Value="1" />
-
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.InstallerAssets)\License.rtf" />
-		<WixVariable Id="WixUIBannerBmp"  Value="$(var.InstallerAssets)\banner.bmp" />
-		<WixVariable Id="WixUIDialogBmp"  Value="$(var.InstallerAssets)\dialog.bmp" />
+		
 
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<WixVariable Id="WixUIBannerBmp" Value="$(var.InstallerAssets)\banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.InstallerAssets)\dialog.bmp" />
 
-		<!-- ══════════════════════════════════════════════════ -->
-		<!-- UI                                                  -->
-		<!-- ══════════════════════════════════════════════════ -->
 		<UI>
-			<UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_InstallDir" />
+    
+    
 
-			<Dialog Id="AegisOptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
-				<Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15"
-                         Transparent="yes" NoPrefix="yes">
-					<Text>{\WixUI_Font_Title}Installation Options</Text>
-				</Control>
-				<Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="25"
-                         Transparent="yes" NoPrefix="yes">
-					<Text>Choose how AegisCore should be configured on your system.</Text>
-				</Control>
-				<Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44"
-                         TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
-				<Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
-				<Control Id="DesktopShortcutCheckbox" Type="CheckBox"
-                         X="20" Y="80" Width="330" Height="18"
-                         Property="DESKTOP_SHORTCUT" CheckBoxValue="1">
-					<Text>Create a desktop shortcut for AegisCore</Text>
-				</Control>
-				<Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
-				<Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17"
-                         Text="!(loc.WixUIBack)">
-					<Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
-				</Control>
-				<Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17"
-                         Default="yes" Text="!(loc.WixUINext)">
-					<Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-				</Control>
-				<Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17"
-                         Cancel="yes" Text="!(loc.WixUICancel)">
-					<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
-				</Control>
-			</Dialog>
+    <Dialog Id="AegisOptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
+    <Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes">
+        <Text>{\WixUI_Font_Title}Installation Options</Text>
+    </Control>
+    
+    <Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="25" Transparent="yes" NoPrefix="yes">
+        <Text>Choose how AegisCore should be configured on your system.</Text>
+    </Control>
 
-			<Publish Dialog="InstallDirDlg"  Control="Next" Event="NewDialog" Value="AegisOptionsDlg" Order="4">1</Publish>
-			<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="AegisOptionsDlg" Order="1">1</Publish>
-		</UI>
+    <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.InstallDirDlgBannerBitmap)" />
+    <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
 
-		<!-- ══════════════════════════════════════════════════ -->
-		<!-- FEATURES                                            -->
-		<!-- ══════════════════════════════════════════════════ -->
-		<Feature Id="Complete" Level="1" Title="AegisCore Antivirus"
-                 Display="expand" ConfigurableDirectory="INSTALLFOLDER">
+    <Control Id="DesktopShortcutCheckbox" Type="CheckBox" X="20" Y="80" Width="330" Height="18" 
+             Property="DESKTOP_SHORTCUT" CheckBoxValue="1" TabSkip="no">
+        <Text>Create a desktop shortcut for AegisCore</Text>
+    </Control>
 
-			<Feature Id="MainProgram" Level="1" Title="Core Protection"
-                     Description="Main antivirus engine and real-time protection">
+    <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+
+    <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" TabSkip="no">
+        <Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
+    </Control>
+    
+    <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" TabSkip="no">
+        <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+    </Control>
+    
+    <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)" TabSkip="no">
+        <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+    </Control>
+</Dialog>
+
+    <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="AegisOptionsDlg" Order="4">1</Publish>
+    <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="AegisOptionsDlg" Order="1">1</Publish>
+</UI>
+
+		<Feature Id="Complete" Level="1" Title="AegisCore Antivirus" Display="expand" ConfigurableDirectory="INSTALLFOLDER">
+			<Feature Id="MainProgram" Level="1" Title="Core Protection">
 				<ComponentRef Id="MainEngine" />
 				<ComponentRef Id="VirusScanner" />
-				<ComponentRef Id="OpenSSLCrypto" />
+				<!--<ComponentRef Id="OpenSSLCrypto" />-->
 				<ComponentRef Id="MainProcces" />
-				<ComponentRef Id="HookingDll" />
-				<ComponentRef Id="ServiceComponent" />
+				<!--<ComponentRef Id="ServiceComponent" />-->
 				<ComponentRef Id="HookingFiles" />
 			</Feature>
-
-			<Feature Id="GUI" Level="1" Title="User Interface"
-                     Description="Graphical interface and tray icon">
+			<Feature Id="GUI" Level="1" Title="User Interface">
 				<ComponentRef Id="TrayIcon" />
 				<ComponentRef Id="GUIIcon" />
 				<ComponentRef Id="StartupTrayIcon" />
 				<ComponentGroupRef Id="ElectronFiles" />
 				<ComponentRef Id="DesktopShortcutComponent" />
 			</Feature>
-
-			<Feature Id="DeepScan" Level="1" Title="Deep Analysis"
-                     Description="Advanced threat detection engine">
+			<Feature Id="DeepScan" Level="1" Title="Deep Analysis">
 				<ComponentRef Id="DeepAnalysisEngine" />
+				<ComponentGroupRef Id="YaraRulesComponents" />
+				<ComponentRef Id="DeepAnalysisIcon"/>
+				<ComponentRef Id="UserDatabaseComponent" />
 				<ComponentRef Id="IsolationForestExe" />
+				<ComponentRef Id="terminateVirus" />
 				<ComponentRef Id="TlsCheckExe" />
 				<ComponentRef Id="ThreatDatabase" />
 				<ComponentRef Id="IsolationForestPkl" />
 			</Feature>
-
-			<Feature Id="DebugFiles" Level="1" Title="Database &amp; Logs"
-                     Description="Threat database and log files">
+			<Feature Id="DebugFiles" Level="1" Title="Database &amp; Logs">
 				<ComponentRef Id="DatabaseFile" />
 				<ComponentRef Id="LogFile" />
 			</Feature>
-
 		</Feature>
-
 	</Product>
 
-	<!-- ═══════════════════════════════════════════════════════ -->
-	<!-- DIRECTORY STRUCTURE — mirrors repo exactly             -->
-	<!--                                                         -->
-	<!-- AegisCore\                          (INSTALLFOLDER)    -->
-	<!--   aegiscore (static scans)\                            -->
-	<!--     x64\Debug\  ← aegiscore.exe, virus_scanner.exe,   -->
-	<!--                    libcrypto-3-x64.dll                 -->
-	<!--     dependencies\ ← DATABASE                           -->
-	<!--   MainProcces\x64\Debug\ ← MainProcces.exe,           -->
-	<!--                             hooking2.dll               -->
-	<!--   deep_analysis\  ← c2_threats.db                     -->
-	<!--     dist\         ← main.exe, isolationForest.exe,    -->
-	<!--                      tlscheck2.exe                     -->
-	<!--       isolationForest_pkl\ ← .pkl ML models           -->
-	<!--   gui\dist\win-unpacked\   ← Electron app             -->
-	<!--   AegisService\                                        -->
-	<!--     x64\Release\  ← AegisService.exe                  -->
-	<!--     AegisIcon\bin\Debug\   ← AegisIcon.exe            -->
-	<!--       Dependencies\ ← AegisCore_Icon.ico              -->
-	<!-- ═══════════════════════════════════════════════════════ -->
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="AegisCore">
-
-					<!-- aegiscore (static scans)\ -->
+				<Directory Id="INSTALLFOLDER" Name="aegiscore-av">
 					<Directory Id="StaticScansFolder" Name="aegiscore (static scans)">
 						<Directory Id="StaticScansX64" Name="x64">
 							<Directory Id="StaticScansDebug" Name="Debug" />
 						</Directory>
 						<Directory Id="DependenciesFolder" Name="dependencies" />
 					</Directory>
-
-					<!-- MainProcces\ -->
 					<Directory Id="MainProccesFolder" Name="MainProcces">
+						<Directory Id="CsvDataFolder" Name="programs_data_csv"/>
 						<Directory Id="MainProccesX64" Name="x64">
 							<Directory Id="MainProccesDebug" Name="Debug" />
 						</Directory>
 					</Directory>
-
-					<!-- deep_analysis\ -->
 					<Directory Id="DeepAnalysisFolder" Name="deep_analysis">
-						<Directory Id="DeepAnalysisDist" Name="dist">
-							<Directory Id="PklFolder" Name="isolationForest_pkl" />
-						</Directory>
+						<Directory Id="DeepAnalysisDist" Name="dist"/>
+						<Directory Id="YaraRulesFolder" Name="yara_rules" />
+						<Directory Id="PklFolder" Name="isolationForest_pkl" />
 					</Directory>
-
-					<!-- gui\dist\win-unpacked\ -->
 					<Directory Id="GuiRoot" Name="gui">
 						<Directory Id="GuiDist" Name="dist">
 							<Directory Id="GUIFolder" Name="win-unpacked" />
 						</Directory>
 					</Directory>
-
-					<!-- AegisService\ -->
 					<Directory Id="AegisServiceFolder" Name="AegisService">
 						<Directory Id="AegisServiceX64" Name="x64">
 							<Directory Id="AegisServiceRelease" Name="Release" />
@@ -197,8 +154,6 @@
 							</Directory>
 						</Directory>
 					</Directory>
-				
-					<!-- hooking2\ -->
 					<Directory Id="Hooking2Folder" Name="hooking2">
 						<Directory Id="Hooking2X64" Name="x64">
 							<Directory Id="Hooking2Debug" Name="Debug" />
@@ -206,213 +161,107 @@
 					</Directory>
 				</Directory>
 			</Directory>
-
 			<Directory Id="StartupFolder" Name="Startup" />
 			<Directory Id="DesktopFolder" />
-
 		</Directory>
 	</Fragment>
 
-	<!-- ═══════════════════════════════════════════════════════ -->
-	<!-- COMPONENTS                                               -->
-	<!-- ═══════════════════════════════════════════════════════ -->
 	<Fragment>
-
-		<!-- ── Core C++ engine ──────────────────────────────────────── -->
-		<Component Id="MainEngine" Directory="StaticScansDebug"
-                   Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
-			<File Id="AegisCoreExe"
-                  Source="$(var.BuildRoot)\aegiscore (static scans).exe"
-                  Name="aegiscore (static scans).exe"
-                  KeyPath="yes" />
+		<Component Id="MainEngine" Directory="StaticScansDebug" Guid="894c59b0-c233-4ffc-b28e-bd2b01aee6b7">
+			<File Id="AegisCoreExe" Source="$(var.BuildRoot)\aegiscore (static scans).exe" Name="aegiscore (static scans).exe" KeyPath="yes" />
+		</Component>
+		<Component Id="DeepAnalysisIcon" Directory="DeepAnalysisFolder" Guid="d2e1f4b5-c6a7-4890-bcde-f12345678903">
+			<File Id="DeepIconFile" Source="$(var.DeepRoot)\AegisCore.ico" Name="AegisCore.ico" KeyPath="yes" />
+		</Component>
+		<Component Id="VirusScanner" Directory="StaticScansDebug" Guid="c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f">
+			<File Id="VirusScannerExe" Source="$(var.SourceRoot)\aegiscore (static scans)\dist\virus_scanner.exe" Name="virus_scanner.exe" KeyPath="yes" />
+		</Component>
+		<!--<Component Id="OpenSSLCrypto" Directory="StaticScansDebug" Guid="6e9c5531-ac2d-4874-b93e-cecc39611768">
+			<File Id="libcrypto" Source="$(var.BuildRoot)\libcrypto-3-x64.dll" KeyPath="yes" />
+		</Component>-->
+		<Component Id="MainProcces" Directory="MainProccesDebug" Guid="b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e">
+			<File Id="MainProccesExe" Source="$(var.MainProcSrc)\MainProcces.exe" Name="MainProcces.exe" KeyPath="yes" />
+		</Component>
+		<!--<Component Id="ServiceComponent" Directory="AegisServiceRelease" Guid="abf5921b-e496-49bc-b451-cd8f4503b17e">
+			<File Id="ServiceFile" Source="$(var.SourceRoot)\AegisService\x64\Debug\AegisService.exe" Name="AegisService.exe" KeyPath="yes" />
+			<ServiceInstall Id="AegisServiceInstaller" Type="ownProcess" Name="AegisService" DisplayName="AegisCore Protection Service" Start="auto" Account="LocalSystem" ErrorControl="normal" />
+			<ServiceControl Id="AegisServiceControl" Start="install" Stop="both" Remove="uninstall" Name="AegisService" Wait="yes" />
+		</Component>-->
+		<Component Id="TrayIcon" Directory="AegisIconDebug" Guid="15222f4c-815f-40c4-8b3d-a03809251a5f">
+			<File Id="AegisTrayExe" Source="$(var.TrayExeSrc)\AegisIcon.exe" Name="AegisIcon.exe" KeyPath="yes" />
+		</Component>
+		<Component Id="UserDatabaseComponent" Directory="DeepAnalysisFolder" Guid="6b2a88f8-4eec-4733-b8a1-88f6c8433585">
+			<File Id="UserDbFile" Source="$(var.DeepRoot)\userdb.txt" Name="userdb.txt" KeyPath="yes" />
+		</Component>
+		<Component Id="GUIIcon" Directory="AegisIconDeps" Guid="7f5b3815-8431-4224-b877-602c1ef39fd7">
+			<File Id="TrayIconIco" Source="$(var.IconSrc)\AegisCore_Icon.ico" Name="AegisCore_Icon.ico" KeyPath="yes" />
+		</Component>
+		<Component Id="DeepAnalysisEngine" Directory="DeepAnalysisDist" Guid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b">
+			<File Id="DeepAnalysisExe" Source="$(var.DeepSrc)\main.exe" Name="main.exe" KeyPath="yes" />
+		</Component>
+		<Component Id="IsolationForestExe" Directory="DeepAnalysisDist" Guid="a1b2c3d4-e5f6-7891-abcd-ef1234567891">
+			<File Id="IsolationForestExeFile" Source="$(var.DeepSrc)\isolationForest.exe" Name="isolationForest.exe" KeyPath="yes" />
+		</Component>
+		<Component Id="TlsCheckExe" Directory="DeepAnalysisDist" Guid="b2c3d4e5-f6a7-8902-bcde-f12345678902">
+			<File Id="TlsCheckExeFile" Source="$(var.DeepSrc)\tlscheck2.exe" Name="tlscheck2.exe" KeyPath="yes" />
 		</Component>
 
-		<!-- ── VirusTotal scanner (PyInstaller) ─────────────────────── -->
-		<Component Id="VirusScanner" Directory="StaticScansDebug"
-                   Guid="c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f">
-			<File Id="VirusScannerExe"
-                  Source="$(var.SourceRoot)\aegiscore (static scans)\dist\virus_scanner.exe"
-                  Name="virus_scanner.exe"
-                  KeyPath="yes" />
+		<Component Id="terminateVirus" Directory="DeepAnalysisDist" Guid="d3e4f5a6-b7c8-9013-bcde-f12345678903">
+			<File Id="terminateVirusFile" Source="$(var.DeepSrc)\terminateVirus.exe" Name="terminateVirus.exe" KeyPath="yes" />
 		</Component>
-
-		<!-- ── OpenSSL crypto DLL (MD5 hashing dependency) ──────────── -->
-		<Component Id="OpenSSLCrypto" Directory="StaticScansDebug"
-                   Guid="6e9c5531-ac2d-4874-b93e-cecc39611768">
-			<File Id="libcrypto"
-                  Source="$(var.BuildRoot)\libcrypto-3-x64.dll"
-                  KeyPath="yes" />
+		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder" Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
+			<File Id="ThreatDb" Source="$(var.DeepRoot)\c2_threats.db" Name="c2_threats.db" KeyPath="yes" />
 		</Component>
-
-		<!-- ── Hooking engine (MainProcces.exe) ─────────────────────── -->
-		<Component Id="MainProcces" Directory="MainProccesDebug"
-                   Guid="b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e">
-			<File Id="MainProccesExe"
-                  Source="$(var.MainProcSrc)\MainProcces.exe"
-                  Name="MainProcces.exe"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── Hooking DLL — sits next to MainProcces.exe ───────────── -->
-		<!-- Source.cpp resolves its path relative to its own exe dir    -->
-		<Component Id="HookingDll" Directory="MainProccesDebug"
-                   Guid="f1e2d3c4-b5a6-7890-fedc-ba9876543210">
-			<File Id="hooking2dll"
-                  Source="$(var.HookingSrc)\hooking2.dll"
-                  Name="hooking2.dll"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── Windows Service ──────────────────────────────────────── -->
-		<Component Id="ServiceComponent" Directory="AegisServiceRelease"
-                   Guid="abf5921b-e496-49bc-b451-cd8f4503b17e">
-			<File Id="ServiceFile"
-                  Source="$(var.SourceRoot)\AegisService\x64\Release\AegisService.exe"
-                  Name="AegisService.exe"
-                  KeyPath="yes" />
-
-			<ServiceInstall Id="AegisServiceInstaller"
-                            Type="ownProcess"
-                            Name="AegisService"
-                            DisplayName="AegisCore Protection Service"
-                            Description="Provides real-time malware protection and threat monitoring"
-                            Start="auto"
-                            Account="LocalSystem"
-                            ErrorControl="normal"
-                            Interactive="no" />
-
-			<ServiceControl Id="AegisServiceControl"
-                            Start="install"
-                            Stop="both"
-                            Remove="uninstall"
-                            Name="AegisService"
-                            Wait="yes" />
-		</Component>
-
-		<!-- ── Tray icon exe ────────────────────────────────────────── -->
-		<Component Id="TrayIcon" Directory="AegisIconDebug"
-                   Guid="15222f4c-815f-40c4-8b3d-a03809251a5f">
-			<File Id="AegisTrayExe"
-                  Source="$(var.TrayExeSrc)\AegisIcon.exe"
-                  Name="AegisIcon.exe"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── App icon ─────────────────────────────────────────────── -->
-		<Component Id="GUIIcon" Directory="AegisIconDeps"
-                   Guid="7f5b3815-8431-4224-b877-602c1ef39fd7">
-			<File Id="TrayIconIco"
-                  Source="$(var.IconSrc)\AegisCore_Icon.ico"
-                  Name="AegisCore_Icon.ico"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── Deep analysis main engine (PyInstaller) ──────────────── -->
-		<Component Id="DeepAnalysisEngine" Directory="DeepAnalysisDist"
-                   Guid="3e4f5a6b-7c8d-9e0f-1a2b-3c4d5e6f7a8b">
-			<File Id="DeepAnalysisExe"
-                  Source="$(var.DeepSrc)\main.exe"
-                  Name="main.exe"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── isolationForest.exe (PyInstaller) ────────────────────── -->
-		<Component Id="IsolationForestExe" Directory="DeepAnalysisDist"
-                   Guid="a1b2c3d4-e5f6-7891-abcd-ef1234567891">
-			<File Id="IsolationForestExeFile"
-                  Source="$(var.DeepSrc)\isolationForest.exe"
-                  Name="isolationForest.exe"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── tlscheck2.exe (PyInstaller) ──────────────────────────── -->
-		<Component Id="TlsCheckExe" Directory="DeepAnalysisDist"
-                   Guid="b2c3d4e5-f6a7-8902-bcde-f12345678902">
-			<File Id="TlsCheckExeFile"
-                  Source="$(var.DeepSrc)\tlscheck2.exe"
-                  Name="tlscheck2.exe"
-                  KeyPath="yes" />
-		</Component>
-
-		<!-- ── c2_threats.db (SQLite threat log) ────────────────────── -->
-		<Component Id="ThreatDatabase" Directory="DeepAnalysisFolder"
-                   Guid="9d0de768-ab64-476d-8551-6bf687a751a5">
-			<File Id="ThreatDb"
-                  Source="$(var.DeepRoot)\c2_threats.db"
-                  Name="c2_threats.db"
-                  KeyPath="yes" />
-		</Component>
-		
-		<!-- ── min hook and hooking ────────────────────── -->
 		<Component Id="HookingFiles" Directory="Hooking2Debug" Guid="1c5d591d-a6fe-4131-b18b-68b8062a3a25">
-			<File Id="hooking2dll_new" 
-				  Source="$(var.HookingSrc)\hooking2.dll" 
-				  Name="hooking2.dll" 
-				  KeyPath="yes" />
-			<File Id="MinHookLib" 
-				  Source="$(var.HookingSrc)\MinHook.x64.lib" 
-				  Name="MinHook.x64.lib" />
+			<File Id="hooking2dll_new" Source="$(var.HookingSrc)\hooking2.dll" Name="hooking2.dll" KeyPath="yes" />
+			<File Id="MinHookdll" Source="$(var.HookingSrc)\MinHook.x64.dll" Name="MinHook.x64.dll" />
 		</Component>
-
-		<!-- ── isolationForest_pkl\ — trained ML model files ────────── -->
-		<!-- Add one <File> entry per .pkl file in your folder.          -->
-		<!-- Example:                                                     -->
-		<!-- <File Id="model_chrome"                                      -->
-		<!--       Source="$(var.DeepSrc)\isolationForest_pkl\chrome.pkl" -->
-		<!--       KeyPath="yes" />                                       -->
-		<Component Id="IsolationForestPkl" Directory="PklFolder"
-                   Guid="c3d4e5f6-a7b8-9013-cdef-123456789013">
+		<Component Id="IsolationForestPkl" Directory="PklFolder" Guid="c3d4e5f6-a7b8-9013-cdef-123456789013">
 			<CreateFolder />
-			<RegistryValue Root="HKCU" Key="Software\AegisCore"
-                           Name="pkl_installed" Type="integer" Value="1" KeyPath="yes"/>
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="pkl_installed" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
-
-		<!-- ── Signatures database ──────────────────────────────────── -->
-		<Component Id="DatabaseFile" Directory="DependenciesFolder"
-                   Guid="901a88f8-4eec-4733-b8a1-88f6c8433584">
-			<File Id="AegisDB"
-                  Source="$(var.DbSrc)\DATABASE"
-                  Name="DATABASE"
-                  KeyPath="yes" />
+		<Component Id="DatabaseFile" Directory="DependenciesFolder" Guid="901a88f8-4eec-4733-b8a1-88f6c8433584">
+			<File Id="AegisDB" Source="$(var.DbSrc)\DATABASE" Name="DATABASE" KeyPath="yes" />
 		</Component>
-
-		<!-- ── Log folder placeholder ───────────────────────────────── -->
-		<Component Id="LogFile" Directory="StaticScansDebug"
-                   Guid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e">
+		<Component Id="LogFile" Directory="StaticScansDebug" Guid="4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e">
 			<CreateFolder />
-			<RemoveFile Id="RemoveLogs" Name="logs.txt" On="uninstall" />
-			<RegistryValue Root="HKCU" Key="Software\AegisCore"
-                           Name="logs_created" Type="integer" Value="1" KeyPath="yes"/>
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="logs_created" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
-
-		<!-- ── Startup shortcut → tray icon auto-starts on login ────── -->
-		<Component Id="StartupTrayIcon" Directory="StartupFolder"
-                   Guid="7a3eb415-96f2-4793-9cf2-ceac098344d2">
-			<Shortcut Id="StartupShortcut"
-                      Name="AegisCore"
-                      Description="AegisCore Antivirus"
-                      Target="[AegisIconDebug]AegisIcon.exe"
-                      WorkingDirectory="AegisIconDebug" />
-			<RemoveFile Id="RemoveStartupShortcut" Name="AegisCore.lnk" On="uninstall" />
-			<RegistryValue Root="HKCU" Key="Software\AegisCore"
-                           Name="tray_installed" Type="integer" Value="1" KeyPath="yes"/>
+		<Component Id="StartupTrayIcon" Directory="StartupFolder" Guid="7a3eb415-96f2-4793-9cf2-ceac098344d2">
+			<Shortcut Id="StartupShortcut" Name="AegisCore" Target="[AegisIconDebug]AegisIcon.exe" WorkingDirectory="AegisIconDebug" />
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="tray_installed" Type="integer" Value="1" KeyPath="yes"/>
 		</Component>
-
-		<!-- ── Desktop shortcut → Electron GUI ─────────────────────── -->
-		<Component Id="DesktopShortcutComponent" Directory="DesktopFolder"
-                   Guid="e14680bf-ae0e-4a08-9d8a-b03b456fc8ef">
-			<Shortcut Id="DesktopShortcut"
-                      Name="AegisCore"
-                      Description="AegisCore Antivirus"
-                      Target="[GUIFolder]AegisCore.exe"
-                      WorkingDirectory="GUIFolder"
-                      Icon="ProductIcon" />
-			<RemoveFile Id="RemoveDesktopShortcut" Name="AegisCore.lnk" On="uninstall" />
-			<RegistryValue Root="HKCU" Key="Software\AegisCore"
-                           Name="desktop_shortcut" Type="integer" Value="1" KeyPath="yes"/>
+		<Component Id="DesktopShortcutComponent" Directory="DesktopFolder" Guid="e14680bf-ae0e-4a08-9d8a-b03b456fc8ef">
+			<Shortcut Id="DesktopShortcut" Name="AegisCore" Target="[GUIFolder]AegisCore.exe" WorkingDirectory="GUIFolder" Icon="ProductIcon" />
+			<RegistryValue Root="HKCU" Key="Software\AegisCore" Name="desktop_shortcut" Type="integer" Value="1" KeyPath="yes"/>
 			<Condition>DESKTOP_SHORTCUT = "1"</Condition>
 		</Component>
+		<ComponentGroup Id="YaraRulesComponents" Directory="YaraRulesFolder">
 
+			<Component Id="YaraAntiDebug" Guid="*">
+				<File Id="AntiDebugYar" Source="$(var.YaraRulesSrc)\antidebug_antivm.yar" KeyPath="yes" />
+			</Component>
+
+			<Component Id="YaraCapabilities" Guid="*">
+				<File Id="CapabilitiesYar" Source="$(var.YaraRulesSrc)\capabilities.yar" KeyPath="yes" />
+			</Component>
+
+			<Component Id="YaraGodMode" Guid="*">
+				<File Id="GodModeYar" Source="$(var.YaraRulesSrc)\godmode.yar" KeyPath="yes" />
+			</Component>
+
+			<Component Id="YaraPeid" Guid="*">
+				<File Id="PeidYar" Source="$(var.YaraRulesSrc)\peid.yar" KeyPath="yes" />
+			</Component>
+
+		</ComponentGroup>
 	</Fragment>
 
+	<Fragment>
+		<ComponentGroup Id="ElectronFiles" Directory="GUIFolder">
+			<Component Id="ElectronExe" Guid="*">
+				<File Id="AegisCoreElectronExe" Source="$(var.SourceRoot)\gui\dist\win-unpacked\AegisCore.exe" KeyPath="yes" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
 </Wix>
