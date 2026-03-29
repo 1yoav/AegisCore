@@ -2,7 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03d12b45-d206-4a3f-8621-08227605b22d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/yara_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/yara_analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../AegisInstaller/installer.wixobj" beforeDir="false" afterPath="$PROJECT_DIR$/../AegisInstaller/installer.wixobj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/PYZ-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/tlscheck2.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/tlscheck2.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/warn-tlscheck2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/warn-tlscheck2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tlscheck2/xref-tlscheck2.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/tlscheck2/xref-tlscheck2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/driver_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/driver_context.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tlscheck2.spec" beforeDir="false" afterPath="$PROJECT_DIR$/tlscheck2.spec" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +39,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.isolationForest">
+  <component name="RunManager" selected="Python.driver_context">
     <configuration name="behavioral_analyzer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="deep_analysis" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -40,6 +53,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/behavioral_analyzer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="driver_context" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="deep_analysis" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/driver_context.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -113,6 +147,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.driver_context" />
         <item itemvalue="Python.isolationForest" />
         <item itemvalue="Python.yara_analyzer" />
         <item itemvalue="Python.main" />

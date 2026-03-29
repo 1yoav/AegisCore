@@ -1,7 +1,5 @@
 ﻿#include "UiCom.h"
 
-
-
 namespace fs = std::filesystem;
 
 HANDLE hEvent;

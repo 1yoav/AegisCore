@@ -1,8 +1,8 @@
 # AegisCore
 
-**AegisCore** is a lightweight, modular, open-source antivirus framework for Windows — developed by **Iftach Rabinowitz** and **Yoav Schmidt** as the final-year project for the Magshimim Cyber Education Program.
+**AegisCore** is a lightweight, modular, open-source antivirus framework for Windows, developed by **Iftach Rabinowitz** and **Yoav Schmidt** as the final-year project for the Magshimim Cyber Education Program.
 
-Built from the ground up with extensibility in mind, AegisCore is designed to be understood, modified, and built upon — not just run.
+Built from the ground up with extensibility in mind, AegisCore is designed to be understood, modified, and built upon - not just run.
 
 ---
 
@@ -42,7 +42,7 @@ An Electron-based desktop application providing:
 
 ## Key Features
 
-- Real-time monitoring of Downloads, Desktop, and Temp directories
+- Real-time download monitoring
 - MD5 hash-based VirusTotal cloud scanning
 - Digital certificate validation via WinTrust API
 - API hooking with ML-based behavioral anomaly detection (Isolation Forest)
@@ -50,12 +50,12 @@ An Electron-based desktop application providing:
 - Static PE analysis (entropy, headers, strings, packing detection)
 - IAT (Import Address Table) analysis
 - TLS certificate inspection via live packet sniffing
-- System scan — startup registry keys, scheduled tasks, installed services
+- Chrome extension Scanner
+- System scan - startup registry keys, scheduled tasks, installed services
 - Named pipe IPC between C++ engine and Electron GUI
 - WFP-based network blocking of known malicious IPs (FireHOL Level 1 blocklist)
 - Persistent threat database (SQLite)
 - Native Windows MSI installer (WiX)
-- Fully open-source and modular — every component can be swapped, extended, or replaced independently
 
 ---
 
@@ -84,4 +84,4 @@ An Electron-based desktop application providing:
 
 ## License
 
-MIT License — free to use, modify, and distribute. See `LICENSE` for details.
+MIT License: free to use, modify, and distribute. See `LICENSE` for details.

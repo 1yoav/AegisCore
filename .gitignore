@@ -401,3 +401,122 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# =====================
+# Python
+# =====================
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.env
+.venv
+env/
+venv/
+ENV/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.cache
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+*.mo
+*.pot
+*.pyo
+instance/
+.webassets-cache
+.scrapy
+docs/_build/
+target/
+celerybeat-schedule
+*.sage.py
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+__pypackages__/
+celerybeat.pid
+*.sagews
+.spyderproject.cfg
+.spyproject
+.ropeproject
+/site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# =====================
+# JavaScript / Node.js
+# =====================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+lib-cov/
+.nyc_output
+.grunt
+bower_components/
+.lock-wscript
+build/Release
+node_modules/
+jspm_packages/
+web_modules/
+*.tsbuildinfo
+.npm
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.node_repl_history
+*.tgz
+.yarn-integrity
+.parcel-cache
+.next
+out/
+.nuxt
+.cache/
+.vuepress/dist
+.temp
+.docusaurus
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vite/
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# =====================
+# HTML (generated/build output)
+# =====================
+*.min.css
+*.min.js
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+_site/
